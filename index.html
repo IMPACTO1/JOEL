@@ -601,10 +601,10 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         <div class="fg"><label class="fl" data-i="lem">Email <span style="color:var(--tx2);font-size:10px" data-i="opt">(optional)</span></label><input type="email" class="fi" id="bk-em" autocomplete="email"></div>
         <div class="fg"><label class="fl" data-i="lgn">Gender</label>
           <select class="fsel" id="bk-gn">
-            <option value="women" data-i="gopt_w">Mujer / Woman</option>
-            <option value="men" data-i="gopt_m">Hombre / Man</option>
-            <option value="other" data-i="gopt_o">Otro / Other</option>
-            <option value="prefer_not" data-i="gopt_p">Prefiero no decir / Prefer not to say</option>
+            <option value="women">Mujer / Woman</option>
+            <option value="men">Hombre / Man</option>
+            <option value="other">Otro / Other</option>
+            <option value="prefer_not">Prefiero no decir / Prefer not to say</option>
           </select>
         </div>
       </div>
@@ -709,10 +709,10 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="cl-ph" autocomplete="tel"></div>
         <div class="fg"><label class="fl" data-i="lgn">Gender</label>
           <select class="fsel" id="cl-gn">
-            <option value="women" data-i="gopt_w">Mujer / Woman</option>
-            <option value="men" data-i="gopt_m">Hombre / Man</option>
-            <option value="other" data-i="gopt_o">Otro / Other</option>
-            <option value="prefer_not" data-i="gopt_p">Prefiero no decir / Prefer not to say</option>
+            <option value="women">Mujer / Woman</option>
+            <option value="men">Hombre / Man</option>
+            <option value="other">Otro / Other</option>
+            <option value="prefer_not">Prefiero no decir / Prefer not to say</option>
           </select>
         </div>
       </div>
@@ -795,6 +795,7 @@ const T=k=>TT[lang][k]||TT.en[k]||k;
 function setL(l){
   lang=l;localStorage.setItem('jl',l);
   applyLoginI18n();
+  setGenderOptions();
   document.getElementById('en-b').classList.toggle('on',l==='en');
   document.getElementById('es-b').classList.toggle('on',l==='es');
   apI18n();
@@ -871,6 +872,30 @@ function gColorDim(g){
   if(g==='men')return'var(--mdim)';
   if(g==='women')return'var(--wdim)';
   return'var(--udim)';
+}
+
+// Set gender options in all selects based on current language
+function setGenderOptions(){
+  var opts = [
+    ['women', T('gopt_w')],
+    ['men',   T('gopt_m')],
+    ['other', T('gopt_o')],
+    ['prefer_not', T('gopt_p')]
+  ];
+  ['cl-gn','bk-gn'].forEach(function(id){
+    var sel = document.getElementById(id);
+    if(!sel) return;
+    // Remember current value
+    var cur = sel.value;
+    sel.innerHTML = '';
+    opts.forEach(function(o){
+      var opt = document.createElement('option');
+      opt.value = o[0];
+      opt.textContent = o[1];
+      sel.appendChild(opt);
+    });
+    sel.value = cur || 'women';
+  });
 }
 // ══════════════════════════════════════════
 // MODE SWITCHER
@@ -1469,28 +1494,24 @@ function emH(t,s){return`<div class="empty"><div class="emp-ic">🔍</div><div c
 
 
 function doLogin(){
-  try {
-    var uEl = document.getElementById('login-user');
-    var pEl = document.getElementById('login-pass');
-    var u = uEl ? (uEl.value||'').trim().toLowerCase().replace(/\s/g,'') : '';
-    var p = pEl ? (pEl.value||'').trim().replace(/\s/g,'') : '';
-    var ok = (u === 'admin') && (p === 'joel2024');
-    if(ok){
-      isLoggedIn = true;
-      var ls = document.getElementById('login-screen');
-      var mb = document.getElementById('mode-bar');
-      if(ls) ls.style.display = 'none';
-      if(mb) mb.style.display = 'flex';
-      setMode('admin');
-      renderAll();
-    } else {
-      var err = document.getElementById('login-err');
-      if(err){ err.style.display = 'block'; }
-      if(pEl) pEl.value = '';
-      setTimeout(function(){ var e2=document.getElementById('login-err'); if(e2)e2.style.display='none'; }, 3000);
-    }
-  } catch(ex) {
-    alert('Error: ' + ex.message);
+  var uEl = document.getElementById('login-user');
+  var pEl = document.getElementById('login-pass');
+  if(!uEl || !pEl){ alert('Form error'); return; }
+  var u = uEl.value.trim().toLowerCase().replace(/ /g,'');
+  var p = pEl.value.trim().replace(/ /g,'');
+  if(u === 'admin' && p === 'joel2024'){
+    isLoggedIn = true;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('mode-bar').style.display = 'flex';
+    setMode('admin');
+    renderAll();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    pEl.value = '';
+    window.setTimeout(function(){
+      var e = document.getElementById('login-err');
+      if(e) e.style.display = 'none';
+    }, 3000);
   }
 }
 function skipToBooking(){
@@ -1563,6 +1584,7 @@ function applyLoginI18n(){
 // ══════════════════════════════════════════
 document.getElementById('f-dt').value=today();
 setL(lang);
+setGenderOptions();
 renderAll();
 bkRenderSvcs();
 </script>
