@@ -601,10 +601,10 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         <div class="fg"><label class="fl" data-i="lem">Email <span style="color:var(--tx2);font-size:10px" data-i="opt">(optional)</span></label><input type="email" class="fi" id="bk-em" autocomplete="email"></div>
         <div class="fg"><label class="fl" data-i="lgn">Gender</label>
           <select class="fsel" id="bk-gn">
-            <option value="women" data-i="gopt_w">Woman</option>
-            <option value="men" data-i="gopt_m">Man</option>
-            <option value="other" data-i="gopt_o">Other</option>
-            <option value="prefer_not" data-i="gopt_p">Prefer not to say</option>
+            <option value="women" data-i="gopt_w">Mujer / Woman</option>
+            <option value="men" data-i="gopt_m">Hombre / Man</option>
+            <option value="other" data-i="gopt_o">Otro / Other</option>
+            <option value="prefer_not" data-i="gopt_p">Prefiero no decir / Prefer not to say</option>
           </select>
         </div>
       </div>
@@ -709,10 +709,10 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="cl-ph" autocomplete="tel"></div>
         <div class="fg"><label class="fl" data-i="lgn">Gender</label>
           <select class="fsel" id="cl-gn">
-            <option value="women" data-i="gopt_w">Woman</option>
-            <option value="men" data-i="gopt_m">Man</option>
-            <option value="other" data-i="gopt_o">Other</option>
-            <option value="prefer_not" data-i="gopt_p">Prefer not to say</option>
+            <option value="women" data-i="gopt_w">Mujer / Woman</option>
+            <option value="men" data-i="gopt_m">Hombre / Man</option>
+            <option value="other" data-i="gopt_o">Otro / Other</option>
+            <option value="prefer_not" data-i="gopt_p">Prefiero no decir / Prefer not to say</option>
           </select>
         </div>
       </div>
@@ -778,6 +778,11 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 <div class="tw" id="tw"></div>
 
 <script>
+// ── GLOBAL VARS — declared first so iOS Safari can access them ──
+var isLoggedIn = false;
+var ADMIN_USER = 'admin';
+var ADMIN_PASS = 'joel2024';
+
 // ══════════════════════════════════════════
 // I18N
 // ══════════════════════════════════════════
@@ -854,7 +859,7 @@ const fmtH=h=>{const hr=parseInt(h);if(lang==='es')return hr+'h00';return hr<12?
 
 // Gender label helper — handles all 4 options
 function gLabel(g){
-  const map={women:T('gopt_w'),men:T('gopt_m'),other:T('gopt_o'),prefer_not:T('gopt_p')};
+  var map={women:T('gopt_w'),men:T('gopt_m'),other:T('gopt_o'),prefer_not:T('gopt_p')};
   return map[g]||g||'—';
 }
 function gColor(g){
@@ -1459,9 +1464,9 @@ function emH(t,s){return`<div class="empty"><div class="emp-ic">🔍</div><div c
 
 
 // ── LOGIN ──────────────────────────────────
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'joel2024';
-let isLoggedIn = false;
+
+
+
 
 function doLogin(){
   try {
