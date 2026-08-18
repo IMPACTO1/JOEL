@@ -2,652 +2,621 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>JOEL Salon</title>
 <style>
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0D0D0D;--sf:#161616;--sf2:#1E1E1E;--sf3:#252525;
-  --gold:#C9A017;--gold2:#E8B84B;--gdim:rgba(201,160,23,.13);
+  --gold:#C9A017;--gold2:#E8B84B;--gdim:rgba(201,160,23,.12);
   --tx:#F5F5F0;--tx2:#999990;--tx3:#555550;
   --men:#3B7DD8;--mdim:rgba(59,125,216,.15);
   --women:#C2607A;--wdim:rgba(194,96,122,.15);
   --uni:#7B68EE;--udim:rgba(123,104,238,.15);
   --ok:#2ECC71;--warn:#F39C12;--err:#E74C3C;
-  --bd:rgba(255,255,255,.07);--r:14px;--rs:10px;
+  --bd:rgba(255,255,255,.07);--r:12px;--rs:8px;
   --nh:58px;
 }
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;-webkit-text-size-adjust:100%;overflow:hidden}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;overflow:hidden;-webkit-text-size-adjust:100%}
 button{cursor:pointer;font-family:inherit;border:none;outline:none;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 *{scrollbar-width:thin;scrollbar-color:var(--sf3) transparent}
 
-/* ── MODE SWITCHER ── */
-.mode-switch{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--bg);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:48px}
-.ms-logo{display:flex;align-items:center;gap:8px}
-.ms-ic{width:30px;height:30px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
-.ms-name{font-size:16px;font-weight:800;letter-spacing:2px}
-.ms-tabs{display:flex;background:var(--sf2);border-radius:8px;padding:3px;gap:2px}
-.ms-tab{padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;background:transparent;color:var(--tx2);transition:all .2s;border:none;cursor:pointer}
-.ms-tab.on{background:var(--gold);color:#000}
-.ms-lang{display:flex;background:var(--sf2);border-radius:8px;padding:3px;gap:2px}
-.lb{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;background:transparent;color:var(--tx2);transition:all .2s;border:none;cursor:pointer}
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR desktop */
+.sidebar{width:200px;min-width:200px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;z-index:100}
+.logo-wrap{padding:16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.logo-ic{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .4s;flex-shrink:0}
+.logo-ic:hover{transform:rotate(180deg)}
+.logo-tx{font-size:18px;font-weight:800;letter-spacing:3px}
+.logo-sub{font-size:9px;color:var(--tx2);letter-spacing:2px}
+.lang-row{margin:8px 12px;background:var(--sf2);border-radius:8px;display:flex;padding:3px;gap:2px}
+.lb{flex:1;padding:5px;border-radius:6px;font-size:11px;font-weight:700;background:transparent;color:var(--tx2);transition:all .2s}
 .lb.on{background:var(--gold);color:#000}
-
-/* ── APP SHELLS ── */
-.app-shell{display:none;position:fixed;top:48px;left:0;right:0;bottom:0;overflow:hidden}
-.app-shell.on{display:flex}
-
-/* ══════════════════════════════════════════
-   ADMIN SHELL
-══════════════════════════════════════════ */
-#admin-shell{flex-direction:row}
-
-.sidebar{width:200px;min-width:200px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden}
-.sl-logo{padding:14px 14px 10px;border-bottom:1px solid var(--bd)}
-.sl-title{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--tx2);text-transform:uppercase}
-.nav{flex:1;padding:6px 8px;overflow-y:auto}
+.nav{flex:1;padding:6px 10px;overflow-y:auto}
 .nl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);padding:10px 8px 4px}
-.ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--rs);color:var(--tx2);font-size:13px;font-weight:500;background:transparent;cursor:pointer;width:100%;text-align:left;transition:all .2s;margin-bottom:2px;border:none}
-.ni:hover,.ni:active{background:var(--sf2);color:var(--tx)}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--rs);color:var(--tx2);font-size:13px;font-weight:500;background:transparent;cursor:pointer;width:100%;text-align:left;transition:all .2s;margin-bottom:2px;border:none}
+.ni:hover{background:var(--sf2);color:var(--tx)}
 .ni.on{background:var(--gdim);color:var(--gold)}
-.ni-ic{font-size:15px;width:18px;text-align:center}
+.ni-ic{font-size:15px;width:20px;text-align:center}
 .nbadge{margin-left:auto;background:var(--err);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;display:none}
+.sf-foot{padding:10px 14px;border-top:1px solid var(--bd);font-size:10px;color:var(--tx3);text-align:center}
 
-.admin-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.admin-topbar{height:50px;min-height:50px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;gap:8px}
-.atb-title{font-size:14px;font-weight:700;flex:1}
-.admin-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:52px;min-height:52px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;gap:8px}
+.tb-title{font-size:14px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px;-webkit-overflow-scrolling:touch}
 
-/* BOTTOM NAV (mobile admin) */
-.bnav{display:none;position:absolute;bottom:0;left:0;right:0;height:var(--nh);background:var(--sf);border-top:1px solid var(--bd);z-index:100;align-items:stretch}
-.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;border:none;color:var(--tx2);font-size:9px;font-weight:600;cursor:pointer;padding:6px 2px;position:relative;transition:color .2s}
+/* BOTTOM NAV mobile */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--nh);background:var(--sf);border-top:1px solid var(--bd);z-index:200;align-items:stretch}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;border:none;color:var(--tx2);font-size:9px;font-weight:600;cursor:pointer;padding:6px 2px;-webkit-tap-highlight-color:transparent;transition:color .2s}
 .bn.on{color:var(--gold)}
-.bn-ic{font-size:20px;line-height:1}
-.bndot{position:absolute;top:7px;right:calc(50% - 14px);width:7px;height:7px;background:var(--err);border-radius:50%;display:none}
-.fab{display:none;position:absolute;bottom:calc(var(--nh) + 12px);right:14px;width:50px;height:50px;border-radius:50%;background:var(--gold);color:#000;font-size:26px;border:none;cursor:pointer;z-index:101;box-shadow:0 4px 20px rgba(201,160,23,.45);align-items:center;justify-content:center}
+.bn-ic{font-size:21px;line-height:1}
+.bn-dot{position:absolute;top:8px;right:calc(50% - 15px);width:7px;height:7px;background:var(--err);border-radius:50%;display:none}
 
-/* ══════════════════════════════════════════
-   BOOKING SHELL
-══════════════════════════════════════════ */
-#booking-shell{flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg)}
-.booking-wrap{max-width:460px;margin:0 auto;padding:20px 16px 50px;width:100%}
+/* FAB */
+.fab{display:none;position:fixed;bottom:calc(var(--nh) + 12px);right:14px;width:50px;height:50px;border-radius:50%;background:var(--gold);color:#000;font-size:26px;font-weight:700;border:none;cursor:pointer;z-index:150;box-shadow:0 4px 20px rgba(201,160,23,.45);align-items:center;justify-content:center}
 
-/* STEPS */
-.steps{display:flex;align-items:flex-start;margin-bottom:24px}
-.step-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.sn{width:30px;height:30px;border-radius:50%;background:var(--sf2);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--tx2);transition:all .3s;flex-shrink:0}
-.sn.done{background:var(--ok);border-color:var(--ok);color:#000}
-.sn.cur{background:var(--gold);border-color:var(--gold);color:#000}
-.sl{font-size:9px;color:var(--tx2);letter-spacing:.5px;text-align:center;margin-top:2px}
-.sline{flex:1;height:2px;background:var(--bd);margin-top:14px;transition:background .3s;max-width:40px}
-.sline.done{background:var(--ok)}
-
-/* BOOKING SECTIONS */
-.bsec{display:none}.bsec.on{display:block}
-.bsec-title{font-size:19px;font-weight:800;margin-bottom:4px}
-.bsec-sub{font-size:13px;color:var(--tx2);margin-bottom:18px}
-
-/* SERVICE LIST */
-.gtabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.gt{padding:7px 15px;border-radius:20px;font-size:13px;font-weight:600;background:var(--sf);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.gt.aw{background:var(--wdim);border-color:var(--women);color:var(--women)}
-.gt.am{background:var(--mdim);border-color:var(--men);color:var(--men)}
-.gt.au{background:var(--udim);border-color:var(--uni);color:var(--uni)}
-.svc-list{display:flex;flex-direction:column;gap:10px}
-.svc-card{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.svc-card.sel,.svc-card:active{border-color:var(--gold);background:var(--gdim)}
-.svc-ic{font-size:26px;flex-shrink:0}
-.svc-inf{flex:1;min-width:0}
-.svc-nm{font-size:14px;font-weight:700}
-.svc-dr{font-size:11px;color:var(--tx2);margin-top:2px}
-.svc-pr{font-size:15px;font-weight:800;color:var(--gold);flex-shrink:0}
-.svc-tbd{font-size:11px;color:var(--warn);font-style:italic;flex-shrink:0}
-
-/* STAFF */
-.staff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.staff-card{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.staff-card.sel,.staff-card:active{border-color:var(--gold);background:var(--gdim)}
-.stf-av{width:50px;height:50px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;overflow:hidden}
-.stf-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.stf-nm{font-size:13px;font-weight:700}
-.stf-rl{font-size:11px;color:var(--tx2);margin-top:2px}
-.no-pref-card{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;-webkit-tap-highlight-color:transparent}
-.no-pref-card.sel,.no-pref-card:active{border-color:var(--gold);background:var(--gdim)}
-
-/* DATE TIME */
-.notice{background:var(--gdim);border:1px solid rgba(201,160,23,.2);border-radius:var(--rs);padding:11px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.date-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:16px}
-.date-btn{background:var(--sf);border:2px solid var(--bd);border-radius:var(--rs);padding:10px 4px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.date-btn.sel,.date-btn:active{border-color:var(--gold);background:var(--gdim)}
-.dday{font-size:9px;color:var(--tx2);margin-bottom:1px}
-.dnum{font-size:17px;font-weight:800}
-.dmo{font-size:9px;color:var(--tx2)}
-.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.time-btn{background:var(--sf);border:2px solid var(--bd);border-radius:var(--rs);padding:12px 6px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.time-btn.sel{border-color:var(--gold);background:var(--gdim);color:var(--gold)}
-.time-btn.taken{background:var(--sf2);border-color:var(--sf3);color:var(--tx3);cursor:not-allowed;opacity:.5;pointer-events:none}
-
-/* SUMMARY */
-.sum-box{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:15px;margin-bottom:18px}
-.sum-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px}
-.sum-row:last-child{border-bottom:none}
-.sum-lbl{color:var(--tx2)}
-.sum-val{font-weight:700;text-align:right;max-width:60%}
-
-/* FORM */
-.fg{margin-bottom:12px}
-.fl{display:block;font-size:10px;font-weight:600;color:var(--tx2);letter-spacing:.5px;margin-bottom:5px;text-transform:uppercase}
-.fi{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 13px;color:var(--tx);font-size:15px;transition:border-color .2s}
-.fi:focus{border-color:var(--gold)}
-.fi::placeholder{color:var(--tx3)}
-.fsel{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 13px;color:var(--tx);font-size:15px}
-.fsel:focus{border-color:var(--gold)}
-.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.exist-found{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);border-radius:var(--rs);padding:12px 14px;font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:8px;display:none}
-.priv-note{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:11px 13px;font-size:11px;color:var(--tx2);margin-bottom:14px;display:flex;align-items:flex-start;gap:7px}
-
-/* SUCCESS */
-.success-wrap{text-align:center;padding:20px 0}
-.suc-ic{font-size:60px;margin-bottom:14px}
-.suc-title{font-size:21px;font-weight:800;margin-bottom:6px}
-.suc-sub{font-size:13px;color:var(--tx2);margin-bottom:22px;line-height:1.6}
-.suc-note{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:11px 13px;font-size:11px;color:var(--tx2);margin-bottom:18px}
-
-/* SHARED BUTTONS */
-.btn-main{width:100%;padding:15px;border-radius:var(--rs);font-size:15px;font-weight:700;background:var(--gold);color:#000;border:none;cursor:pointer;transition:all .2s;margin-top:6px;display:block}
-.btn-main:active{background:var(--gold2);transform:scale(.99)}
-.btn-main:disabled{background:var(--sf3);color:var(--tx3);cursor:not-allowed;transform:none}
-.btn-back{width:100%;padding:12px;border-radius:var(--rs);font-size:13px;font-weight:600;background:var(--sf2);color:var(--tx2);border:1px solid var(--bd);cursor:pointer;margin-bottom:10px;margin-top:4px;display:block}
-.btn-back:active{background:var(--sf3)}
-
-/* ADMIN STATS / CARDS / TABLE */
-.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:13px;position:relative;overflow:hidden}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acc,var(--gold))}
-.s-lbl{font-size:10px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
-.s-val{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
-.s-sub{font-size:10px;color:var(--tx2);margin-top:2px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.sec-t{font-size:13px;font-weight:700}
-.ac{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:11px 12px;display:flex;align-items:center;gap:9px;margin-bottom:7px;transition:border-color .2s}
-.at{font-size:12px;font-weight:700;color:var(--gold);min-width:40px;text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0}
-.adiv{width:2px;height:30px;background:var(--sf3);border-radius:2px;flex-shrink:0}
-.ai{flex:1;min-width:0}
-.acl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.asv{font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.abg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0}
-.bm{background:var(--mdim);color:var(--men)}.bw{background:var(--wdim);color:var(--women)}.bu{background:var(--udim);color:var(--uni)}
-.apr2{font-size:12px;font-weight:700;color:var(--ok);flex-shrink:0;min-width:46px;text-align:right}
-.ast{font-size:10px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;text-align:center;white-space:nowrap}
-.sconf{background:rgba(46,204,113,.15);color:var(--ok)}
-.spend{background:rgba(243,156,18,.15);color:var(--warn)}
-.scomp{background:rgba(255,255,255,.06);color:var(--tx2)}
-.scanc{background:rgba(231,76,60,.15);color:var(--err)}
-.aa{display:flex;gap:4px;flex-shrink:0}
-.ab{width:28px;height:28px;border-radius:6px;background:var(--sf2);color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:12px;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.ab:active{background:var(--gold);color:#000}
-.ab.dd:active{background:var(--err);color:#fff}
-.svgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.svcd{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:12px;position:relative;transition:border-color .2s}
-.svcd:active{border-color:var(--gold)}
-.gdot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%}
-.svic{font-size:20px;margin-bottom:5px}
-.svnm{font-size:12px;font-weight:700;margin-bottom:2px}
-.svdr{font-size:10px;color:var(--tx2);margin-bottom:6px}
-.svpr{display:flex;align-items:center;justify-content:space-between}
-.sprice{font-size:14px;font-weight:800;color:var(--gold)}
-.stbd{font-size:10px;color:var(--warn);font-style:italic}
-.sedt{width:22px;height:22px;border-radius:5px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:10px}
-.sedt:active{background:var(--gold);color:#000}
-.staff-list-a{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stf-card-a{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:13px;display:flex;align-items:center;gap:11px;position:relative}
-.stf-av-a{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
-.stf-av-a img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.stf-nm-a{font-size:13px;font-weight:700}
-.stf-rl-a{font-size:11px;color:var(--tx2)}
-.stf-ed{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:5px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:10px}
-.stf-ed:active{background:var(--gold);color:#000}
-.clt{width:100%;border-collapse:collapse}
-.clt th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx2);text-transform:uppercase;border-bottom:1px solid var(--bd)}
-.clt td{padding:10px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
-.clt tr:active td{background:var(--sf2)}
-.cav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
-.cav img{width:100%;height:100%;object-fit:cover}
-.cc{display:flex;align-items:center;gap:8px}
-.cnm{font-size:13px;font-weight:600}
-.cph{font-size:11px;color:var(--tx2)}
-.rg{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.rc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px}
-.rt{font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:11px;text-transform:uppercase;letter-spacing:1px}
-.bc{display:flex;flex-direction:column;gap:9px}
-.br{display:flex;align-items:center;gap:8px}
-.bl{font-size:10px;color:var(--tx2);min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bt{flex:1;height:6px;background:var(--sf2);border-radius:3px;overflow:hidden}
-.bf{height:100%;border-radius:3px;transition:width .8s ease}
-.bv{font-size:10px;font-weight:700;min-width:28px;text-align:right}
-.rbig{font-size:30px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
-.rrow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}
-.rrow:last-child{border-bottom:none}
-.link-box{background:var(--gdim);border:1px solid rgba(201,160,23,.2);border-radius:var(--r);padding:14px;margin-bottom:16px}
-.link-lbl{font-size:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-weight:700}
-.link-hint{font-size:12px;color:var(--tx2);margin-top:6px;line-height:1.5}
-
-/* MODAL */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:500;align-items:flex-end;justify-content:center;padding:0}
-.mo.on{display:flex}
-.md{background:var(--sf);border:1px solid var(--bd);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:su .25s ease}
-@keyframes su{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-.mh{padding:14px 16px 10px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--sf);z-index:1}
-.handle{width:36px;height:4px;background:var(--sf3);border-radius:2px;margin:0 auto 10px;display:block}
-.mtitle{font-size:14px;font-weight:700}
-.mclose{width:28px;height:28px;border-radius:7px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:14px}
-.mclose:active{background:var(--err);color:#fff}
-.mbody{padding:14px 16px}
-.mfoot{padding:10px 16px 18px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--bd)}
-
-/* SHARED BTN */
+/* BUTTONS */
 .btn{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:600;transition:all .2s;border:none;cursor:pointer}
 .bg{background:var(--gold);color:#000}.bg:active{background:var(--gold2)}
 .bgh{background:var(--sf2);color:var(--tx);border:1px solid var(--bd)}.bgh:active{background:var(--sf3)}
 .bd2{background:var(--err);color:#fff}
 .sm{padding:6px 11px;font-size:12px}
+
+/* VIEWS */
+.vw{display:none}.vw.on{display:block}
+
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acc,var(--gold))}
+.sl{font-size:10px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.sv{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.ss{font-size:10px;color:var(--tx2);margin-top:2px}
+
+/* APT CARDS */
+.ac{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:11px 12px;display:flex;align-items:center;gap:9px;margin-bottom:7px;transition:border-color .2s}
+.ac:active{border-color:rgba(201,160,23,.3)}
+.at{font-size:12px;font-weight:700;color:var(--gold);min-width:40px;text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0}
+.ad{width:2px;height:32px;background:var(--sf3);border-radius:2px;flex-shrink:0}
+.ai{flex:1;min-width:0}
+.acl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asv{font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0}
+.bm{background:var(--mdim);color:var(--men)}.bw{background:var(--wdim);color:var(--women)}.bu{background:var(--udim);color:var(--uni)}
+.apr{font-size:13px;font-weight:700;color:var(--ok);flex-shrink:0;min-width:48px;text-align:right}
+.ast{font-size:10px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;text-align:center}
+.sc2{background:rgba(46,204,113,.15);color:var(--ok)}
+.sp{background:rgba(243,156,18,.15);color:var(--warn)}
+.sd{background:rgba(255,255,255,.06);color:var(--tx2)}
+.sx{background:rgba(231,76,60,.15);color:var(--err)}
+.aa{display:flex;gap:4px;flex-shrink:0}
+.ab{width:30px;height:30px;border-radius:6px;background:var(--sf2);color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:13px;border:none;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.ab:active{background:var(--gold);color:#000}
+.ab.dd:active{background:var(--err);color:#fff}
+
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.cbtn{width:30px;height:30px;border-radius:8px;background:var(--sf2);color:var(--tx);border:none;cursor:pointer;font-size:14px;transition:all .2s}
+.cbtn:active{background:var(--gold);color:#000}
+.cm{font-size:13px;font-weight:700;flex:1;text-align:center}
+.wg{display:grid;grid-template-columns:40px repeat(7,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.wh{background:var(--sf);padding:6px 2px;text-align:center}
+.dn{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx2)}
+.dnum{font-size:15px;font-weight:800;margin-top:1px}
+.dnum.td{color:var(--gold)}
+.tc{background:var(--sf);padding:4px 2px;font-size:8px;color:var(--tx3);text-align:right;line-height:1.2}
+.ws{background:var(--sf);min-height:34px;padding:2px;cursor:pointer}
+.ws:active{background:var(--sf2)}
+.sa{border-radius:3px;padding:1px 3px;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;cursor:pointer}
+.sw{background:var(--wdim);border-left:2px solid var(--women);color:var(--women)}
+.sm2{background:var(--mdim);border-left:2px solid var(--men);color:var(--men)}
+.su{background:var(--gdim);border-left:2px solid var(--gold);color:var(--gold)}
+
+/* SERVICES */
+.gtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.gt{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;background:var(--sf);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;transition:all .2s}
+.gt.aw{background:var(--wdim);border-color:var(--women);color:var(--women)}
+.gt.am{background:var(--mdim);border-color:var(--men);color:var(--men)}
+.gt.au{background:var(--udim);border-color:var(--uni);color:var(--uni)}
+.svgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.svcd{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:12px;position:relative;transition:border-color .2s}
+.svcd:active{border-color:var(--gold)}
+.gdot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%}
+.svic{font-size:20px;margin-bottom:6px}
+.svnm{font-size:12px;font-weight:700;margin-bottom:2px}
+.svdr{font-size:10px;color:var(--tx2);margin-bottom:7px}
+.svpr{display:flex;align-items:center;justify-content:space-between}
+.sprice{font-size:15px;font-weight:800;color:var(--gold)}
+.stbd{font-size:10px;color:var(--warn);font-style:italic}
+.sedt{width:24px;height:24px;border-radius:5px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:11px;transition:all .2s}
+.sedt:active{background:var(--gold);color:#000}
+
+/* STAFF */
+.staff-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.staff-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px;position:relative}
+.staff-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
+.staff-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.staff-name{font-size:14px;font-weight:700}
+.staff-role{font-size:11px;color:var(--tx2)}
+.staff-del{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:11px}
+.staff-del:active{background:var(--err);color:#fff}
+
+/* CLIENTS */
+.clt{width:100%;border-collapse:collapse}
+.clt th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx2);text-transform:uppercase;border-bottom:1px solid var(--bd)}
+.clt td{padding:10px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.clt tr:active td{background:var(--sf2)}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.cc{display:flex;align-items:center;gap:8px}
+.cn{font-size:13px;font-weight:600}
+.cp{font-size:11px;color:var(--tx2)}
+
+/* REPORTS */
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.rc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:15px}
+.rt{font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:11px;text-transform:uppercase;letter-spacing:1px}
+.bc{display:flex;flex-direction:column;gap:9px}
+.br{display:flex;align-items:center;gap:8px}
+.bl{font-size:10px;color:var(--tx2);min-width:85px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{flex:1;height:6px;background:var(--sf2);border-radius:3px;overflow:hidden}
+.bf{height:100%;border-radius:3px;transition:width .8s ease}
+.bv{font-size:10px;font-weight:700;min-width:28px;text-align:right}
+.rbig{font-size:32px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.rrow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.rrow:last-child{border-bottom:none}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:500;align-items:flex-end;justify-content:center;padding:0}
+.mo.on{display:flex}
+.md{background:var(--sf);border:1px solid var(--bd);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 -10px 50px rgba(0,0,0,.8);animation:su .25s ease}
+@keyframes su{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
+.mh{padding:14px 16px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--sf);z-index:1}
+.handle{width:36px;height:4px;background:var(--sf3);border-radius:2px;margin:0 auto 10px;display:block}
+.mt{font-size:14px;font-weight:700}
+.mc{width:28px;height:28px;border-radius:7px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:14px;transition:all .2s}
+.mc:active{background:var(--err);color:#fff}
+.mb{padding:14px 16px}
+.mf{padding:10px 16px 18px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--bd)}
+.fg{margin-bottom:11px}
+.fl{display:block;font-size:10px;font-weight:600;color:var(--tx2);letter-spacing:.5px;margin-bottom:4px;text-transform:uppercase}
+.fi{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 11px;color:var(--tx);font-size:14px;transition:border-color .2s;-webkit-appearance:none}
+.fi:focus{border-color:var(--gold)}
+.fi::placeholder{color:var(--tx3)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fs{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 11px;color:var(--tx);font-size:14px;-webkit-appearance:none}
+.fs:focus{border-color:var(--gold)}
+.fta{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 11px;color:var(--tx);font-size:14px;resize:vertical;min-height:65px}
+.fta:focus{border-color:var(--gold)}
+
+/* TOAST */
+.tw{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:90%}
+.toast{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:9px 16px;font-size:12px;white-space:nowrap;box-shadow:var(--sh);animation:ti .25s ease;text-align:center;max-width:300px}
+@keyframes ti{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.tok{border-color:var(--ok);color:var(--ok)}.terr{border-color:var(--err);color:var(--err)}.twarn{border-color:var(--warn);color:var(--warn)}
+
+/* MISC */
+.empty{text-align:center;padding:40px 16px;color:var(--tx2)}
+.emp-ic{font-size:34px;margin-bottom:8px;opacity:.4}
+.emp-tx{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.emp-sub{font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.st{font-size:13px;font-weight:700}
 .sb{display:flex;gap:7px;margin-bottom:12px}
-.si{flex:1;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:9px 12px;color:var(--tx);font-size:14px}
+.si{flex:1;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:9px 12px;color:var(--tx);font-size:14px;-webkit-appearance:none}
 .si:focus{border-color:var(--gold)}
 .si::placeholder{color:var(--tx3)}
 .av-up{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.av-pr{width:50px;height:50px;border-radius:50%;background:var(--sf2);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;border:2px solid var(--bd)}
+.av-pr{width:52px;height:52px;border-radius:50%;background:var(--sf2);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;border:2px solid var(--bd)}
 .av-pr img{width:100%;height:100%;object-fit:cover}
 .av-btn{padding:6px 12px;font-size:12px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);cursor:pointer;display:inline-block}
 .av-btn:active{border-color:var(--gold);color:var(--gold)}
 
-/* TOAST */
-.tw{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:90%}
-.toast{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:9px 18px;font-size:12px;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:ti .25s ease;text-align:center;max-width:300px;pointer-events:all}
-@keyframes ti{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-.tok{border-color:var(--ok);color:var(--ok)}.terr{border-color:var(--err);color:var(--err)}.twarn{border-color:var(--warn);color:var(--warn)}
-.empty{text-align:center;padding:35px 14px;color:var(--tx2)}
-.emp-ic{font-size:32px;margin-bottom:8px;opacity:.4}
-.emp-tx{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:3px}
-.emp-sub{font-size:12px}
-.vw{display:none}.vw.on{display:block}
+/* BOOKING LINK BOX */
+.link-box{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:16px}
+.link-label{font-size:10px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.link-url{font-size:12px;color:var(--gold);word-break:break-all;margin-bottom:10px;font-family:monospace}
+.link-hint{font-size:11px;color:var(--tx2)}
 
 /* RESPONSIVE */
 @media(max-width:768px){
   .sidebar{display:none}
   .bnav{display:flex}
   .fab{display:flex}
-  .admin-content{padding:11px 11px calc(var(--nh) + 11px)}
+  .content{padding:11px 11px calc(var(--nh) + 11px)}
   .sg{grid-template-columns:1fr 1fr;gap:8px}
-  .s-val{font-size:19px}
+  .sv{font-size:20px}
   .two{grid-template-columns:1fr}
   .svgrid{grid-template-columns:1fr 1fr}
   .rg{grid-template-columns:1fr}
-  .fr2{grid-template-columns:1fr}
-  .staff-list-a{grid-template-columns:1fr}
-  .atb-date{display:none}
-  .ast,.apr2{display:none}
+  .fr{grid-template-columns:1fr}
+  .staff-grid{grid-template-columns:1fr}
+  .ast,.apr{display:none}
+  .tb-date{display:none}
   .md{max-width:100%}
-  .ms-tab{padding:5px 10px;font-size:10px}
 }
 @media(min-width:769px){
   .mo{align-items:center;padding:20px}
-  .md{border-radius:16px}
+  .md{border-radius:16px;max-width:460px}
   .handle{display:none}
-  @keyframes su{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+  @keyframes su{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
 }
-@media(max-width:380px){
-  .sg{grid-template-columns:1fr 1fr}
+@media(max-width:400px){
+  .sg{grid-template-columns:1fr 1fr;gap:6px}
+  .sc{padding:10px}
+  .sv{font-size:18px}
   .svgrid{grid-template-columns:1fr}
-  .ms-name{display:none}
+  .content{padding:9px 9px calc(var(--nh) + 9px)}
 }
-@media print{.sidebar,.admin-topbar,.aa,.btn,.mo,.bnav,.fab,.mode-switch{display:none!important}#admin-shell{top:0;flex-direction:column}.admin-content{padding:0;overflow:visible}body{background:#fff;color:#000}}
+@media print{.sidebar,.topbar,.aa,.btn,.mo,.bnav,.fab{display:none!important}.main{display:block}.content{padding:0;overflow:visible}body{background:#fff;color:#000}}
 
-/* ── LOGIN SCREEN ── */
-#login-screen{position:fixed;inset:0;background:var(--bg);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px}
-.login-box{background:var(--sf);border:1px solid var(--bd);border-radius:20px;padding:32px 24px;width:100%;max-width:360px;text-align:center}
-.login-ic{font-size:48px;margin-bottom:12px}
-.login-title{font-size:22px;font-weight:800;letter-spacing:2px;margin-bottom:4px}
-.login-sub{font-size:12px;color:var(--tx2);margin-bottom:24px}
-.login-fg{margin-bottom:14px;text-align:left}
-.login-lbl{display:block;font-size:10px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
-.login-inp{width:100%;background:var(--sf2);border:2px solid var(--bd);border-radius:var(--rs);padding:12px 14px;color:var(--tx);font-size:16px;transition:border-color .2s;-webkit-appearance:none}
-.login-inp:focus{border-color:var(--gold);outline:none}
-.login-inp::placeholder{color:var(--tx3)}
-.login-btn{width:100%;padding:16px;min-height:52px;-webkit-tap-highlight-color:transparent;border-radius:var(--rs);font-size:15px;font-weight:700;background:var(--gold);color:#000;border:none;cursor:pointer;margin-top:6px;transition:all .2s}
-.login-btn:active{background:var(--gold2);transform:scale(.99)}
-.login-err{color:var(--err);font-size:12px;margin-top:8px;display:none}
-.login-hint{font-size:11px;color:var(--tx3);margin-top:16px}
-.login-book-btn{background:transparent;border:1px solid var(--bd);border-radius:var(--rs);padding:14px 20px;min-height:48px;color:var(--tx2);font-size:13px;cursor:pointer;margin-top:10px;width:100%;transition:all .2s}
-.login-book-btn:active{border-color:var(--gold);color:var(--gold)}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--sf:#161616;--sf2:#1E1E1E;--sf3:#252525;
+  --gold:#C9A017;--gold2:#E8B84B;--gdim:rgba(201,160,23,.12);
+  --tx:#F5F5F0;--tx2:#999990;--tx3:#555550;
+  --men:#3B7DD8;--mdim:rgba(59,125,216,.15);
+  --women:#C2607A;--wdim:rgba(194,96,122,.15);
+  --uni:#7B68EE;--udim:rgba(123,104,238,.15);
+  --ok:#2ECC71;--warn:#F39C12;--err:#E74C3C;
+  --bd:rgba(255,255,255,.07);--r:14px;--rs:10px;
+}
+html,body{min-height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+button{cursor:pointer;font-family:inherit;border:none;outline:none;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
+
+/* HEADER */
+.header{background:var(--sf);border-bottom:1px solid var(--bd);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.h-logo{display:flex;align-items:center;gap:10px}
+.h-ic{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.h-name{font-size:18px;font-weight:800;letter-spacing:2px}
+.h-sub{font-size:10px;color:var(--tx2);letter-spacing:1px}
+.lang-tog{display:flex;background:var(--sf2);border-radius:8px;padding:3px;gap:2px}
+.lb{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;background:transparent;color:var(--tx2);transition:all .2s;border:none;cursor:pointer}
+.lb.on{background:var(--gold);color:#000}
+
+/* MAIN */
+.wrap{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+
+/* STEPS */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--sf2);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--tx2);transition:all .3s}
+.step-num.done{background:var(--ok);border-color:var(--ok);color:#000}
+.step-num.active{background:var(--gold);border-color:var(--gold);color:#000}
+.step-lbl{font-size:10px;color:var(--tx2);letter-spacing:.5px;text-align:center}
+.step-line{flex:1;height:2px;background:var(--bd);margin-bottom:16px;transition:background .3s}
+.step-line.done{background:var(--ok)}
+
+/* SECTIONS */
+.section{display:none}.section.on{display:block}
+.sec-title{font-size:18px;font-weight:800;margin-bottom:6px}
+.sec-sub{font-size:13px;color:var(--tx2);margin-bottom:20px}
+
+/* SERVICE CARDS */
+.svc-list{display:flex;flex-direction:column;gap:10px}
+.svc-item{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.svc-item:active,.svc-item.sel{border-color:var(--gold);background:var(--gdim)}
+.svc-ic{font-size:28px;flex-shrink:0}
+.svc-info{flex:1}
+.svc-name{font-size:15px;font-weight:700}
+.svc-dur{font-size:12px;color:var(--tx2);margin-top:2px}
+.svc-price{font-size:16px;font-weight:800;color:var(--gold);flex-shrink:0}
+.svc-tbd{font-size:12px;color:var(--warn);font-style:italic}
+.gender-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.gt{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:600;background:var(--sf);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;transition:all .2s}
+.gt.aw{background:var(--wdim);border-color:var(--women);color:var(--women)}
+.gt.am{background:var(--mdim);border-color:var(--men);color:var(--men)}
+.gt.au{background:var(--udim);border-color:var(--uni);color:var(--uni)}
+
+/* STAFF CARDS */
+.staff-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.staff-item{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s}
+.staff-item:active,.staff-item.sel{border-color:var(--gold);background:var(--gdim)}
+.staff-av{width:52px;height:52px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;overflow:hidden}
+.staff-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.staff-nm{font-size:13px;font-weight:700}
+.staff-rl{font-size:11px;color:var(--tx2)}
+.no-pref{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.no-pref:active,.no-pref.sel{border-color:var(--gold);background:var(--gdim)}
+
+/* DATE TIME */
+.date-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.date-btn{background:var(--sf);border:2px solid var(--bd);border-radius:var(--rs);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s}
+.date-btn:active,.date-btn.sel{border-color:var(--gold);background:var(--gdim)}
+.date-day{font-size:10px;color:var(--tx2);margin-bottom:2px}
+.date-num{font-size:17px;font-weight:800}
+.date-month{font-size:10px;color:var(--tx2)}
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.time-btn{background:var(--sf);border:2px solid var(--bd);border-radius:var(--rs);padding:11px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.time-btn:active,.time-btn.sel{border-color:var(--gold);background:var(--gdim);color:var(--gold)}
+.time-btn.taken{background:var(--sf2);border-color:var(--sf3);color:var(--tx3);cursor:not-allowed;opacity:.5}
+
+/* SUMMARY BOX */
+.summary{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:20px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.sum-row:last-child{border-bottom:none}
+.sum-lbl{color:var(--tx2)}
+.sum-val{font-weight:700}
+.dur-badge{display:inline-flex;align-items:center;gap:5px;background:var(--gdim);color:var(--gold);font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;margin-top:6px}
+
+/* FORM */
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--tx2);letter-spacing:.5px;margin-bottom:5px;text-transform:uppercase}
+.fi{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;color:var(--tx);font-size:15px;transition:border-color .2s}
+.fi:focus{border-color:var(--gold)}
+.fi::placeholder{color:var(--tx3)}
+.fs{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;color:var(--tx);font-size:15px}
+.fs:focus{border-color:var(--gold)}
+
+/* BUTTONS */
+.btn-main{width:100%;padding:15px;border-radius:var(--rs);font-size:16px;font-weight:700;background:var(--gold);color:#000;border:none;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-main:active{background:var(--gold2);transform:scale(.99)}
+.btn-back{width:100%;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:600;background:var(--sf2);color:var(--tx2);border:1px solid var(--bd);cursor:pointer;margin-bottom:10px}
+.btn-back:active{background:var(--sf3)}
+
+/* SUCCESS */
+.success-screen{text-align:center;padding:30px 0}
+.success-ic{font-size:64px;margin-bottom:16px}
+.success-title{font-size:22px;font-weight:800;margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--tx2);margin-bottom:24px;line-height:1.6}
+.conf-box{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:20px;text-align:left}
+
+/* NOTICE */
+.notice{background:rgba(201,160,23,.08);border:1px solid rgba(201,160,23,.2);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:var(--tx2);margin-bottom:16px;display:flex;align-items:flex-start;gap:8px}
+
+/* TOAST */
+.tw{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+.toast{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:9px 18px;font-size:13px;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:ti .25s ease;text-align:center}
+@keyframes ti{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.tok{border-color:var(--ok);color:var(--ok)}.terr{border-color:var(--err);color:var(--err)}
+
+.empty{text-align:center;padding:30px;color:var(--tx2);font-size:13px}
+
+
+.svc-item{cursor:pointer;-webkit-tap-highlight-color:rgba(201,160,23,.2);touch-action:manipulation}
+.svc-item:active{opacity:.7}
+@supports(padding:env(safe-area-inset-bottom)){
+  #booking-shell{padding-bottom:env(safe-area-inset-bottom)}
+}
+
 </style>
 </head>
 <body>
-
-<!-- ── MODE SWITCHER ── -->
-
-<!-- ── LOGIN SCREEN ── -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-ic">✂️</div>
-    <div class="login-title">JOEL</div>
-    <div class="login-sub" id="login-sub">Salon Management</div>
-    <div class="login-fg">
-      <label class="login-lbl" id="login-user-lbl">Username</label>
-      <input type="text" class="login-inp" id="login-user" placeholder="admin" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text">
+<div id="landing" style="position:fixed;inset:0;background:#0a0a0a;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <div style="text-align:center;margin-bottom:40px">
+    <div style="width:72px;height:72px;background:#C9A017;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:12px">✂️</div>
+    <div style="font-size:26px;font-weight:800;color:#F5F5F0;letter-spacing:4px">JOEL</div>
+    <div style="font-size:11px;color:#888;margin-top:4px;letter-spacing:1px">SALON</div>
+  </div>
+  <div style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:10px">
+    <button onclick="goBooking()" style="width:100%;background:#C9A017;border:none;border-radius:16px;padding:18px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">
+      <div style="font-size:24px;margin-bottom:4px">📲</div>
+      <div id="lb-book" style="font-size:16px;font-weight:700;color:#000">Book an Appointment</div>
+      <div id="lb-book2" style="font-size:11px;color:#333;margin-top:2px">Reserve your spot</div>
+    </button>
+    <button onclick="showAdminLogin()" id="adm-btn" style="width:100%;background:#1a1a1a;border:1.5px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">
+      <div style="font-size:24px;margin-bottom:4px">🔐</div>
+      <div id="lb-adm" style="font-size:16px;font-weight:700;color:#F5F5F0">Administrator</div>
+      <div id="lb-adm2" style="font-size:11px;color:#888;margin-top:2px">Staff access only</div>
+    </button>
+    <div id="adm-form" style="display:none;background:#141414;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px">
+      <input id="au" type="text" placeholder="Username" autocomplete="username" autocorrect="off" autocapitalize="none" spellcheck="false" style="width:100%;background:#222;border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:#F5F5F0;font-size:16px;font-family:inherit;box-sizing:border-box;outline:none;-webkit-appearance:none;margin-bottom:8px" onfocus="this.style.borderColor='#C9A017'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+      <input id="ap" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;background:#222;border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:#F5F5F0;font-size:16px;font-family:inherit;box-sizing:border-box;outline:none;-webkit-appearance:none;margin-bottom:12px" onfocus="this.style.borderColor='#C9A017'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+      <div id="lf-err" style="display:none;color:#E74C3C;font-size:12px;text-align:center;margin-bottom:8px">Incorrect credentials</div>
+      <button id="lf-go" onclick="doLogin()" style="width:100%;background:#C9A017;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">Enter Admin</button>
+      <div style="font-size:10px;color:#444;text-align:center;margin-top:8px">admin / joel2024</div>
     </div>
-    <div class="login-fg">
-      <label class="login-lbl" id="login-pass-lbl">Password</label>
-      <input type="password" class="login-inp" id="login-pass" placeholder="••••••" autocomplete="current-password" autocorrect="off" autocapitalize="none" spellcheck="false">
-    </div>
-    <button class="login-btn" type="button" id="login-btn" onclick="doLogin()">Enter Admin</button>
-    <div class="login-err" id="login-err">❌ Incorrect username or password</div>
-    <div class="login-hint" id="login-hint">Default: admin / joel2024</div>
-    <button class="login-book-btn" type="button" id="login-book-btn">📲 Book an Appointment</button>
+  </div>
+  <div style="position:fixed;top:14px;right:14px;display:flex;background:#1a1a1a;border-radius:8px;padding:3px;gap:2px">
+    <button id="en-b" onclick="setL('en')" style="padding:5px 10px;border-radius:5px;font-size:11px;font-weight:700;background:#C9A017;color:#000;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent">EN</button>
+    <button id="es-b" onclick="setL('es')" style="padding:5px 10px;border-radius:5px;font-size:11px;font-weight:700;background:transparent;color:#888;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent">ES</button>
   </div>
 </div>
+<div id="admin-shell" class="app" style="display:none;position:fixed;inset:0">
 
-<div class="mode-switch" id="mode-bar" style="display:none">
-  <div class="ms-logo">
-    <div class="ms-ic">✂️</div>
-    <div class="ms-name">JOEL</div>
+
+<!-- SIDEBAR desktop -->
+<aside class="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-ic">✂️</div>
+    <div><div class="logo-tx">JOEL</div><div class="logo-sub">Salon Admin</div></div>
   </div>
-  <div class="ms-tabs">
-    <button class="ms-tab on" onclick="setMode('admin')" id="tab-admin" data-i="mode_admin">Admin</button>
-    <button class="ms-tab" onclick="setMode('booking')" id="tab-booking" data-i="mode_booking">📲 Book</button>
+  <div class="lang-row">
+    <button class="lb on" onclick="setL('en')" id="en-btn">EN</button>
+    <button class="lb" onclick="setL('es')" id="es-btn">ES</button>
   </div>
-  <div class="ms-lang">
-    <button class="lb on" onclick="setL('en')" id="en-b">EN</button>
-    <button class="lb" onclick="setL('es')" id="es-b">ES</button>
+  <nav class="nav">
+    <div class="nl" data-i="mn">Main</div>
+    <button class="ni on" onclick="gv('dashboard')"><span class="ni-ic">📊</span><span data-i="vd">Dashboard</span></button>
+    <button class="ni" onclick="gv('appointments')"><span class="ni-ic">📅</span><span data-i="va">Appointments</span><span class="nbadge" id="nb">0</span></button>
+    <button class="ni" onclick="gv('calendar')"><span class="ni-ic">🗓️</span><span data-i="vc">Calendar</span></button>
+    <div class="nl" data-i="mg">Manage</div>
+    <button class="ni" onclick="gv('staff')"><span class="ni-ic">💇</span><span data-i="vst">Staff</span></button>
+    <button class="ni" onclick="gv('services')"><span class="ni-ic">💅</span><span data-i="vsv">Services</span></button>
+    <button class="ni" onclick="gv('clients')"><span class="ni-ic">👥</span><span data-i="vcl">Clients</span></button>
+    <button class="ni" onclick="gv('reports')"><span class="ni-ic">📈</span><span data-i="vr">Reports</span></button>
+  </nav>
+  <div class="sf-foot">v4.0 · JOEL Salon</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar"><button id="exit-admin-btn" onclick="exitAdmin()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:6px 14px;color:#ccc;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent">← Exit</button>
+    <div class="tb-title" id="pg-title">Dashboard</div>
+    <div class="tb-date" id="tb-date" style="font-size:11px;color:var(--tx2)"></div>
+    <button class="btn bgh sm" onclick="setL(lang==='en'?'es':'en')" id="mob-l" style="min-width:40px">ES</button>
+    <button class="btn bgh sm" onclick="expData()" title="Backup">💾</button>
+    <button class="btn bg sm" onclick="openNewApt()" data-i="napt">+ New</button>
+  </header>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="vw on" id="vw-dashboard">
+      <div class="sg">
+        <div class="sc" style="--acc:var(--gold)"><div class="sl" data-i="s1">Today</div><div class="sv" id="s-t">$0</div><div class="ss" id="s-tn">0</div></div>
+        <div class="sc" style="--acc:var(--ok)"><div class="sl" data-i="s2">This Week</div><div class="sv" id="s-w">$0</div><div class="ss" id="s-wn">0</div></div>
+        <div class="sc" style="--acc:var(--men)"><div class="sl" data-i="s3">Clients</div><div class="sv" id="s-c">0</div><div class="ss" data-i="s3b">total</div></div>
+        <div class="sc" style="--acc:var(--err)"><div class="sl" data-i="s4">Pending</div><div class="sv" id="s-p">0</div><div class="ss" data-i="s4b">confirm</div></div>
+      </div>
+      <div class="two">
+        <div>
+          <div class="sh"><div class="st" data-i="td-sch">Today</div><button class="btn bgh sm" onclick="gv('appointments')" data-i="sa">See all</button></div>
+          <div id="dash-tl"></div>
+        </div>
+        <div>
+          <div class="sh"><div class="st" data-i="top-sv">Top Services</div></div>
+          <div class="rc" style="margin:0"><div class="bc" id="dash-top"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="vw" id="vw-appointments">
+      <div style="display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap;align-items:center">
+        <input type="date" class="fi" id="f-dt" style="max-width:155px;flex:1" onchange="renderApts()">
+        <select class="fs" id="f-st" style="max-width:135px;flex:1" onchange="renderApts()">
+          <option value="" data-i="all">All</option>
+          <option value="pending" data-i="pend">Pending</option>
+          <option value="confirmed" data-i="conf">Confirmed</option>
+          <option value="completed" data-i="comp">Completed</option>
+          <option value="cancelled" data-i="canc">Cancelled</option>
+        </select>
+        <button class="btn bgh sm" onclick="document.getElementById('f-dt').value='';renderApts()">✕</button>
+      </div>
+      <div id="apt-list"></div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="vw" id="vw-calendar">
+      <div class="cal-nav">
+        <button class="cbtn" onclick="calW--;renderCal()">‹</button>
+        <div class="cm" id="cal-lbl"></div>
+        <button class="cbtn" onclick="calW++;renderCal()">›</button>
+        <button class="btn bgh sm" onclick="calW=0;renderCal()" data-i="tod">Today</button>
+      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="wg" id="wk-g" style="min-width:500px"></div></div>
+    </div>
+
+    <!-- STAFF -->
+    <div class="vw" id="vw-staff">
+      <div class="link-box">
+        <div class="link-label" data-i="bl-lbl">📲 Client Booking Link</div>
+        <div class="link-url" id="booking-url">joel_booking.html</div>
+        <div class="link-hint" data-i="bl-hint">Send this link to clients so they can book appointments online without seeing your management app.</div>
+      </div>
+      <div class="sh">
+        <div class="st" data-i="vst">Staff</div>
+        <button class="btn bg sm" onclick="openAddStaff()">+ <span data-i="add-st">Add</span></button>
+      </div>
+      <div class="staff-grid" id="staff-grid"></div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="vw" id="vw-services">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div class="gtabs">
+          <button class="gt aw" id="tw" onclick="fSv('women')" data-i="tw">👩 Women</button>
+          <button class="gt" id="tm" onclick="fSv('men')" data-i="tm">👨 Men</button>
+          <button class="gt" id="tu" onclick="fSv('unisex')" data-i="tu">✨ Unisex</button>
+        </div>
+        <button class="btn bg sm" onclick="openAddSvc()">+</button>
+      </div>
+      <div class="svgrid" id="sv-g"></div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="vw" id="vw-clients">
+      <div class="sb">
+        <input type="text" class="si" id="cl-s" placeholder="Search..." oninput="renderCl()">
+        <button class="btn bgh sm" onclick="openImp()">📥</button>
+        <button class="btn bg sm" onclick="openAddCl()">+</button>
+      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="clt">
+          <thead><tr>
+            <th data-i="hcl">Client</th>
+            <th data-i="hvi">Visits</th>
+            <th data-i="hsp">Spent</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="cl-tb"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="vw" id="vw-reports">
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <select class="fs" id="rp" style="max-width:145px" onchange="renderRep()">
+          <option value="today" data-i="pt">Today</option>
+          <option value="week" selected data-i="pw">This Week</option>
+          <option value="month" data-i="pm">This Month</option>
+          <option value="all" data-i="pa">All Time</option>
+        </select>
+        <button class="btn bgh sm" onclick="window.print()">🖨️</button>
+        <button class="btn bgh sm" onclick="expData()">💾</button>
+      </div>
+      <div class="rg">
+        <div class="rc">
+          <div class="rt" data-i="rrev">Revenue</div>
+          <div class="rbig" id="r-rev">$0</div>
+          <div style="font-size:10px;color:var(--tx2);margin-top:2px" id="r-pl"></div>
+          <div style="margin-top:10px">
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rco">Completed</span><span id="r-co" style="font-weight:700">0</span></div>
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rav">Avg</span><span id="r-av" style="font-weight:700">$0</span></div>
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rpd">Pending</span><span id="r-pd" style="font-weight:700;color:var(--warn)">0</span></div>
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rns">No-shows</span><span id="r-ns" style="font-weight:700;color:var(--err)">0</span></div>
+          </div>
+        </div>
+        <div class="rc"><div class="rt" data-i="rts">Top Services</div><div class="bc" id="r-ts"></div></div>
+        <div class="rc"><div class="rt" data-i="rbg">By Gender</div><div class="bc" id="r-bg"></div></div>
+        <div class="rc"><div class="rt" data-i="rtc">Top Clients</div><div id="r-tc"></div></div>
+      </div>
+    </div>
+
   </div>
+</main>
 </div>
 
-<!-- ══════════════════════════════════════
-     ADMIN SHELL
-══════════════════════════════════════ -->
-<div class="app-shell" id="admin-shell">
-  <aside class="sidebar">
-    <div class="sl-logo"><div class="sl-title" data-i="admin_panel">Admin Panel</div></div>
-    <nav class="nav">
-      <div class="nl" data-i="mn">Main</div>
-      <button class="ni on" onclick="gv('dashboard')"><span class="ni-ic">📊</span><span data-i="vd">Dashboard</span></button>
-      <button class="ni" onclick="gv('appointments')"><span class="ni-ic">📅</span><span data-i="va">Appointments</span><span class="nbadge" id="nb">0</span></button>
-      <button class="ni" onclick="gv('calendar')"><span class="ni-ic">🗓️</span><span data-i="vc">Calendar</span></button>
-      <div class="nl" data-i="mg">Manage</div>
-      <button class="ni" onclick="gv('staff')"><span class="ni-ic">💇</span><span data-i="vst">Staff</span></button>
-      <button class="ni" onclick="gv('services')"><span class="ni-ic">💅</span><span data-i="vsv">Services</span></button>
-      <button class="ni" onclick="gv('clients')"><span class="ni-ic">👥</span><span data-i="vcl">Clients</span></button>
-      <button class="ni" onclick="gv('reports')"><span class="ni-ic">📈</span><span data-i="vr">Reports</span></button>
-    </nav>
-  </aside>
-
-  <div class="admin-main">
-    <header class="admin-topbar">
-      <div class="atb-title" id="pg-title">Dashboard</div>
-      <div class="atb-date" id="atb-date" style="font-size:11px;color:var(--tx2)"></div>
-      <button class="btn bgh sm" onclick="expData()" title="Backup">💾</button>
-      <button class="btn bgh sm" onclick="openImp()">📥</button>
-      <button class="btn bg sm" onclick="openNewApt()" data-i="napt">+ New</button>
-    </header>
-
-    <div class="admin-content">
-
-      <!-- DASHBOARD -->
-      <div class="vw on" id="vw-dashboard">
-        <div class="sg">
-          <div class="sc" style="--acc:var(--gold)"><div class="s-lbl" data-i="s1">Today</div><div class="s-val" id="s-t">$0</div><div class="s-sub" id="s-tn">0 apts</div></div>
-          <div class="sc" style="--acc:var(--ok)"><div class="s-lbl" data-i="s2">This Week</div><div class="s-val" id="s-w">$0</div><div class="s-sub" id="s-wn">0</div></div>
-          <div class="sc" style="--acc:var(--men)"><div class="s-lbl" data-i="s3">Clients</div><div class="s-val" id="s-c">0</div><div class="s-sub" data-i="s3b">total</div></div>
-          <div class="sc" style="--acc:var(--err)"><div class="s-lbl" data-i="s4">Pending</div><div class="s-val" id="s-p">0</div><div class="s-sub" data-i="s4b">confirm</div></div>
-        </div>
-        <div class="two">
-          <div>
-            <div class="sec-hdr"><div class="sec-t" data-i="td_sch">Today's Schedule</div><button class="btn bgh sm" onclick="gv('appointments')" data-i="sa">See all</button></div>
-            <div id="dash-tl"></div>
-          </div>
-          <div>
-            <div class="sec-hdr"><div class="sec-t" data-i="top_sv">Top Services</div></div>
-            <div class="rc" style="margin:0"><div class="bc" id="dash-top"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- APPOINTMENTS -->
-      <div class="vw" id="vw-appointments">
-        <div style="display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap;align-items:center">
-          <input type="date" class="fi" id="f-dt" style="max-width:155px;flex:1" onchange="renderApts()">
-          <select class="fsel" id="f-st" style="max-width:135px;flex:1" onchange="renderApts()">
-            <option value="" data-i="all">All</option>
-            <option value="pending" data-i="pend">Pending</option>
-            <option value="confirmed" data-i="conf">Confirmed</option>
-            <option value="completed" data-i="comp">Completed</option>
-            <option value="cancelled" data-i="canc">Cancelled</option>
-          </select>
-          <button class="btn bgh sm" onclick="document.getElementById('f-dt').value='';renderApts()">✕</button>
-        </div>
-        <div id="apt-list"></div>
-      </div>
-
-      <!-- CALENDAR -->
-      <div class="vw" id="vw-calendar">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-          <button class="ab" onclick="calW--;renderCal()">‹</button>
-          <div style="font-size:13px;font-weight:700;flex:1;text-align:center" id="cal-lbl"></div>
-          <button class="ab" onclick="calW++;renderCal()">›</button>
-          <button class="btn bgh sm" onclick="calW=0;renderCal()" data-i="tod">Today</button>
-        </div>
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-          <div id="wk-g" style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;min-width:480px"></div>
-        </div>
-      </div>
-
-      <!-- STAFF -->
-      <div class="vw" id="vw-staff">
-        <div class="link-box">
-          <div class="link-lbl">📲 <span data-i="bl_lbl">Client Booking — this page</span></div>
-          <div style="font-size:11px;color:var(--gold);margin:4px 0;font-family:monospace" id="booking-url-label">Tap "📲 Book" tab above</div>
-          <div class="link-hint" data-i="bl_hint">Share this app link with clients and tell them to tap the "Book" tab. They'll book without seeing your admin data.</div>
-        </div>
-        <div class="sec-hdr">
-          <div class="sec-t" data-i="vst">Staff</div>
-          <button class="btn bg sm" onclick="openAddStaff()">+ <span data-i="add_st">Add</span></button>
-        </div>
-        <div class="staff-list-a" id="staff-list-a"></div>
-      </div>
-
-      <!-- SERVICES -->
-      <div class="vw" id="vw-services">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-          <div class="gtabs">
-            <button class="gt aw" id="tw" onclick="fSv('women')" data-i="gw">👩 Women</button>
-            <button class="gt" id="tm" onclick="fSv('men')" data-i="gm">👨 Men</button>
-            <button class="gt" id="tu" onclick="fSv('unisex')" data-i="gu">✨ Unisex</button>
-          </div>
-          <button class="btn bg sm" onclick="openAddSvc()">+</button>
-        </div>
-        <div class="svgrid" id="sv-g"></div>
-      </div>
-
-      <!-- CLIENTS -->
-      <div class="vw" id="vw-clients">
-        <div class="sb">
-          <input type="text" class="si" id="cl-s" placeholder="Search..." oninput="renderCl()">
-          <button class="btn bg sm" onclick="openAddCl()">+</button>
-        </div>
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-          <table class="clt"><thead><tr>
-            <th data-i="hcl">Client</th><th data-i="hgn">Gender</th><th data-i="hvi">Visits</th><th data-i="hsp">Spent</th><th></th>
-          </tr></thead><tbody id="cl-tb"></tbody></table>
-        </div>
-      </div>
-
-      <!-- REPORTS -->
-      <div class="vw" id="vw-reports">
-        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
-          <select class="fsel" id="rp" style="max-width:145px" onchange="renderRep()">
-            <option value="today" data-i="pt">Today</option>
-            <option value="week" selected data-i="pw">This Week</option>
-            <option value="month" data-i="pm">This Month</option>
-            <option value="all" data-i="pa">All Time</option>
-          </select>
-          <button class="btn bgh sm" onclick="window.print()">🖨️</button>
-          <button class="btn bgh sm" onclick="expData()">💾</button>
-        </div>
-        <div class="rg">
-          <div class="rc">
-            <div class="rt" data-i="rrev">Revenue</div>
-            <div class="rbig" id="r-rev">$0</div>
-            <div style="font-size:10px;color:var(--tx2);margin-top:2px" id="r-pl"></div>
-            <div style="margin-top:10px">
-              <div class="rrow"><span style="color:var(--tx2)" data-i="rco">Completed</span><span id="r-co" style="font-weight:700">0</span></div>
-              <div class="rrow"><span style="color:var(--tx2)" data-i="rav">Avg</span><span id="r-av" style="font-weight:700">$0</span></div>
-              <div class="rrow"><span style="color:var(--tx2)" data-i="rpd">Pending</span><span id="r-pd" style="font-weight:700;color:var(--warn)">0</span></div>
-              <div class="rrow"><span style="color:var(--tx2)" data-i="rns">No-shows</span><span id="r-ns" style="font-weight:700;color:var(--err)">0</span></div>
-            </div>
-          </div>
-          <div class="rc"><div class="rt" data-i="rts">Top Services</div><div class="bc" id="r-ts"></div></div>
-          <div class="rc"><div class="rt" data-i="rbg">By Gender</div><div class="bc" id="r-bg"></div></div>
-          <div class="rc"><div class="rt" data-i="rtc">Top Clients</div><div id="r-tc"></div></div>
-        </div>
-      </div>
-
-    </div><!-- /admin-content -->
-
-    <!-- BOTTOM NAV mobile -->
-    <nav class="bnav" id="bnav">
-      <button class="bn on" onclick="gv('dashboard')" id="bn-dashboard"><div class="bn-ic">📊</div><span data-i="vd">Home</span></button>
-      <button class="bn" onclick="gv('appointments')" id="bn-appointments"><div class="bn-ic">📅</div><span data-i="va">Apts</span><div class="bndot" id="bndot"></div></button>
-      <button class="bn" onclick="gv('staff')" id="bn-staff"><div class="bn-ic">💇</div><span data-i="vst">Staff</span></button>
-      <button class="bn" onclick="gv('clients')" id="bn-clients"><div class="bn-ic">👥</div><span data-i="vcl">Clients</span></button>
-      <button class="bn" onclick="gv('reports')" id="bn-reports"><div class="bn-ic">📈</div><span data-i="vr">Reports</span></button>
-    </nav>
-    <button class="fab" onclick="openNewApt()">+</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════
-     BOOKING SHELL
-══════════════════════════════════════ -->
-<div class="app-shell" id="booking-shell">
-  <div class="booking-wrap">
-
-    <!-- STEPS -->
-    <div class="steps" id="bk-steps">
-      <div class="step-item"><div class="sn cur" id="sn1">1</div><div class="sl" data-i="step1">Service</div></div>
-      <div class="sline" id="sl1"></div>
-      <div class="step-item"><div class="sn" id="sn2">2</div><div class="sl" data-i="step2">Stylist</div></div>
-      <div class="sline" id="sl2"></div>
-      <div class="step-item"><div class="sn" id="sn3">3</div><div class="sl" data-i="step3">Date & Time</div></div>
-      <div class="sline" id="sl3"></div>
-      <div class="step-item"><div class="sn" id="sn4">4</div><div class="sl" data-i="step4">Your Info</div></div>
-    </div>
-
-    <!-- STEP 1: SERVICE -->
-    <div class="bsec on" id="bk1">
-      <div class="bsec-title" data-i="s1t">Choose a Service</div>
-      <div class="bsec-sub" data-i="s1s">What would you like today?</div>
-      <div class="gtabs" id="bk-gtabs">
-        <button class="gt aw" id="bg-women" onclick="bkFilterG('women')" data-i="gw">👩 Women</button>
-        <button class="gt" id="bg-men" onclick="bkFilterG('men')" data-i="gm">👨 Men</button>
-        <button class="gt" id="bg-uni" onclick="bkFilterG('unisex')" data-i="gu">✨ Unisex</button>
-      </div>
-      <div class="svc-list" id="bk-svc-list"></div>
-      <button class="btn-main" id="bk-btn1" disabled onclick="bkGoStep(2)" data-i="next">Continue →</button>
-    </div>
-
-    <!-- STEP 2: STYLIST -->
-    <div class="bsec" id="bk2">
-      <div class="bsec-title" data-i="s2t">Choose your Stylist</div>
-      <div class="bsec-sub" data-i="s2s">Who would you like to see?</div>
-      <div class="no-pref-card" id="bk-no-pref" onclick="bkSelStaff(null)">
-        <div style="font-size:22px;margin-bottom:4px">🎲</div>
-        <div style="font-size:14px;font-weight:700" data-i="no_pref">No preference</div>
-        <div style="font-size:12px;color:var(--tx2)" data-i="no_pref_sub">First available</div>
-      </div>
-      <div class="staff-grid" id="bk-staff-list"></div>
-      <button class="btn-back" onclick="bkGoStep(1)" data-i="back">← Back</button>
-    </div>
-
-    <!-- STEP 3: DATE & TIME -->
-    <div class="bsec" id="bk3">
-      <div class="bsec-title" data-i="s3t">Pick a Date & Time</div>
-      <div class="bsec-sub" data-i="s3s">Select when you'd like to come in</div>
-      <div class="notice" id="bk-dur-notice">⏱ <span id="bk-dur-txt"></span></div>
-      <div style="font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:9px" data-i="pick_date">Date</div>
-      <div class="date-grid" id="bk-date-grid"></div>
-      <div style="font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin:14px 0 9px" data-i="pick_time">Time</div>
-      <div class="time-grid" id="bk-time-grid"></div>
-      <button class="btn-main" id="bk-btn3" disabled onclick="bkGoStep(4)" style="margin-top:16px" data-i="next">Continue →</button>
-      <button class="btn-back" onclick="bkGoStep(2)" data-i="back">← Back</button>
-    </div>
-
-    <!-- STEP 4: INFO -->
-    <div class="bsec" id="bk4">
-      <div class="bsec-title" data-i="s4t">Your Information</div>
-      <div class="bsec-sub" data-i="s4s">Almost done!</div>
-      <div class="sum-box" id="bk-summary"></div>
-      <div class="fg">
-        <label class="fl" data-i="lph">Phone Number</label>
-        <input type="tel" class="fi" id="bk-ph" inputmode="tel" autocomplete="tel" oninput="bkCheckExist()" placeholder="000-000-0000">
-      </div>
-      <div class="exist-found" id="bk-exist"><span>✅</span><span id="bk-exist-msg"></span></div>
-      <div id="bk-new-form">
-        <div class="fr2">
-          <div class="fg"><label class="fl" data-i="lfn">First Name</label><input type="text" class="fi" id="bk-fn" autocomplete="given-name"></div>
-          <div class="fg"><label class="fl" data-i="lln">Last Name</label><input type="text" class="fi" id="bk-ln" autocomplete="family-name"></div>
-        </div>
-        <div class="fg"><label class="fl" data-i="lem">Email <span style="color:var(--tx2);font-size:10px" data-i="opt">(optional)</span></label><input type="email" class="fi" id="bk-em" autocomplete="email"></div>
-        <div class="fg"><label class="fl" data-i="lgn">Gender</label>
-          <select class="fsel" id="bk-gn">
-            <option value="women">Mujer / Woman</option>
-            <option value="men">Hombre / Man</option>
-            <option value="other">Otro / Other</option>
-            <option value="prefer_not">Prefiero no decir / Prefer not to say</option>
-          </select>
-        </div>
-      </div>
-      <div class="fg"><label class="fl" data-i="lnt">Notes <span style="color:var(--tx2);font-size:10px" data-i="opt">(optional)</span></label><input type="text" class="fi" id="bk-nt" placeholder="Allergies, preferences..."></div>
-      <div class="priv-note">🔒 <span data-i="privacy">Your info is private and only used to manage your appointment.</span></div>
-      <button class="btn-main" onclick="bkConfirm()" data-i="confirm">Confirm Appointment ✓</button>
-      <button class="btn-back" onclick="bkGoStep(3)" data-i="back">← Back</button>
-    </div>
-
-    <!-- SUCCESS -->
-    <div class="bsec" id="bk5">
-      <div class="success-wrap">
-        <div class="suc-ic">🎉</div>
-        <div class="suc-title" data-i="suc_t">You're booked!</div>
-        <div class="suc-sub" data-i="suc_s">We'll see you soon. Please arrive 5 minutes early.</div>
-        <div class="sum-box" id="bk-conf-box"></div>
-        <div class="suc-note" data-i="suc_note">📱 Screenshot this confirmation for your records.</div>
-        <button class="btn-main" onclick="bkReset()" data-i="book_again">Book Another Appointment</button>
-      </div>
-    </div>
-
-  </div>
-</div>
+<!-- BOTTOM NAV mobile -->
+<nav class="bnav" id="bnav">
+  <button class="bn on" onclick="gv('dashboard')" id="bn-dashboard"><div class="bn-ic">📊</div><span data-i="vd">Home</span></button>
+  <button class="bn" onclick="gv('appointments')" id="bn-appointments"><div class="bn-ic">📅</div><span data-i="va">Apts</span><div class="bn-dot" id="bndot"></div></button>
+  <button class="bn" onclick="gv('staff')" id="bn-staff"><div class="bn-ic">💇</div><span data-i="vst">Staff</span></button>
+  <button class="bn" onclick="gv('clients')" id="bn-clients"><div class="bn-ic">👥</div><span data-i="vcl">Clients</span></button>
+  <button class="bn" onclick="gv('reports')" id="bn-reports"><div class="bn-ic">📈</div><span data-i="vr">Reports</span></button>
+</nav>
+<button class="fab" onclick="openNewApt()">+</button>
 
 <!-- MODALS -->
 <!-- Appointment -->
 <div class="mo" id="m-apt">
   <div class="md">
-    <div class="mh"><div class="mtitle" id="apt-mt" data-i="napt">New Appointment</div><button class="mclose" onclick="cM('m-apt')">✕</button></div>
-    <div class="mbody">
+    <div class="mh"><div class="mt" id="apt-mt" data-i="napt">New Appointment</div><button class="mc" onclick="cM('m-apt')">✕</button></div>
+    <div class="mb">
       <div class="handle"></div>
       <input type="hidden" id="apt-eid">
-      <div class="fr2">
+      <div class="fr">
         <div class="fg"><label class="fl" data-i="ld">Date</label><input type="date" class="fi" id="apt-d"></div>
         <div class="fg"><label class="fl" data-i="lt">Time</label><input type="time" class="fi" id="apt-t"></div>
       </div>
-      <div class="fg"><label class="fl" data-i="lcl">Client</label><select class="fsel" id="apt-cl"></select></div>
-      <div class="fg"><label class="fl" data-i="lsv">Service</label><select class="fsel" id="apt-sv" onchange="fillP()"></select></div>
-      <div class="fg"><label class="fl" data-i="lst">Stylist</label><select class="fsel" id="apt-stf"></select></div>
-      <div class="fr2">
+      <div class="fg"><label class="fl" data-i="lcl">Client</label><select class="fs" id="apt-cl"></select></div>
+      <div class="fg"><label class="fl" data-i="lsv">Service</label><select class="fs" id="apt-sv" onchange="fillP()"></select></div>
+      <div class="fg"><label class="fl" data-i="lst">Stylist</label><select class="fs" id="apt-stf"></select></div>
+      <div class="fr">
         <div class="fg"><label class="fl" data-i="lpr">Price ($)</label><input type="number" class="fi" id="apt-pr" placeholder="0.00" inputmode="decimal"></div>
         <div class="fg"><label class="fl" data-i="lstat">Status</label>
-          <select class="fsel" id="apt-stat">
+          <select class="fs" id="apt-stat">
             <option value="confirmed" data-i="conf">Confirmed</option>
             <option value="pending" data-i="pend">Pending</option>
           </select>
@@ -655,7 +624,7 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
       </div>
       <div class="fg"><label class="fl" data-i="lnt">Notes</label><input type="text" class="fi" id="apt-nt" placeholder="Optional..."></div>
     </div>
-    <div class="mfoot">
+    <div class="mf">
       <button class="btn bgh sm" onclick="cM('m-apt')" data-i="can">Cancel</button>
       <button class="btn bg" onclick="saveApt()" data-i="sav">Save</button>
     </div>
@@ -665,8 +634,8 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 <!-- Staff -->
 <div class="mo" id="m-stf">
   <div class="md">
-    <div class="mh"><div class="mtitle" id="stf-mt">Add Stylist</div><button class="mclose" onclick="cM('m-stf')">✕</button></div>
-    <div class="mbody">
+    <div class="mh"><div class="mt" id="stf-mt">Add Stylist</div><button class="mc" onclick="cM('m-stf')">✕</button></div>
+    <div class="mb">
       <div class="handle"></div>
       <input type="hidden" id="stf-eid">
       <div class="av-up">
@@ -674,14 +643,14 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         <label class="av-btn"><span data-i="uph">Upload photo</span><input type="file" accept="image/*" style="display:none" onchange="prevStfAv(this)"></label>
         <input type="hidden" id="stf-av">
       </div>
-      <div class="fr2">
-        <div class="fg"><label class="fl" data-i="lfn">First Name</label><input type="text" class="fi" id="stf-fn"></div>
-        <div class="fg"><label class="fl" data-i="lln">Last Name</label><input type="text" class="fi" id="stf-ln"></div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lfn">First Name</label><input type="text" class="fi" id="stf-fn" placeholder="Joel"></div>
+        <div class="fg"><label class="fl" data-i="lln">Last Name</label><input type="text" class="fi" id="stf-ln" placeholder="Smith"></div>
       </div>
       <div class="fg"><label class="fl" data-i="lrl">Role / Specialty</label><input type="text" class="fi" id="stf-rl" placeholder="Hair Stylist, Barber..."></div>
-      <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="stf-ph"></div>
+      <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="stf-ph" placeholder="000-000-0000"></div>
     </div>
-    <div class="mfoot">
+    <div class="mf">
       <button class="btn bd2 sm" id="stf-del" style="display:none" onclick="delStf()">Delete</button>
       <button class="btn bgh sm" onclick="cM('m-stf')" data-i="can">Cancel</button>
       <button class="btn bg" onclick="saveStf()" data-i="sav">Save</button>
@@ -692,8 +661,8 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 <!-- Client -->
 <div class="mo" id="m-cl">
   <div class="md">
-    <div class="mh"><div class="mtitle" id="cl-mt" data-i="ncl">New Client</div><button class="mclose" onclick="cM('m-cl')">✕</button></div>
-    <div class="mbody">
+    <div class="mh"><div class="mt" id="cl-mt" data-i="ncl">New Client</div><button class="mc" onclick="cM('m-cl')">✕</button></div>
+    <div class="mb">
       <div class="handle"></div>
       <input type="hidden" id="cl-eid">
       <div class="av-up">
@@ -701,25 +670,20 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         <label class="av-btn"><span data-i="uph">Upload photo</span><input type="file" accept="image/*" style="display:none" onchange="prevClAv(this)"></label>
         <input type="hidden" id="cl-av">
       </div>
-      <div class="fr2">
+      <div class="fr">
         <div class="fg"><label class="fl" data-i="lfn">First Name</label><input type="text" class="fi" id="cl-fn" autocomplete="given-name"></div>
         <div class="fg"><label class="fl" data-i="lln">Last Name</label><input type="text" class="fi" id="cl-ln" autocomplete="family-name"></div>
       </div>
-      <div class="fr2">
+      <div class="fr">
         <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="cl-ph" autocomplete="tel"></div>
         <div class="fg"><label class="fl" data-i="lgn">Gender</label>
-          <select class="fsel" id="cl-gn">
-            <option value="women">Mujer / Woman</option>
-            <option value="men">Hombre / Man</option>
-            <option value="other">Otro / Other</option>
-            <option value="prefer_not">Prefiero no decir / Prefer not to say</option>
-          </select>
+          <select class="fs" id="cl-gn"></select>
         </div>
       </div>
       <div class="fg"><label class="fl" data-i="lem">Email</label><input type="email" class="fi" id="cl-em" autocomplete="email"></div>
-      <div class="fg"><label class="fl" data-i="lnt">Notes</label><textarea class="fi" id="cl-nt" style="min-height:60px;resize:vertical"></textarea></div>
+      <div class="fg"><label class="fl" data-i="lnt">Notes</label><textarea class="fta" id="cl-nt"></textarea></div>
     </div>
-    <div class="mfoot">
+    <div class="mf">
       <button class="btn bgh sm" onclick="cM('m-cl')" data-i="can">Cancel</button>
       <button class="btn bg" onclick="saveCl()" data-i="sav">Save</button>
     </div>
@@ -729,15 +693,15 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 <!-- Service -->
 <div class="mo" id="m-sv">
   <div class="md">
-    <div class="mh"><div class="mtitle" id="sv-mt">Add Service</div><button class="mclose" onclick="cM('m-sv')">✕</button></div>
-    <div class="mbody">
+    <div class="mh"><div class="mt" id="sv-mt">Add Service</div><button class="mc" onclick="cM('m-sv')">✕</button></div>
+    <div class="mb">
       <div class="handle"></div>
       <input type="hidden" id="sv-eid">
       <div class="fg"><label class="fl" data-i="lsvn">Name (EN)</label><input type="text" class="fi" id="sv-n"></div>
       <div class="fg"><label class="fl" data-i="lsve">Name (ES)</label><input type="text" class="fi" id="sv-e"></div>
-      <div class="fr2">
+      <div class="fr">
         <div class="fg"><label class="fl" data-i="lgn">Category</label>
-          <select class="fsel" id="sv-gn">
+          <select class="fs" id="sv-gn">
             <option value="women">Women / Mujer</option>
             <option value="men">Men / Hombre</option>
             <option value="unisex">Unisex</option>
@@ -745,12 +709,12 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
         </div>
         <div class="fg"><label class="fl" data-i="ldr">Duration (min)</label><input type="number" class="fi" id="sv-d" inputmode="numeric"></div>
       </div>
-      <div class="fr2">
+      <div class="fr">
         <div class="fg"><label class="fl" data-i="lpr">Price ($)</label><input type="number" class="fi" id="sv-p" inputmode="decimal"></div>
         <div class="fg"><label class="fl" data-i="lic">Icon</label><input type="text" class="fi" id="sv-i" placeholder="💇"></div>
       </div>
     </div>
-    <div class="mfoot">
+    <div class="mf">
       <button class="btn bd2 sm" id="sv-del" style="display:none" onclick="delSv()">Delete</button>
       <button class="btn bgh sm" onclick="cM('m-sv')" data-i="can">Cancel</button>
       <button class="btn bg" onclick="saveSv()" data-i="sav">Save</button>
@@ -761,170 +725,257 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 <!-- Import -->
 <div class="mo" id="m-imp">
   <div class="md">
-    <div class="mh"><div class="mtitle" data-i="imp">Import / Restore</div><button class="mclose" onclick="cM('m-imp')">✕</button></div>
-    <div class="mbody">
+    <div class="mh"><div class="mt" data-i="imp">Import / Restore</div><button class="mc" onclick="cM('m-imp')">✕</button></div>
+    <div class="mb">
       <div class="handle"></div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:12px" data-i="imph">Upload a backup JSON file to restore data on this device.</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:12px" data-i="imph">Upload backup file to sync between devices.</p>
       <div class="fg"><label class="fl">JSON File</label><input type="file" class="fi" id="imp-f" accept=".json" onchange="readImp(this)"></div>
-      <div class="fg"><label class="fl">Or paste JSON</label><textarea class="fi" id="imp-j" style="min-height:80px;font-size:11px;font-family:monospace;resize:vertical"></textarea></div>
+      <div class="fg"><label class="fl">Or paste JSON</label><textarea class="fta" id="imp-j" style="font-size:11px;font-family:monospace;min-height:80px"></textarea></div>
     </div>
-    <div class="mfoot">
+    <div class="mf">
       <button class="btn bgh sm" onclick="cM('m-imp')" data-i="can">Cancel</button>
       <button class="btn bg" onclick="impData()" data-i="imp">Import</button>
     </div>
   </div>
 </div>
 
+<div class="tw" id="tw">
+</div>
+<div id="booking-shell" style="display:none;position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0a0a0a">
+
+
+<header class="header">
+  <div class="h-logo">
+    <div class="h-ic">✂️</div>
+    <div><div class="h-name">JOEL</div><div class="h-sub" data-i="tagline">Book your appointment</div></div>
+  </div>
+  <div class="lang-tog">
+    <button class="lb on" onclick="setL('en')" id="en-b">EN</button>
+    <button class="lb" onclick="setL('es')" id="es-b">ES</button>
+  </div>
+<button onclick="goLanding()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:7px 14px;color:#ddd;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">← Back</button></header>
+
+<div class="wrap">
+
+  <!-- STEPS INDICATOR -->
+  <div class="steps" id="steps-wrap">
+    <div class="step">
+      <div class="step-num active" id="sn1">1</div>
+      <div class="step-lbl" data-i="step1">Service</div>
+    </div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step">
+      <div class="step-num" id="sn2">2</div>
+      <div class="step-lbl" data-i="step2">Stylist</div>
+    </div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step">
+      <div class="step-num" id="sn3">3</div>
+      <div class="step-lbl" data-i="step3">Date & Time</div>
+    </div>
+    <div class="step-line" id="sl3"></div>
+    <div class="step">
+      <div class="step-num" id="sn4">4</div>
+      <div class="step-lbl" data-i="step4">Your Info</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: SERVICE -->
+  <div class="section on" id="sec1">
+    <div class="sec-title" data-i="s1t">Choose a Service</div>
+    <div class="sec-sub" data-i="s1s">What would you like today?</div>
+    <div class="gender-tabs">
+      <button class="gt aw" id="g-women" onclick="bkFilterG('women')" data-i="gw"><span id="tab-w-txt">Women</span></button>
+      <button class="gt" id="g-men" onclick="bkFilterG('men')" data-i="gm"><span id="tab-m-txt">Men</span></button>
+      <button class="gt" id="g-uni" onclick="bkFilterG('unisex')" data-i="gu"><span id="tab-o-txt">Other</span></button>
+    </div>
+    <div class="svc-list" id="svc-list"></div>
+    <button class="btn-main" style="margin-top:20px" onclick="bkGoStep(2)" id="btn-s1" disabled data-i="next">Continue →</button>
+  </div>
+
+  <!-- STEP 2: STYLIST -->
+  <div class="section" id="sec2">
+    <div class="sec-title" data-i="s2t">Choose your Stylist</div>
+    <div class="sec-sub" data-i="s2s">Who would you like to see?</div>
+    <div class="no-pref" id="no-pref" onclick="selStaff(null)">
+      <div style="font-size:24px;margin-bottom:4px">🎲</div>
+      <div style="font-size:14px;font-weight:700" data-i="no-pref">No preference</div>
+      <div style="font-size:12px;color:var(--tx2)" data-i="no-pref-sub">First available</div>
+    </div>
+    <div class="staff-list" id="staff-list"></div>
+    <button class="btn-back" onclick="bkGoStep(1)" data-i="back">← Back</button>
+  </div>
+
+  <!-- STEP 3: DATE & TIME -->
+  <div class="section" id="sec3">
+    <div class="sec-title" data-i="s3t">Pick a Date & Time</div>
+    <div class="sec-sub" data-i="s3s">Select when you'd like to come in</div>
+    <div class="notice">⏱ <span id="dur-notice"></span></div>
+    <div style="font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px" data-i="pick-date">Date</div>
+    <div class="date-grid" id="date-grid"></div>
+    <div style="font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin:14px 0 10px" data-i="pick-time">Time</div>
+    <div class="time-grid" id="time-grid"></div>
+    <button class="btn-main" style="margin-top:20px" onclick="bkGoStep(4)" id="btn-s3" disabled data-i="next">Continue →</button>
+    <button class="btn-back" onclick="bkGoStep(2)" data-i="back">← Back</button>
+  </div>
+
+  <!-- STEP 4: CLIENT INFO -->
+  <div class="section" id="sec4">
+    <div class="sec-title" data-i="s4t">Your Information</div>
+    <div class="sec-sub" data-i="s4s">Almost done! Tell us a little about yourself.</div>
+
+    <!-- Summary -->
+    <div class="summary" id="booking-summary"></div>
+
+    <!-- Check if existing client -->
+    <div class="fg">
+      <label class="fl" data-i="lph">Phone Number</label>
+      <input type="tel" class="fi" id="b-phone" placeholder="000-000-0000" autocomplete="tel" inputmode="tel" oninput="bkCheckExist()">
+    </div>
+    <div id="existing-found" style="display:none">
+      <div style="background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);border-radius:var(--rs);padding:12px 14px;font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span>✅</span><span id="existing-msg"></span>
+      </div>
+    </div>
+    <div id="new-client-form">
+      <div class="fg">
+        <label class="fl" data-i="lfn">First Name</label>
+        <input type="text" class="fi" id="b-fn" autocomplete="given-name">
+      </div>
+      <div class="fg">
+        <label class="fl" data-i="lln">Last Name</label>
+        <input type="text" class="fi" id="b-ln" autocomplete="family-name">
+      </div>
+      <div class="fg">
+        <label class="fl" data-i="lem">Email <span style="color:var(--tx2);font-style:italic;font-size:10px" data-i="opt">(optional)</span></label>
+        <input type="email" class="fi" id="b-em" autocomplete="email">
+      </div>
+      <div class="fg">
+        <label class="fl" data-i="lgn">Gender</label>
+        <select class="fs" id="b-gn"></select>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl" data-i="lnt">Notes <span style="color:var(--tx2);font-style:italic;font-size:10px" data-i="opt">(optional)</span></label>
+      <input type="text" class="fi" id="b-nt" data-i-placeholder="nt-ph">
+    </div>
+    <div class="notice">🔒 <span data-i="privacy">Your information is private and will only be used to manage your appointment.</span></div>
+    <button class="btn-main" onclick="bkConfirm()" data-i="confirm">Confirm Appointment ✓</button>
+    <button class="btn-back" onclick="bkGoStep(3)" data-i="back">← Back</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="section" id="sec5">
+    <div class="success-screen">
+      <div class="success-ic">🎉</div>
+      <div class="success-title" data-i="suc-t">You're booked!</div>
+      <div class="success-sub" data-i="suc-s">We'll see you soon. Please arrive 5 minutes early.</div>
+      <div class="conf-box" id="conf-box"></div>
+      <div class="notice">📱 <span data-i="suc-note">Screenshot this confirmation for your records.</span></div>
+      <button class="btn-main" onclick="bkReset()" data-i="book-again">Book Another Appointment</button>
+    </div>
+  </div>
+
+</div>
+
 <div class="tw" id="tw"></div>
 
-<script>
-// ── GLOBAL VARS — declared first so iOS Safari can access them ──
-var isLoggedIn = false;
-var ADMIN_USER = 'admin';
-var ADMIN_PASS = 'joel2024';
 
-// ══════════════════════════════════════════
+
+</div>
+<div class="tw" id="tw"></div>
+<script>
+
+var isLoggedIn=false;
+
+function goBooking(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('booking-shell').style.display='block';
+  if(typeof svcs!=='undefined'&&svcs.length) SD2('pub_sv',svcs);
+  if(typeof staff!=='undefined') SD2('pub_st',staff);
+  selSvc=null; curFilter='women';
+  bkRenderSvcs(); bkFilterG('women');
+  setTimeout(function(){buildGenderOpts('b-gn','men');},30);
+}
+function showAdminLogin(){
+  document.getElementById('adm-form').style.display='block';
+  document.getElementById('adm-btn').style.display='none';
+  setTimeout(function(){var u=document.getElementById('au');if(u)u.focus();},100);
+}
+function doLogin(){
+  var u=(document.getElementById('au').value||'').trim().toLowerCase().replace(/ /g,'');
+  var p=(document.getElementById('ap').value||'').trim();
+  if(u==='admin'&&p==='joel2024'){
+    isLoggedIn=true;
+    document.getElementById('landing').style.display='none';
+    document.getElementById('admin-shell').style.display='flex';
+    renderAll();
+  } else {
+    document.getElementById('lf-err').style.display='block';
+    document.getElementById('ap').value='';
+    setTimeout(function(){document.getElementById('lf-err').style.display='none';},3000);
+  }
+}
+function exitAdmin(){
+  isLoggedIn=false;
+  document.getElementById('admin-shell').style.display='none';
+  document.getElementById('ap').value='';
+  document.getElementById('au').value='';
+  document.getElementById('adm-form').style.display='none';
+  document.getElementById('adm-btn').style.display='block';
+  document.getElementById('landing').style.display='flex';
+}
+function goLanding(){
+  document.getElementById('booking-shell').style.display='none';
+  document.getElementById('landing').style.display='flex';
+}
+function buildGenderOpts(selId,curVal){
+  var sel=document.getElementById(selId);
+  if(!sel)return;
+  var en=(lang==='en');
+  var cur=curVal||'men';
+  sel.innerHTML='';
+  [['men',en?'Male':'Hombre'],['women',en?'Female':'Mujer'],['other',en?'Other':'Otro']].forEach(function(o){
+    var opt=document.createElement('option');
+    opt.value=o[0]; opt.textContent=o[1];
+    if(o[0]===cur) opt.selected=true;
+    sel.appendChild(opt);
+  });
+}
+function applyLandingI18n(){
+  var en=(lang==='en');
+  function el(id,t){var e=document.getElementById(id);if(e)e.textContent=t;}
+  el('lb-book',en?'Book an Appointment':'Hacer una Reserva');
+  el('lb-book2',en?'Reserve your spot':'Reserva tu espacio');
+  el('lb-adm',en?'Administrator':'Administrador');
+  el('lb-adm2',en?'Staff access only':'Solo personal autorizado');
+  el('lf-go',en?'Enter Admin':'Entrar al Admin');
+  el('exit-admin-btn',en?'Exit':'Salir');
+  // Tabs
+  el('tab-w-txt',en?'Women':'Mujer');
+  el('tab-m-txt',en?'Men':'Hombre');
+  el('tab-o-txt',en?'Other':'Otro');
+  // Lang buttons
+  var eb=document.getElementById('en-b');
+  var esb=document.getElementById('es-b');
+  if(eb){eb.style.background=en?'#C9A017':'transparent';eb.style.color=en?'#000':'#888';}
+  if(esb){esb.style.background=!en?'#C9A017':'transparent';esb.style.color=!en?'#000':'#888';}
+}
+
+
 // I18N
-// ══════════════════════════════════════════
 const TT={
-en:{mode_admin:'👤 Admin',mode_booking:'📲 Book',admin_panel:'Admin Panel',mn:'Main',vd:'Dashboard',va:'Appointments',vc:'Calendar',mg:'Manage',vst:'Staff',vsv:'Services',vcl:'Clients',vr:'Reports',napt:'+ New',tod:'Today',s1:"Today's Rev",s2:'This Week',s3:'Clients',s3b:'total',s4:'Pending',s4b:'confirm',td_sch:"Today's Schedule",sa:'See all',top_sv:'Top Services',all:'All',pend:'Pending',conf:'Confirmed',comp:'Completed',canc:'Cancelled',ld:'Date',lt:'Time',lcl:'Client',lsv:'Service',lst:'Stylist',lpr:'Price ($)',lstat:'Status',lnt:'Notes',lfn:'First Name',lln:'Last Name',lph:'Phone',lgn:'Gender',lem:'Email',lsvn:'Name (EN)',lsve:'Name (ES)',ldr:'Duration (min)',lic:'Icon',lrl:'Role',can:'Cancel',sav:'Save',del:'Delete',ed:'Edit',pt:'Today',pw:'This Week',pm:'This Month',pa:'All Time',rrev:'Revenue',rco:'Completed',rav:'Avg',rpd:'Pending',rns:'No-shows',rts:'Top Services',rbg:'By Gender',rtc:'Top Clients',hcl:'Client',hgn:'Gender',hvi:'Visits',hsp:'Spent',men:'Male',women:'Female',uni:'Unisex',noa:'No appointments',noa2:'Tap + to add',noc:'No clients',nosts:'No staff yet',nos:'Add your first stylist',ncl:'New Client',ecl:'Edit Client',nsv:'Add Service',esv:'Edit Service',nst:'Add Stylist',est:'Edit Stylist',imp:'Import',imph:'Upload backup to restore data.',add_st:'Add',uph:'Upload photo',bl_lbl:'Client Booking — this page',bl_hint:'Share this app link and tell clients to tap the "Book" tab.',step1:'Service',step2:'Stylist',step3:'Date & Time',step4:'Your Info',s1t:'Choose a Service',s1s:'What would you like today?',gw:'👩 Women',gm:'👨 Men',gu:'✨ Unisex',s2t:'Choose your Stylist',s2s:'Who would you like to see?',no_pref:'No preference',no_pref_sub:'First available',s3t:'Pick a Date & Time',s3s:"Select when you'd like to come in",pick_date:'Date',pick_time:'Time',s4t:'Your Information',s4s:'Almost done!',opt:'(optional)',privacy:'Your info is private and only used to manage your appointment.',next:'Continue →',back:'← Back',confirm:'Confirm Appointment ✓',suc_t:"You're booked!",suc_s:"We'll see you soon. Please arrive 5 minutes early.",suc_note:'📱 Screenshot this confirmation for your records.',book_again:'Book Another Appointment',dur:'This service takes approx.',taken:'Taken',sum_svc:'Service',sum_stf:'Stylist',sum_date:'Date',sum_time:'Time',sum_price:'Price',sum_dur:'Duration',tbd:'Confirm price with salon',any:'Any available',exist_found:'Welcome back',no_slots:'No slots available. Try another date.',min:'min',gopt_w:'Woman',gopt_m:'Man',gopt_o:'Other',gopt_p:'Prefer not to say'},
-es:{mode_admin:'👤 Admin',mode_booking:'📲 Reservar',admin_panel:'Panel Admin',mn:'Principal',vd:'Panel',va:'Citas',vc:'Calendario',mg:'Gestión',vst:'Personal',vsv:'Servicios',vcl:'Clientes',vr:'Informes',napt:'+ Nueva',tod:'Hoy',s1:'Ingresos Hoy',s2:'Esta Semana',s3:'Clientes',s3b:'total',s4:'Pendientes',s4b:'confirmar',td_sch:'Agenda de Hoy',sa:'Ver todo',top_sv:'Servicios Populares',all:'Todos',pend:'Pendiente',conf:'Confirmado',comp:'Completado',canc:'Cancelado',ld:'Fecha',lt:'Hora',lcl:'Cliente',lsv:'Servicio',lst:'Estilista',lpr:'Precio ($)',lstat:'Estado',lnt:'Notas',lfn:'Nombre',lln:'Apellido',lph:'Teléfono',lgn:'Género',lem:'Correo',lsvn:'Nombre (EN)',lsve:'Nombre (ES)',ldr:'Duración (min)',lic:'Ícono',lrl:'Cargo',can:'Cancelar',sav:'Guardar',del:'Eliminar',ed:'Editar',pt:'Hoy',pw:'Esta Semana',pm:'Este Mes',pa:'Todo',rrev:'Ingresos',rco:'Completados',rav:'Promedio',rpd:'Pendientes',rns:'No se presentaron',rts:'Servicios Populares',rbg:'Por Género',rtc:'Mejores Clientes',hcl:'Cliente',hgn:'Género',hvi:'Visitas',hsp:'Total',men:'Hombre',women:'Mujer',uni:'Unisex',noa:'Sin citas',noa2:'Toca + para agregar',noc:'Sin clientes',nosts:'Sin personal',nos:'Agrega tu primer estilista',ncl:'Nuevo Cliente',ecl:'Editar Cliente',nsv:'Agregar Servicio',esv:'Editar Servicio',nst:'Agregar Estilista',est:'Editar Estilista',imp:'Importar',imph:'Sube el respaldo para restaurar datos.',add_st:'Agregar',uph:'Subir foto',bl_lbl:'Reservas del Cliente — esta página',bl_hint:'Comparte este link y dile al cliente que toque la pestaña "Reservar".',step1:'Servicio',step2:'Estilista',step3:'Fecha y Hora',step4:'Tus Datos',s1t:'Elige un Servicio',s1s:'¿Qué te gustaría hoy?',gw:'👩 Mujeres',gm:'👨 Hombres',gu:'✨ Unisex',s2t:'Elige tu Estilista',s2s:'¿Con quién te gustaría tu cita?',no_pref:'Sin preferencia',no_pref_sub:'El primero disponible',s3t:'Elige Fecha y Hora',s3s:'¿Cuándo te gustaría venir?',pick_date:'Fecha',pick_time:'Hora',s4t:'Tus Datos',s4s:'¡Casi listo!',opt:'(opcional)',privacy:'Tu información es privada y solo se usa para gestionar tu cita.',next:'Continuar →',back:'← Volver',confirm:'Confirmar Cita ✓',suc_t:'¡Tu cita está confirmada!',suc_s:'Te esperamos pronto. Por favor llega 5 minutos antes.',suc_note:'📱 Toma una captura como comprobante.',book_again:'Reservar Otra Cita',dur:'Este servicio tarda aprox.',taken:'Ocupado',sum_svc:'Servicio',sum_stf:'Estilista',sum_date:'Fecha',sum_time:'Hora',sum_price:'Precio',sum_dur:'Duración',tbd:'Confirmar precio con el salón',any:'Cualquier estilista',exist_found:'Bienvenido de vuelta',no_slots:'Sin horarios disponibles. Prueba otro día.',min:'min',gopt_w:'Mujer',gopt_m:'Hombre',gopt_o:'Otro',gopt_p:'Prefiero no decir'}
+  en:{mn:"Main",vd:"Dashboard",va:"Appointments",vc:"Calendar",mg:"Manage",vst:"Staff",vsv:"Services",vcl:"Clients",vr:"Reports",napt:"+ New Appointment",tod:"Today",s1:"Today's Revenue",s2:"This Week",s3:"Clients",s3b:"total",s4:"Pending",s4b:"confirm",td_sch:"Today's Schedule",sa:"See all","top-sv":"Top Services",all:"All",pend:"Pending",conf:"Confirmed",comp:"Completed",canc:"Cancelled",ld:"Date",lt:"Time",lcl:"Client",lsv:"Service",lst:"Stylist",lpr:"Price ($)",lstat:"Status",lnt:"Notes",lfn:"First Name",lln:"Last Name",lph:"Phone",lgn:"Gender",lem:"Email",lsvn:"Name (EN)",lsve:"Name (ES)",ldr:"Duration (min)",lic:"Icon",lrl:"Role",can:"Cancel",sav:"Save",del:"Delete",ed:"Edit",pt:"Today",pw:"This Week",pm:"This Month",pa:"All Time",rrev:"Revenue",rco:"Completed",rav:"Avg",rpd:"Pending",rns:"No-shows",rts:"Top Services",rbg:"By Gender",rtc:"Top Clients",hcl:"Client",hvi:"Visits",hsp:"Spent",hlv:"Last Visit",men:"Male",women:"Female",uni:"Unisex",noa:"No appointments",noa2:"Tap + to add",noc:"No clients",nosts:"No staff",nos:"Add your first stylist",ncl:"New Client",ecl:"Edit Client",nsv:"Add Service",esv:"Edit Service",nst:"Add Stylist",est:"Edit Stylist",imp:"Import",imph:"Upload backup to sync between devices.","add-st":"Add Staff",uph:"Upload photo","bl-lbl":"Client Booking Link","bl-hint":"Share this link with clients so they can self-book without seeing your admin."},
+  es:{mn:"Principal",vd:"Panel",va:"Citas",vc:"Calendario",mg:"Gestión",vst:"Personal",vsv:"Servicios",vcl:"Clientes",vr:"Informes",napt:"+ Nueva Cita",tod:"Hoy",s1:"Ingresos de Hoy",s2:"Esta Semana",s3:"Clientes",s3b:"total",s4:"Pendientes",s4b:"confirmar",td_sch:"Agenda de Hoy",sa:"Ver todo","top-sv":"Servicios Populares",all:"Todos",pend:"Pendiente",conf:"Confirmado",comp:"Completado",canc:"Cancelado",ld:"Fecha",lt:"Hora",lcl:"Cliente",lsv:"Servicio",lst:"Estilista",lpr:"Precio ($)",lstat:"Estado",lnt:"Notas",lfn:"Nombre",lln:"Apellido",lph:"Teléfono",lgn:"Género",lem:"Correo",lsvn:"Nombre (EN)",lsve:"Nombre (ES)",ldr:"Duración (min)",lic:"Ícono",lrl:"Cargo / Especialidad",can:"Cancelar",sav:"Guardar",del:"Eliminar",ed:"Editar",pt:"Hoy",pw:"Esta Semana",pm:"Este Mes",pa:"Todo",rrev:"Ingresos",rco:"Completados",rav:"Promedio",rpd:"Pendientes",rns:"No se presentaron",rts:"Servicios Populares",rbg:"Por Género",rtc:"Mejores Clientes",hcl:"Cliente",hvi:"Visitas",hsp:"Total",hlv:"Última",men:"Hombre",women:"Mujer",uni:"Unisex",noa:"Sin citas",noa2:"Toca + para agregar",noc:"Sin clientes",nosts:"Sin personal",nos:"Agrega tu primer estilista",ncl:"Nuevo Cliente",ecl:"Editar Cliente",nsv:"Agregar Servicio",esv:"Editar Servicio",nst:"Agregar Estilista",est:"Editar Estilista",imp:"Importar",imph:"Sube el respaldo para sincronizar.","add-st":"Agregar",uph:"Subir foto","bl-lbl":"Link de Reservas del Cliente","bl-hint":"Envía este link a los clientes para que agenden sin ver tu administración."}
 };
 let lang=localStorage.getItem('jl')||'en';
 const T=k=>TT[lang][k]||TT.en[k]||k;
 function setL(l){
-  lang=l;localStorage.setItem('jl',l);
-  applyLoginI18n();
-  setGenderOptions();
-  document.getElementById('en-b').classList.toggle('on',l==='en');
-  document.getElementById('es-b').classList.toggle('on',l==='es');
-  apI18n();
-  if(curMode==='admin')renderAll();
-  else{bkRenderSvcs();bkRenderStaff();if(bkStep===3){bkRenderDates();bkRenderTimes();}if(bkStep===4)bkRenderSummary();}
-}
-function apI18n(){document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');if(T(k))el.textContent=T(k);});}
-
-// ══════════════════════════════════════════
-// DATA — single shared localStorage
-// ══════════════════════════════════════════
-const SD_DEFAULT=[
-  {id:'w1',g:'women',ic:'✂️',n:'Haircut & Style',es:'Corte y Peinado',d:60,p:null},
-  {id:'w2',g:'women',ic:'💨',n:'Blowout',es:'Brushing',d:45,p:null},
-  {id:'w3',g:'women',ic:'🎨',n:'Full Color',es:'Color Completo',d:120,p:null},
-  {id:'w4',g:'women',ic:'✨',n:'Highlights',es:'Mechas',d:150,p:null},
-  {id:'w5',g:'women',ic:'🌊',n:'Balayage',es:'Balayage',d:180,p:null},
-  {id:'w6',g:'women',ic:'💎',n:'Keratin Treatment',es:'Keratina',d:180,p:null},
-  {id:'w7',g:'women',ic:'🌀',n:'Perm',es:'Permanente',d:150,p:null},
-  {id:'w8',g:'women',ic:'💆',n:'Deep Conditioning',es:'Hidratación Profunda',d:60,p:null},
-  {id:'w9',g:'women',ic:'👑',n:'Updo / Bridal',es:'Recogido / Novia',d:90,p:null},
-  {id:'w10',g:'women',ic:'🔆',n:'Gloss / Toner',es:'Brillo / Tónico',d:45,p:null},
-  {id:'w11',g:'women',ic:'🪮',n:'Eyebrow Wax',es:'Depilación de Cejas',d:20,p:null},
-  {id:'w12',g:'women',ic:'💋',n:'Facial Wax',es:'Depilación Facial',d:20,p:null},
-  {id:'m1',g:'men',ic:'💈',n:'Haircut',es:'Corte de Cabello',d:30,p:null},
-  {id:'m2',g:'men',ic:'🧔',n:'Beard Trim',es:'Arreglo de Barba',d:20,p:null},
-  {id:'m3',g:'men',ic:'⚡',n:'Haircut + Beard',es:'Corte + Barba',d:50,p:null},
-  {id:'m4',g:'men',ic:'🪒',n:'Hot Towel Shave',es:'Afeitado Clásico',d:40,p:null},
-  {id:'m5',g:'men',ic:'🎨',n:'Hair Color',es:'Color de Cabello',d:90,p:null},
-  {id:'m6',g:'men',ic:'🩶',n:'Gray Coverage',es:'Cobertura de Canas',d:90,p:null},
-  {id:'m7',g:'men',ic:'✂️',n:'Fade / Taper',es:'Degradado',d:35,p:null},
-  {id:'m8',g:'men',ic:'👦',n:'Kids Haircut',es:'Corte Infantil',d:25,p:null},
-  {id:'m9',g:'men',ic:'🪮',n:'Eyebrow Cleanup',es:'Arreglo de Cejas',d:15,p:null},
-  {id:'u1',g:'unisex',ic:'💆',n:'Scalp Massage',es:'Masaje Capilar',d:30,p:null},
-  {id:'u2',g:'unisex',ic:'🔬',n:'Scalp Analysis',es:'Análisis Capilar',d:20,p:null},
-  {id:'u3',g:'unisex',ic:'🧶',n:'Braids',es:'Trenzas',d:120,p:null},
-  {id:'u4',g:'unisex',ic:'🌿',n:'Locs Service',es:'Locs / Dreadlocks',d:180,p:null},
-];
-const GD=k=>{try{return JSON.parse(localStorage.getItem('j_'+k)||'null')}catch{return null}};
-const SD2=(k,v)=>localStorage.setItem('j_'+k,JSON.stringify(v));
-let svcs=GD('sv')||SD_DEFAULT;
-let cls=GD('cl')||[];
-let apts=GD('ap')||[];
-let staff=GD('st')||[];
-const saveSv2=()=>SD2('sv',svcs);
-const saveCls2=()=>SD2('cl',cls);
-const saveAp=()=>SD2('ap',apts);
-const saveSt=()=>SD2('st',staff);
-
-// Utils
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-const today=()=>new Date().toISOString().slice(0,10);
-const fm=n=>n!=null&&n!==''?'$'+parseFloat(n).toFixed(2):'—';
-const fm2=n=>n!=null&&n!==''?'$'+parseFloat(n).toFixed(0):'';
-const fd=d=>{if(!d)return'—';return new Date(d+'T12:00:00').toLocaleDateString(lang==='es'?'es-US':'en-US',{month:'short',day:'numeric'});};
-const fdLong=d=>{if(!d)return'';return new Date(d+'T12:00:00').toLocaleDateString(lang==='es'?'es-US':'en-US',{weekday:'long',month:'long',day:'numeric'});};
-const ac=n=>{const c=['#3B7DD8','#C2607A','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#E74C3C'];let h=0;for(let x of(n||'?'))h=x.charCodeAt(0)+h*31;return c[Math.abs(h)%c.length];};
-const ini=n=>(n||'?').split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
-const svN=s=>lang==='es'&&s.es?s.es:s.n;
-const fmtH=h=>{const hr=parseInt(h);if(lang==='es')return hr+'h00';return hr<12?hr+':00 AM':hr===12?'12:00 PM':(hr-12)+':00 PM';};
-
-
-// Gender label helper — handles all 4 options
-function gLabel(g){
-  var map={women:T('gopt_w'),men:T('gopt_m'),other:T('gopt_o'),prefer_not:T('gopt_p')};
-  return map[g]||g||'—';
-}
-function gColor(g){
-  if(g==='men')return'var(--men)';
-  if(g==='women')return'var(--women)';
-  return'var(--uni)';
-}
-function gColorDim(g){
-  if(g==='men')return'var(--mdim)';
-  if(g==='women')return'var(--wdim)';
-  return'var(--udim)';
-}
-
-// Set gender options in all selects based on current language
-function setGenderOptions(){
-  var opts = [
-    ['women', T('gopt_w')],
-    ['men',   T('gopt_m')],
-    ['other', T('gopt_o')],
-    ['prefer_not', T('gopt_p')]
-  ];
-  ['cl-gn','bk-gn'].forEach(function(id){
-    var sel = document.getElementById(id);
-    if(!sel) return;
-    // Remember current value
-    var cur = sel.value;
-    sel.innerHTML = '';
-    opts.forEach(function(o){
-      var opt = document.createElement('option');
-      opt.value = o[0];
-      opt.textContent = o[1];
-      sel.appendChild(opt);
-    });
-    sel.value = cur || 'women';
-  });
-}
-// ══════════════════════════════════════════
-// MODE SWITCHER
-// ══════════════════════════════════════════
-let curMode='admin';
-function setMode(m){
-  curMode=m;
-  document.getElementById('tab-admin').classList.toggle('on',m==='admin');
-  document.getElementById('tab-booking').classList.toggle('on',m==='booking');
-  document.getElementById('admin-shell').classList.toggle('on',m==='admin');
-  document.getElementById('booking-shell').classList.toggle('on',m==='booking');
-  if(m==='booking'){bkRenderSvcs();bkFilterG(bkGFilter);}
-  if(m==='admin')renderAll();
-}
-
-// ══════════════════════════════════════════
-// ADMIN VIEWS
-// ══════════════════════════════════════════
-let curV='dashboard',curSF='women',calW=0;
-function gv(v){
-  document.querySelectorAll('.vw').forEach(e=>e.classList.remove('on'));
-  document.querySelectorAll('.ni,.bn').forEach(e=>e.classList.remove('on'));
-  document.getElementById('vw-'+v).classList.add('on');
-  document.querySelectorAll('.ni').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes("'"+v+"'"))e.classList.add('on');});
-  const bn=document.getElementById('bn-'+v);if(bn)bn.classList.add('on');
-  curV=v;
-  const vmap={dashboard:'vd',appointments:'va',calendar:'vc',staff:'vst',services:'vsv',clients:'vcl',reports:'vr'};
-  document.getElementById('pg-title').textContent=T(vmap[v]||v);
-  rv(v);
+  lang=l; localStorage.setItem('jl',l);
+  applyLandingI18n();
+  buildGenderOpts('b-gn',null);
+  buildGenderOpts('cl-gn',null);
+  apI18n(); renderAll();
 }
 function rv(v){
   if(v==='dashboard')renderDash();
@@ -936,10 +987,10 @@ function rv(v){
   else if(v==='reports')renderRep();
 }
 function renderAll(){apI18n();rv(curV);badge();updD();}
-function updD(){const d=new Date();document.getElementById('atb-date').textContent=d.toLocaleDateString(lang==='es'?'es-US':'en-US',{weekday:'short',month:'short',day:'numeric'});}
+function updD(){const d=new Date();document.getElementById('tb-date').textContent=d.toLocaleDateString(lang==='es'?'es-US':'en-US',{weekday:'short',month:'short',day:'numeric'});}
 function badge(){
   const n=apts.filter(a=>a.status==='pending').length;
-  const nb=document.getElementById('nb');nb.textContent=n;nb.style.display=n?'':'none';
+  const nb=document.getElementById('nb');nb.textContent=n;nb.style.display=n?'':' none';
   const bd=document.getElementById('bndot');if(bd)bd.style.display=n?'block':'none';
   document.getElementById('s-p').textContent=n;
 }
@@ -961,10 +1012,10 @@ function renderDash(){
   document.getElementById('dash-tl').innerHTML=sorted.length?sorted.map(a=>acHTML(a,true)).join(''):emH(T('noa'),T('noa2'));
   const sc={};apts.filter(a=>a.status==='completed').forEach(a=>{sc[a.sn]=(sc[a.sn]||0)+1;});
   const ts=Object.entries(sc).sort((a,b)=>b[1]-a[1]).slice(0,5);const mx=ts[0]?.[1]||1;
-  document.getElementById('dash-top').innerHTML=ts.length?ts.map(([n,c])=>`<div class="br"><div class="bl">${n}</div><div class="bt"><div class="bf" style="width:${c/mx*100}%;background:var(--gold)"></div></div><div class="bv" style="color:var(--gold)">${c}</div></div>`).join(''):`<div style="color:var(--tx2);font-size:11px;padding:8px">No data yet</div>`;
+  document.getElementById('dash-top').innerHTML=ts.length?ts.map(([n,c])=>`<div class="br"><div class="bl">${n}</div><div class="bt"><div class="bf" style="width:${c/mx*100}%;background:var(--gold)"></div></div><div class="bv" style="color:var(--gold)">${c}</div></div>`).join(''):`<div style="color:var(--tx2);font-size:11px;padding:8px">No data</div>`;
 }
 
-// APT CARD
+// APT CARD HTML
 function acHTML(a,compact=false){
   const sv=svcs.find(s=>s.id===a.si)||{};
   const cl=cls.find(c=>c.id===a.ci)||{name:a.cn||'—'};
@@ -972,15 +1023,13 @@ function acHTML(a,compact=false){
   const gc=sv.g==='men'?'bm':sv.g==='women'?'bw':'bu';
   const gl=sv.g==='men'?T('men'):sv.g==='women'?T('women'):T('uni');
   const sl={confirmed:T('conf'),pending:T('pend'),completed:T('comp'),cancelled:T('canc')}[a.status]||a.status;
+  const stfLabel=stf?`· ${stf.name}`:'';
   return`<div class="ac">
     <div class="at">${a.time}</div>
-    <div class="adiv"></div>
-    <div class="ai">
-      <div class="acl">${cl.name}</div>
-      <div class="asv">${a.sn}${stf?' · '+stf.name:''}${!compact?' · '+fd(a.date):''}</div>
-    </div>
+    <div class="ad"></div>
+    <div class="ai"><div class="acl">${cl.name}</div><div class="asv">${a.sn} ${stfLabel}${!compact?' · '+fd(a.date):''}</div></div>
     <span class="abg ${gc}">${gl}</span>
-    <div class="apr2">${a.p?fm(a.p):'—'}</div>
+    <div class="apr">${a.p?fm(a.p):'—'}</div>
     <span class="ast s${a.status[0]}">${sl}</span>
     <div class="aa">
       ${a.status==='pending'?`<button class="ab" onclick="chSt('${a.id}','confirmed')">👍</button>`:''}
@@ -999,7 +1048,7 @@ function renderApts(){
   list.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
   document.getElementById('apt-list').innerHTML=list.length?list.map(a=>acHTML(a)).join(''):emH(T('noa'),T('noa2'));
 }
-function chSt(id,s){const a=apts.find(x=>x.id===id);if(a){a.status=s;saveAp();renderAll();toast('✅ '+T(s==='confirmed'?'conf':s==='completed'?'comp':'canc'),'tok');}}
+function chSt(id,s){const a=apts.find(x=>x.id===id);if(a){a.status=s;saveAp();renderAll();toast('✅ '+T(s==='confirmed'?'conf':s==='completed'?'comp':s),'tok');}}
 function delApt(id){if(!confirm(lang==='es'?'¿Eliminar esta cita?':'Delete this appointment?'))return;apts=apts.filter(a=>a.id!==id);saveAp();renderAll();toast('🗑️','tok');}
 
 // APT MODAL
@@ -1017,29 +1066,29 @@ function openNewApt(prefCl=null){
 function editApt(id){
   const a=apts.find(x=>x.id===id);if(!a)return;
   document.getElementById('apt-eid').value=id;
-  document.getElementById('apt-mt').textContent='✏️ '+T('va');
+  document.getElementById('apt-mt').textContent=T('napt').replace('+','✏️');
   document.getElementById('apt-d').value=a.date;
   document.getElementById('apt-t').value=a.time;
-  document.getElementById('apt-pr').value=a.p||'';
-  document.getElementById('apt-nt').value=a.nt||'';
+  document.getElementById('apt-pr').value=a.p||''
+  document.getElementById('apt-nt').value=a.nt||''
   document.getElementById('apt-stat').value=a.status;
   popAptDrops(a.ci,a.si,a.stid);
   document.getElementById('m-apt').classList.add('on');
 }
 function popAptDrops(pCl=null,pSv=null,pStf=null){
   const cs=document.getElementById('apt-cl');
-  cs.innerHTML=cls.length?cls.map(c=>`<option value="${c.id}"${c.id===pCl?' selected':''}>${c.name}</option>`):`<option value="">— ${T('ncl')} first —</option>`;
+  cs.innerHTML=cls.length?cls.map(c=>`<option value="${c.id}"${c.id===pCl?' selected':''}}>${c.name}</option>`):`<option value="">— ${T('ncl')} first —</option>`;
   const ss=document.getElementById('apt-sv');
-  ss.innerHTML=svcs.map(s=>`<option value="${s.id}"${s.id===pSv?' selected':''}>${svN(s)}</option>`);
+  ss.innerHTML=svcs.map(s=>`<option value="${s.id}"${s.id===pSv?' selected':''}}>${svN(s)}</option>`);
   const stfSel=document.getElementById('apt-stf');
-  stfSel.innerHTML=`<option value="">— ${T('any')} —</option>`+staff.map(s=>`<option value="${s.id}"${s.id===pStf?' selected':''}>${s.name}</option>`).join('');
+  stfSel.innerHTML=`<option value="">— ${T('lst')} —</option>`+staff.map(s=>`<option value="${s.id}"${s.id===pStf?' selected':''}}>${s.name}</option>`).join('');
   if(!pSv)fillP();
 }
 function fillP(){const id=document.getElementById('apt-sv').value;const s=svcs.find(x=>x.id===id);if(s&&s.p!=null)document.getElementById('apt-pr').value=s.p;}
 function saveApt(){
   const date=document.getElementById('apt-d').value;
   const time=document.getElementById('apt-t').value;
-  if(!date||!time){toast(T('ld')+' & '+T('lt')+' required','terr');return;}
+  if(!date||!time){toast(T('ld')+' required','terr');return;}
   const ci=document.getElementById('apt-cl').value;
   const si=document.getElementById('apt-sv').value;
   const stid=document.getElementById('apt-stf').value;
@@ -1058,14 +1107,14 @@ function renderCal(){
   const dn=lang==='es'?['D','L','M','X','J','V','S']:['S','M','T','W','T','F','S'];
   const hrs=['8','9','10','11','12','13','14','15','16','17','18','19'];
   document.getElementById('cal-lbl').textContent=days[3].toLocaleDateString(lang==='es'?'es-US':'en-US',{month:'long',year:'numeric'});
-  const td=today();let h='<div style="background:var(--sf);padding:6px 4px"></div>';
-  days.forEach((d,i)=>{const ds=d.toISOString().slice(0,10);h+=`<div style="background:var(--sf);padding:6px 4px;text-align:center"><div style="font-size:9px;font-weight:700;color:var(--tx2)">${dn[i]}</div><div style="font-size:15px;font-weight:800;${ds===td?'color:var(--gold)':''}">${d.getDate()}</div></div>`;});
+  const td=today();let h='<div class="wh"></div>';
+  days.forEach((d,i)=>{const ds=d.toISOString().slice(0,10);h+=`<div class="wh"><div class="dn">${dn[i]}</div><div class="dnum${ds===td?' td':''}">${d.getDate()}</div></div>`;});
   hrs.forEach(hr=>{
-    h+=`<div style="background:var(--sf);padding:5px 3px;font-size:8px;color:var(--tx3);text-align:right">${hr}</div>`;
+    h+=`<div class="tc">${hr}</div>`;
     days.forEach(d=>{
       const ds=d.toISOString().slice(0,10);
       const da=apts.filter(a=>a.date===ds&&a.status!=='cancelled'&&a.time&&parseInt(a.time.split(':')[0])===parseInt(hr));
-      h+=`<div style="background:var(--sf);min-height:34px;padding:2px;cursor:pointer" onclick="qApt('${ds}','${hr.padStart(2,'0')}:00')">${da.map(a=>{const sv=svcs.find(s=>s.id===a.si)||{};const bg=sv.g==='men'?'var(--mdim)':sv.g==='women'?'var(--wdim)':'var(--gdim)';const cl2=sv.g==='men'?'var(--men)':sv.g==='women'?'var(--women)':'var(--gold)';return`<div style="background:${bg};border-left:2px solid ${cl2};color:${cl2};border-radius:3px;padding:1px 3px;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;cursor:pointer" onclick="event.stopPropagation();editApt('${a.id}')">${a.cn}</div>`;}).join('')}</div>`;
+      h+=`<div class="ws" onclick="qApt('${ds}','${hr.padStart(2,'0')}:00')">${da.map(a=>{const sv=svcs.find(s=>s.id===a.si)||{};const gc=sv.g==='men'?'sm2':sv.g==='women'?'sw':'su';return`<div class="sa ${gc}" title="${a.cn} · ${a.sn}" onclick="event.stopPropagation();editApt('${a.id}')">${a.cn}</div>`;}).join('')}</div>`;
     });
   });
   document.getElementById('wk-g').innerHTML=h;
@@ -1074,11 +1123,15 @@ function qApt(date,time){openNewApt();document.getElementById('apt-d').value=dat
 
 // STAFF
 function renderStaff(){
-  const el=document.getElementById('staff-list-a');
-  if(!staff.length){el.innerHTML=emH(T('nosts'),T('nos'));return;}
-  el.innerHTML=staff.map(s=>{
-    const av=s.avatar?`<div class="stf-av-a"><img src="${s.avatar}"></div>`:`<div class="stf-av-a" style="background:${ac(s.name)}">${ini(s.name)}</div>`;
-    return`<div class="stf-card-a">${av}<div><div class="stf-nm-a">${s.name}</div><div class="stf-rl-a">${s.role||''}</div>${s.phone?`<div style="font-size:10px;color:var(--tx2)">${s.phone}</div>`:''}</div><button class="stf-ed" onclick="editStf('${s.id}')">✏️</button></div>`;
+  const g=document.getElementById('staff-grid');
+  if(!staff.length){g.innerHTML=emH(T('nosts'),T('nos'));return;}
+  g.innerHTML=staff.map(s=>{
+    const av=s.avatar?`<img src="${s.avatar}">`:`<div class="staff-av" style="background:${ac(s.name)}">${ini(s.name)}</div>`;
+    return`<div class="staff-card">
+      <div class="staff-av">${av}</div>
+      <div><div class="staff-name">${s.name}</div><div class="staff-role">${s.role||''}</div>${s.phone?`<div style="font-size:11px;color:var(--tx2)">${s.phone}</div>`:''}</div>
+      <button class="staff-del" onclick="editStf('${s.id}')">✏️</button>
+    </div>`;
   }).join('');
 }
 function openAddStaff(){
@@ -1093,18 +1146,18 @@ function editStf(id){
   const s=staff.find(x=>x.id===id);if(!s)return;
   document.getElementById('stf-eid').value=id;
   document.getElementById('stf-mt').textContent=T('est');
-  document.getElementById('stf-fn').value=s.name.split(' ')[0]||'';
-  document.getElementById('stf-ln').value=s.name.split(' ').slice(1).join(' ')||'';
-  document.getElementById('stf-rl').value=s.role||'';
-  document.getElementById('stf-ph').value=s.phone||'';
-  document.getElementById('stf-av').value=s.avatar||'';
+  document.getElementById('stf-fn').value=s.name.split(' ')[0]||''
+  document.getElementById('stf-ln').value=s.name.split(' ').slice(1).join(' ')||''
+  document.getElementById('stf-rl').value=s.role||''
+  document.getElementById('stf-ph').value=s.phone||''
+  document.getElementById('stf-av').value=s.avatar||''
   const p=document.getElementById('stf-av-pr');
-  if(s.avatar){p.innerHTML=`<img src="${s.avatar}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`;}
+  if(s.avatar){p.innerHTML=`<img src="${s.avatar}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;}
   else{p.innerHTML=ini(s.name);p.style.background=ac(s.name);}
   document.getElementById('stf-del').style.display='';
   document.getElementById('m-stf').classList.add('on');
 }
-function prevStfAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const d=e.target.result;document.getElementById('stf-av').value=d;document.getElementById('stf-av-pr').innerHTML=`<img src="${d}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`;};r.readAsDataURL(f);}
+function prevStfAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const d=e.target.result;document.getElementById('stf-av').value=d;const p=document.getElementById('stf-av-pr');p.innerHTML=`<img src="${d}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;};r.readAsDataURL(f);}
 function saveStf(){
   const fn=document.getElementById('stf-fn').value.trim();if(!fn){toast(T('lfn')+' required','terr');return;}
   const eid=document.getElementById('stf-eid').value;
@@ -1124,7 +1177,7 @@ function renderSv(){
       <div class="gdot" style="background:${gc}"></div>
       <div class="svic">${s.ic||'💅'}</div>
       <div class="svnm">${svN(s)}</div>
-      <div class="svdr">⏱ ${s.d} ${T('min')}</div>
+      <div class="svdr">⏱ ${s.d} min</div>
       <div class="svpr">
         ${s.p!=null?`<div class="sprice">$${parseFloat(s.p).toFixed(0)}</div>`:`<div class="stbd">TBD</div>`}
         <button class="sedt" onclick="editSv('${s.id}')">✏️</button>
@@ -1144,11 +1197,11 @@ function editSv(id){
   document.getElementById('sv-eid').value=id;
   document.getElementById('sv-mt').textContent=T('esv');
   document.getElementById('sv-n').value=s.n;
-  document.getElementById('sv-e').value=s.es||'';
+  document.getElementById('sv-e').value=s.es||''
   document.getElementById('sv-gn').value=s.g;
   document.getElementById('sv-d').value=s.d;
-  document.getElementById('sv-p').value=s.p!=null?s.p:'';
-  document.getElementById('sv-i').value=s.ic||'';
+  document.getElementById('sv-p').value=s.p!=null?s.p:''
+  document.getElementById('sv-i').value=s.ic||''
   document.getElementById('sv-del').style.display='';
   document.getElementById('m-sv').classList.add('on');
 }
@@ -1157,23 +1210,24 @@ function saveSv(){
   const eid=document.getElementById('sv-eid').value;
   const data={id:eid||uid(),g:document.getElementById('sv-gn').value,ic:document.getElementById('sv-i').value||'💅',n:nm,es:document.getElementById('sv-e').value.trim()||nm,d:parseInt(document.getElementById('sv-d').value)||60,p:document.getElementById('sv-p').value!==''?parseFloat(document.getElementById('sv-p').value):null};
   if(eid){const i=svcs.findIndex(s=>s.id===eid);if(i>-1)svcs[i]=data;}else svcs.push(data);
-  saveSv2();cM('m-sv');renderSv();toast('✅','tok');
+  _saveSv();cM('m-sv');renderSv();toast('✅','tok');
 }
-function delSv(){const id=document.getElementById('sv-eid').value;if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;svcs=svcs.filter(s=>s.id!==id);saveSv2();cM('m-sv');renderSv();toast('🗑️','tok');}
+function delSv(){const id=document.getElementById('sv-eid').value;if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;svcs=svcs.filter(s=>s.id!==id);_saveSv();cM('m-sv');renderSv();toast('🗑️','tok');}
 
 // CLIENTS
 function renderCl(){
-  const q=(document.getElementById('cl-s').value||'').toLowerCase();
-  const list=cls.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q));
+  const q=(document.getElementById('cl-s').value||''). toLowerCase();
+  const list=cls.filter(c=>(c.name||''). toLowerCase().includes(q)||(c.phone||''). includes(q));
   const tb=document.getElementById('cl-tb');
   if(!list.length){tb.innerHTML=`<tr><td colspan="4">${emH(T('noc'),'')}</td></tr>`;return;}
   tb.innerHTML=list.map(cl=>{
     const ca=apts.filter(a=>a.ci===cl.id&&a.status==='completed');
     const sp=ca.reduce((s,a)=>s+(+a.p||0),0);
-    const glb=gLabel(cl.gender);const gc2=gColor(cl.gender);const gcd=gColorDim(cl.gender);
-    const av=cl.avatar?`<div class="cav"><img src="${cl.avatar}"></div>`:`<div class="cav" style="background:${ac(cl.name)}">${ini(cl.name)}</div>`;
-    return`<tr><td><div class="cc">${av}<div><div class="cnm">${cl.name}</div><div class="cph">${cl.phone||'—'}</div></div></div></td>
-      <td><span style="background:${gcd};color:${gc2};font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap">${glb}</span></td>
+    const av=cl.avatar?`<div class="av"><img src="${cl.avatar}"></div>`:`<div class="av" style="background:${ac(cl.name)}">${ini(cl.name)}</div>`;
+    return`<tr>
+      <td><div class="cc" style="cursor:pointer" onclick="openProf('${cl.id}')">
+        ${av}<div><div class="cn">${cl.name}</div><div class="cp">${cl.phone||'—'}</div></div>
+      </div></td>
       <td style="font-size:18px;font-weight:800;color:var(--gold)">${ca.length}</td>
       <td style="font-size:13px;font-weight:700;color:var(--ok)">${fm(sp)}</td>
       <td><div style="display:flex;gap:4px">
@@ -1183,11 +1237,12 @@ function renderCl(){
     </tr>`;
   }).join('');
 }
+function openProf(id){const cl=cls.find(c=>c.id===id);if(cl)toast(cl.name+' — '+apts.filter(a=>a.ci===id&&a.status==='completed').length+' visits','tok');}
 function openAddCl(){
   document.getElementById('cl-eid').value='';
   document.getElementById('cl-mt').textContent=T('ncl');
   ['cl-fn','cl-ln','cl-ph','cl-em','cl-nt','cl-av'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('cl-gn').value='women';
+  buildGenderOpts('cl-gn','men');
   const p=document.getElementById('cl-av-pr');p.innerHTML='👤';p.style.background='var(--sf2)';
   document.getElementById('m-cl').classList.add('on');
 }
@@ -1195,26 +1250,26 @@ function editCl(id){
   const cl=cls.find(c=>c.id===id);if(!cl)return;
   document.getElementById('cl-eid').value=id;
   document.getElementById('cl-mt').textContent=T('ecl');
-  document.getElementById('cl-fn').value=cl.name.split(' ')[0]||'';
-  document.getElementById('cl-ln').value=cl.name.split(' ').slice(1).join(' ')||'';
-  document.getElementById('cl-ph').value=cl.phone||'';
-  document.getElementById('cl-em').value=cl.email||'';
-  document.getElementById('cl-nt').value=cl.notes||'';
-  document.getElementById('cl-gn').value=cl.gender||'women';
-  document.getElementById('cl-av').value=cl.avatar||'';
+  document.getElementById('cl-fn').value=cl.name.split(' ')[0]||''
+  document.getElementById('cl-ln').value=cl.name.split(' ').slice(1).join(' ')||''
+  document.getElementById('cl-ph').value=cl.phone||''
+  document.getElementById('cl-em').value=cl.email||''
+  document.getElementById('cl-nt').value=cl.notes||''
+  buildGenderOpts('cl-gn',cl.gender||'men');
+  document.getElementById('cl-av').value=cl.avatar||''
   const p=document.getElementById('cl-av-pr');
-  if(cl.avatar){p.innerHTML=`<img src="${cl.avatar}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`;}else{p.innerHTML=ini(cl.name);p.style.background=ac(cl.name);}
+  if(cl.avatar){p.innerHTML=`<img src="${cl.avatar}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;}else{p.innerHTML=ini(cl.name);p.style.background=ac(cl.name);}
   document.getElementById('m-cl').classList.add('on');
 }
-function prevClAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const d=e.target.result;document.getElementById('cl-av').value=d;document.getElementById('cl-av-pr').innerHTML=`<img src="${d}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`;};r.readAsDataURL(f);}
-function saveCl(){
+function prevClAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const d=e.target.result;document.getElementById('cl-av').value=d;const p=document.getElementById('cl-av-pr');p.innerHTML=`<img src="${d}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;};r.readAsDataURL(f);}
+function saveCl2(){
   const fn=document.getElementById('cl-fn').value.trim();if(!fn){toast(T('lfn')+' required','terr');return;}
   const eid=document.getElementById('cl-eid').value;
   const data={id:eid||uid(),name:(fn+' '+document.getElementById('cl-ln').value.trim()).trim(),phone:document.getElementById('cl-ph').value.trim(),email:document.getElementById('cl-em').value.trim(),gender:document.getElementById('cl-gn').value,notes:document.getElementById('cl-nt').value.trim(),avatar:document.getElementById('cl-av').value||null};
   if(eid){const i=cls.findIndex(c=>c.id===eid);if(i>-1)cls[i]=data;}else cls.push(data);
-  saveCls2();cM('m-cl');renderCl();toast('✅','tok');
+  saveCls();cM('m-cl');renderCl();toast('✅','tok');
 }
-function delCl(id){if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;cls=cls.filter(c=>c.id!==id);saveCls2();renderCl();toast('🗑️','tok');}
+function delCl(id){if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;cls=cls.filter(c=>c.id!==id);saveCls();renderCl();toast('🗑️','tok');}
 
 // REPORTS
 function getFiltered(period){
@@ -1254,15 +1309,17 @@ function renderRep(){
     <div class="br"><div class="bl">${T('uni')}</div><div class="bt"><div class="bf" style="width:${uR/mg*100}%;background:var(--uni)"></div></div><div class="bv" style="color:var(--uni)">${fm(uR)}</div></div>`;
   const csp={};list.forEach(a=>{csp[a.ci]=(csp[a.ci]||0)+(+a.p||0);});
   const tc=Object.entries(csp).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  document.getElementById('r-tc').innerHTML=tc.length?tc.map(([id,sp])=>{const cl=cls.find(c=>c.id===id)||{name:'Guest'};const av=cl.avatar?`<img src="${cl.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">`:`<div class="cav" style="background:${ac(cl.name)};width:24px;height:24px;font-size:10px">${ini(cl.name)}</div>`;return`<div class="rrow"><span style="display:flex;align-items:center;gap:7px;color:var(--tx2)">${av}${cl.name}</span><span style="font-weight:700;color:var(--ok)">${fm(sp)}</span></div>`;}).join(''):`<div style="color:var(--tx2);font-size:11px;padding:7px 0">No data</div>`;
+  document.getElementById('r-tc').innerHTML=tc.length?tc.map(([id,sp])=>{const cl=cls.find(c=>c.id===id)||{name:'Guest'};const av=cl.avatar?`<img src="${cl.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">`:`<div class="av" style="background:${ac(cl.name)};width:24px;height:24px;font-size:10px">${ini(cl.name)}</div>`;return`<div class="rrow"><span style="display:flex;align-items:center;gap:7px;color:var(--tx2)">${av}${cl.name}</span><span style="font-weight:700;color:var(--ok)">${fm(sp)}</span></div>`;}).join(''):`<div style="color:var(--tx2);font-size:11px;padding:7px 0">No data</div>`;
 }
 
-// EXPORT/IMPORT
+// EXPORT / IMPORT
 function expData(){
+  // Share data to booking portal via localStorage key
+  SD2('pub_sv',svcs);SD2('pub_st',staff);
   const data=JSON.stringify({clients:cls,appointments:apts,services:svcs,staff,exported:new Date().toISOString()},null,2);
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
   a.download='joel-backup-'+today()+'.json';a.click();
-  toast('💾 '+(lang==='es'?'Exportado':'Exported'),'tok');
+  toast('💾 '+( lang==='es'?'Exportado':'Exported'),'tok');
 }
 function openImp(){document.getElementById('imp-j').value='';document.getElementById('imp-f').value='';document.getElementById('m-imp').classList.add('on');}
 function readImp(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('imp-j').value=e.target.result;};r.readAsText(f);}
@@ -1274,319 +1331,266 @@ function impData(){
     if(d.appointments)apts=d.appointments;
     if(d.services)svcs=d.services;
     if(d.staff)staff=d.staff;
-    saveCls2();saveAp();saveSv2();saveSt();
+    saveCls();saveAp();_saveSv();saveSt();
+    SD2('pub_sv',svcs);SD2('pub_st',staff);
     cM('m-imp');renderAll();toast('✅ Imported','tok');
   }catch(e){toast('Invalid JSON','terr');}
 }
 
-// ══════════════════════════════════════════
-// BOOKING FLOW
-// ══════════════════════════════════════════
-let bkStep=1,bkSvc=null,bkStaff=undefined,bkDate=null,bkTime=null,bkGFilter='women',bkExistClient=null;
-const BK_HOURS=['8','9','10','11','12','13','14','15','16','17','18','19'];
-
-function bkGoStep(n){
-  // Validate before advancing
-  if(n===2&&!bkSvc){toast(T('s1t'),'twarn');return;}
-  if(n===4&&(!bkDate||!bkTime)){toast(T('pick_time'),'twarn');return;}
-
-  document.querySelectorAll('.bsec').forEach(s=>s.classList.remove('on'));
-  document.getElementById('bk'+n).classList.add('on');
-
-  // Update step indicators
-  for(let i=1;i<=4;i++){
-    const sn=document.getElementById('sn'+i);
-    sn.classList.remove('cur','done');
-    if(i<n)sn.classList.add('done');
-    else if(i===n)sn.classList.add('cur');
-    if(i<4)document.getElementById('sl'+i).classList.toggle('done',i<n);
-  }
-  bkStep=n;
-
-  if(n===2)bkRenderStaff();
-  if(n===3){bkRenderDates();bkRenderTimes();}
-  if(n===4)bkRenderSummary();
-
-  // Scroll to top of booking shell
-  document.getElementById('booking-shell').scrollTo(0,0);
-}
-
-// BOOKING STEP 1
-function bkFilterG(g){
-  bkGFilter=g;
-  ['women','men','uni'].forEach(x=>document.getElementById('bg-'+x).className='gt');
-  document.getElementById('bg-'+g).classList.add(g==='men'?'am':g==='women'?'aw':'au');
-  bkRenderSvcs();
-}
-function bkRenderSvcs(){
-  const list=svcs.filter(s=>s.g===bkGFilter);
-  const el=document.getElementById('bk-svc-list');
-  if(!list.length){el.innerHTML=`<div class="empty" style="padding:30px;text-align:center;color:var(--tx2)">No services available</div>`;return;}
-  el.innerHTML=list.map(s=>`
-    <div class="svc-card${bkSvc===s.id?' sel':''}" onclick="bkSelSvc('${s.id}')">
-      <div class="svc-ic">${s.ic||'💅'}</div>
-      <div class="svc-inf">
-        <div class="svc-nm">${svN(s)}</div>
-        <div class="svc-dr">⏱ ${s.d} ${T('min')}</div>
-      </div>
-      ${s.p!=null?`<div class="svc-pr">${fm2(s.p)}</div>`:`<div class="svc-tbd">TBD</div>`}
-    </div>`).join('');
-  document.getElementById('bk-btn1').disabled=!bkSvc;
-}
-function bkSelSvc(id){
-  bkSvc=id;
-  document.querySelectorAll('.svc-card').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+id+"'")));
-  document.getElementById('bk-btn1').disabled=false;
-}
-
-// BOOKING STEP 2
-function bkRenderStaff(){
-  const np=document.getElementById('bk-no-pref');
-  np.classList.toggle('sel',bkStaff===null);
-  const el=document.getElementById('bk-staff-list');
-  if(!staff.length){el.innerHTML='';return;}
-  el.innerHTML=staff.map(s=>{
-    const av=s.avatar?`<img src="${s.avatar}">`:`<div style="background:${ac(s.name)};width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;margin:0 auto 8px">${ini(s.name)}</div>`;
-    return`<div class="staff-card${bkStaff===s.id?' sel':''}" onclick="bkSelStaff('${s.id}')">
-      <div class="stf-av">${av}</div>
-      <div class="stf-nm">${s.name}</div>
-      <div class="stf-rl">${s.role||''}</div>
-    </div>`;
-  }).join('');
-}
-function bkSelStaff(id){
-  bkStaff=id;
-  document.querySelectorAll('.staff-card').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+id+"'")));
-  document.getElementById('bk-no-pref').classList.remove('sel');
-  setTimeout(()=>bkGoStep(3),280);
-}
-function bkSelNoPrefs(){
-  bkStaff=null;
-  document.getElementById('bk-no-pref').classList.add('sel');
-  document.querySelectorAll('.staff-card').forEach(el=>el.classList.remove('sel'));
-  setTimeout(()=>bkGoStep(3),280);
-}
-document.getElementById('bk-no-pref').addEventListener('click',bkSelNoPrefs);
-
-// BOOKING STEP 3
-function bkRenderDates(){
-  const el=document.getElementById('bk-date-grid');
-  const svc=svcs.find(s=>s.id===bkSvc);
-  if(svc)document.getElementById('bk-dur-txt').textContent=T('dur')+' '+svc.d+' '+T('min');
-  const dates=[];const now=new Date();
-  for(let i=0;i<14;i++){const d=new Date(now);d.setDate(now.getDate()+i);dates.push(d);}
-  const dn=lang==='es'?['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const mn=lang==='es'?['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  el.innerHTML=dates.map(d=>{
-    const ds=d.toISOString().slice(0,10);
-    return`<div class="date-btn${bkDate===ds?' sel':''}" onclick="bkSelDate('${ds}')">
-      <div class="dday">${dn[d.getDay()]}</div>
-      <div class="dnum">${d.getDate()}</div>
-      <div class="dmo">${mn[d.getMonth()]}</div>
-    </div>`;
-  }).join('');
-}
-function bkSelDate(ds){
-  bkDate=ds;bkTime=null;
-  document.querySelectorAll('.date-btn').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+ds+"'")));
-  document.getElementById('bk-btn3').disabled=true;
-  bkRenderTimes();
-}
-function bkRenderTimes(){
-  const el=document.getElementById('bk-time-grid');
-  if(!bkDate){el.innerHTML='';return;}
-  const taken=apts.filter(a=>a.date===bkDate&&a.status!=='cancelled').map(a=>parseInt(a.time.split(':')[0]));
-  el.innerHTML=BK_HOURS.map(h=>{
-    const hr=parseInt(h);
-    const isTaken=taken.includes(hr);
-    const padded=h.padStart(2,'0')+':00';
-    return`<div class="time-btn${isTaken?' taken':bkTime===padded?' sel':''}" ${isTaken?'':`onclick="bkSelTime('${padded}')"`}>
-      ${fmtH(h)}${isTaken?`<br><span style="font-size:9px;font-weight:400">${T('taken')}</span>`:''}
-    </div>`;
-  }).join('');
-}
-function bkSelTime(t){
-  bkTime=t;
-  document.querySelectorAll('.time-btn:not(.taken)').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+t+"'")));
-  document.getElementById('bk-btn3').disabled=false;
-}
-
-// BOOKING STEP 4
-function bkRenderSummary(){
-  const svc=svcs.find(s=>s.id===bkSvc)||{};
-  const stf=bkStaff?staff.find(s=>s.id===bkStaff):null;
-  const rows=[
-    [T('sum_svc'),(s=>svN(s)+(s.ic?' '+s.ic:''))(svc)],
-    [T('sum_dur'),svc.d?svc.d+' '+T('min'):'—'],
-    [T('sum_stf'),stf?stf.name:T('any')],
-    [T('sum_date'),fdLong(bkDate)],
-    [T('sum_time'),fmtH(bkTime?bkTime.split(':')[0]:'8')],
-    [T('sum_price'),svc.p!=null?fm2(svc.p):T('tbd')],
-  ];
-  document.getElementById('bk-summary').innerHTML=rows.map(([l,v])=>`<div class="sum-row"><span class="sum-lbl">${l}</span><span class="sum-val">${v}</span></div>`).join('');
-}
-function bkCheckExist(){
-  const ph=document.getElementById('bk-ph').value.replace(/\D/g,'');
-  if(ph.length<7){bkExistClient=null;document.getElementById('bk-exist').style.display='none';document.getElementById('bk-new-form').style.display='';return;}
-  const found=cls.find(c=>(c.phone||'').replace(/\D/g,'').includes(ph));
-  if(found){
-    bkExistClient=found;
-    document.getElementById('bk-exist-msg').textContent=T('exist_found')+', '+found.name+'! 👋';
-    document.getElementById('bk-exist').style.display='flex';
-    document.getElementById('bk-new-form').style.display='none';
-  }else{bkExistClient=null;document.getElementById('bk-exist').style.display='none';document.getElementById('bk-new-form').style.display='';}
-}
-function bkConfirm(){
-  const phone=document.getElementById('bk-ph').value.trim();
-  if(!phone){toast(T('lph'),'twarn');return;}
-  let cl=bkExistClient;
-  if(!cl){
-    const fn=document.getElementById('bk-fn').value.trim();
-    if(!fn){toast(T('lfn'),'twarn');return;}
-    cl={id:uid(),name:(fn+' '+document.getElementById('bk-ln').value.trim()).trim(),phone,email:document.getElementById('bk-em').value.trim(),gender:document.getElementById('bk-gn').value,notes:'',avatar:null};
-    cls.push(cl);saveCls2();
-  }
-  const svc=svcs.find(s=>s.id===bkSvc)||{};
-  const stf=bkStaff?staff.find(s=>s.id===bkStaff):null;
-  const apt={id:uid(),ci:cl.id,cn:cl.name,si:bkSvc,sn:svN(svc),stid:bkStaff||null,date:bkDate,time:bkTime,p:svc.p||null,status:'pending',nt:document.getElementById('bk-nt').value,source:'booking'};
-  apts.push(apt);saveAp();
-  // Show success
-  document.querySelectorAll('.bsec').forEach(s=>s.classList.remove('on'));
-  document.getElementById('bk5').classList.add('on');
-  document.getElementById('bk-steps').style.display='none';
-  const rows=[
-    ['👤',cl.name],['💅',svN(svc)],['⏱',svc.d+' '+T('min')],
-    ['💇',stf?stf.name:T('any')],['📅',fdLong(bkDate)],['🕐',fmtH(bkTime.split(':')[0])],
-    ['💰',svc.p!=null?fm2(svc.p):T('tbd')],
-  ];
-  document.getElementById('bk-conf-box').innerHTML=rows.map(([ic,v])=>`<div class="sum-row"><span class="sum-lbl">${ic}</span><span class="sum-val">${v}</span></div>`).join('');
-  document.getElementById('booking-shell').scrollTo(0,0);
-  // Refresh admin badge
-  badge();
-  toast('✅ '+T('suc_t'),'tok');
-}
-function bkReset(){
-  bkSvc=null;bkStaff=undefined;bkDate=null;bkTime=null;bkExistClient=null;bkStep=1;
-  document.getElementById('bk-steps').style.display='';
-  ['bk-ph','bk-fn','bk-ln','bk-em','bk-nt'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('bk-exist').style.display='none';
-  document.getElementById('bk-new-form').style.display='';
-  document.getElementById('bk-btn1').disabled=true;
-  document.getElementById('bk-btn3').disabled=true;
-  bkGoStep(1);bkRenderSvcs();bkFilterG('women');
-}
-
-// ══════════════════════════════════════════
-// SHARED MODAL / TOAST / UTILS
-// ══════════════════════════════════════════
+// MODAL / TOAST
 function cM(id){document.getElementById(id).classList.remove('on');}
 document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
 function toast(msg,type='tok'){
   const c=document.getElementById('tw');const el=document.createElement('div');
-  el.className='toast '+type;el.textContent=msg;c.appendChild(el);setTimeout(()=>el.remove(),3000);
+  el.className='toast '+type;el.textContent=msg;
+  c.appendChild(el);setTimeout(()=>el.remove(),3000);
 }
 function emH(t,s){return`<div class="empty"><div class="emp-ic">🔍</div><div class="emp-tx">${t}</div>${s?`<div class="emp-sub">${s}</div>`:''}</div>`;}
 
 
-// ── LOGIN ──────────────────────────────────
+
+// I18N
 
 
+function bkRenderStep(n){bkGoStep(n);}
 
-
-function doLogin(){
-  var uEl = document.getElementById('login-user');
-  var pEl = document.getElementById('login-pass');
-  if(!uEl || !pEl){ alert('Form error'); return; }
-  var u = uEl.value.trim().toLowerCase().replace(/ /g,'');
-  var p = pEl.value.trim().replace(/ /g,'');
-  if(u === 'admin' && p === 'joel2024'){
-    isLoggedIn = true;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('mode-bar').style.display = 'flex';
-    setMode('admin');
-    renderAll();
-  } else {
-    document.getElementById('login-err').style.display = 'block';
-    pEl.value = '';
-    window.setTimeout(function(){
-      var e = document.getElementById('login-err');
-      if(e) e.style.display = 'none';
-    }, 3000);
-  }
+// STEP 1 — SERVICES
+function bkFilterG(g){
+  curFilter=g;
+  document.querySelectorAll('.gt').forEach(x=>x.className='gt');
+  document.getElementById('g-'+g).classList.add(g==='men'?'am':g==='women'?'aw':'au');
+  bkRenderSvcs();
 }
-function skipToBooking(){
-  try {
-    var ls = document.getElementById('login-screen');
-    var mb = document.getElementById('mode-bar');
-    var adm = document.getElementById('admin-shell');
-    var bk = document.getElementById('booking-shell');
-    if(ls) ls.style.display = 'none';
-    if(mb) mb.style.display = 'none';
-    if(adm) adm.style.display = 'none';
-    if(bk){
-      bk.style.display = 'flex';
-      bk.classList.add('on');
-      bk.style.position = 'fixed';
-      bk.style.top = '0';
-      bk.style.bottom = '0';
-      bk.style.left = '0';
-      bk.style.right = '0';
-    }
-    bkRenderSvcs();
-    bkFilterG('women');
-  } catch(ex) { alert('Error: '+ex.message); }
+function bkGoStep(n){
+  if(n===2&&!selSvc){alert(lang==='es'?'Selecciona un servicio':'Select a service');return;}
+  if(n===4&&(!selDate||!selTime)){alert(lang==='es'?'Selecciona fecha y hora':'Select date and time');return;}
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('on');});
+  var target=document.getElementById('sec'+n);
+  if(target)target.classList.add('on');
+  for(var i=1;i<=4;i++){
+    var sn=document.getElementById('sn'+i);
+    if(!sn)continue;
+    sn.classList.remove('active','done');
+    if(i<n)sn.classList.add('done');
+    else if(i===n)sn.classList.add('active');
+    var sl=document.getElementById('sl'+i);
+    if(sl)sl.classList.toggle('done',i<n);
+  }
+  curStep=n;
+  if(n===2)bkRenderStaff();
+  if(n===3){bkRenderDates();bkRenderTimes();}
+  if(n===4)bkRenderSummary();
+  window.scrollTo(0,0);
 }
-// Allow Enter key on login
-// iOS touch fix — bind both click and touchend
-(function(){
-  function bindLogin(){
-    var btn = document.getElementById('login-btn');
-    var bookBtn = document.getElementById('login-book-btn');
-    if(btn){
-      btn.addEventListener('touchend', function(e){ e.preventDefault(); doLogin(); });
-      btn.addEventListener('click', function(e){ e.preventDefault(); doLogin(); });
-    }
-    if(bookBtn){
-      bookBtn.addEventListener('touchend', function(e){ e.preventDefault(); skipToBooking(); });
-      bookBtn.addEventListener('click', function(e){ e.preventDefault(); skipToBooking(); });
-    }
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', bindLogin);
-  } else {
-    bindLogin();
-  }
-})();
 
-['login-user','login-pass'].forEach(id=>{
-  document.getElementById(id).addEventListener('keydown', e=>{
-    if(e.key==='Enter'||e.keyCode===13){ e.preventDefault(); doLogin(); }
+function bkRenderSvcs(){
+  var svcArr=typeof SD!=='undefined'?SD:[];
+  try{var pub=JSON.parse(localStorage.getItem('j_pub_sv')||'null');if(pub&&pub.length)svcArr=pub;}catch(ex){}
+  var list=svcArr.filter(function(sv){return curFilter==='unisex'?true:sv.g===curFilter;});
+  var el=document.getElementById('svc-list');
+  if(!el)return;
+  if(!list.length){el.innerHTML='<div class="empty" style="text-align:center;padding:30px;color:#666">No services</div>';return;}
+  el.innerHTML=list.map(function(sv){
+    var nm=(lang==='es'&&sv.es)?sv.es:sv.n;
+    var pr=sv.p!=null?'<div class="svc-price">$'+sv.p+'</div>':'<div class="svc-tbd">TBD</div>';
+    var sel=selSvc===sv.id?' sel':'';
+    return '<div class="svc-item'+sel+'" data-svc="'+sv.id+'" style="cursor:pointer;-webkit-tap-highlight-color:rgba(201,160,23,.2);touch-action:manipulation">'+
+      '<div class="svc-ic">'+(sv.ic||'💅')+'</div>'+
+      '<div class="svc-info"><div class="svc-name">'+nm+'</div>'+
+      '<div class="svc-dur">⏱ '+sv.d+' min</div></div>'+pr+'</div>';
+  }).join('');
+  el.querySelectorAll('[data-svc]').forEach(function(div){
+    div.addEventListener('click',function(){bkSelService(this.getAttribute('data-svc'));});
+    div.addEventListener('touchend',function(ev){ev.preventDefault();bkSelService(this.getAttribute('data-svc'));});
   });
-});
-// Apply login i18n
-function applyLoginI18n(){
-  const labels = {
-    en: { sub:'Salon Management', user:'Username', pass:'Password', btn:'Enter Admin', hint:'Default: admin / joel2024', book:'📲 Book an Appointment', err:'❌ Incorrect username or password' },
-    es: { sub:'Gestión del Salón', user:'Usuario', pass:'Contraseña', btn:'Entrar al Admin', hint:'Por defecto: admin / joel2024', book:'📲 Reservar una Cita', err:'❌ Usuario o contraseña incorrectos' }
-  };
-  const l = labels[lang] || labels.en;
-  document.getElementById('login-sub').textContent = l.sub;
-  document.getElementById('login-user-lbl').textContent = l.user;
-  document.getElementById('login-pass-lbl').textContent = l.pass;
-  document.getElementById('login-btn').textContent = l.btn;
-  document.getElementById('login-hint').textContent = l.hint;
-  document.getElementById('login-book-btn').textContent = l.book;
-  document.getElementById('login-err').textContent = l.err;
+  document.getElementById('btn-s1').disabled=!selSvc;
+}
+function bkSelService(id){
+  if(!id)return;
+  selSvc=id;
+  document.querySelectorAll('[data-svc]').forEach(function(el){
+    var isSel=el.getAttribute('data-svc')===id;
+    el.style.borderColor=isSel?'#C9A017':'';
+    el.style.background=isSel?'rgba(201,160,23,.1)':'';
+    el.classList.toggle('sel',isSel);
+  });
+  var btn=document.getElementById('btn-s1');
+  if(btn)btn.disabled=false;
 }
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
-document.getElementById('f-dt').value=today();
-setL(lang);
-setGenderOptions();
-renderAll();
-bkRenderSvcs();
-</script>
+// STEP 2 — STAFF
+function bkRenderStaff(){
+  const staff=bkGetD('pub_st',bkGetD('st',[]));
+  const np=document.getElementById('no-pref');np.classList.toggle('sel',selStaffId===null&&selStaffId!==undefined);
+  const el=document.getElementById('staff-list');
+  if(!staff.length){el.innerHTML='';return;}
+  el.innerHTML=staff.map(s=>{
+    const av=s.avatar?`<img src="${s.avatar}">`:`<div style="background:${ac(s.name)};width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;margin:0 auto 8px">${ini(s.name)}</div>`;
+    return`<div class="staff-item${selStaffId===s.id?' sel':''}" onclick="bkSelStaffFn('${s.id}')">
+      <div class="staff-av">${av}</div>
+      <div class="staff-nm">${s.name}</div>
+      <div class="staff-rl">${s.role||''}</div>
+    </div>`;
+  }).join('');
+}
+function bkSelStaffFn(id){
+  selStaffId=id;
+  document.querySelectorAll('.staff-item').forEach(el=>{el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+id+"'"));});
+  document.getElementById('no-pref').classList.remove('sel');
+  setTimeout(()=>bkGoStep(3),300);
+}
+function selStaff2(id){selStaffId=id;document.getElementById('no-pref').classList.add('sel');document.querySelectorAll('.staff-item').forEach(el=>el.classList.remove('sel'));setTimeout(()=>bkGoStep(3),300);}
+document.getElementById('no-pref').onclick=()=>selStaff2(null);
+
+// STEP 3 — DATE & TIME
+function bkRenderDates(){
+  const el=document.getElementById('date-grid');
+  const dates=[];const now=new Date();
+  for(let i=0;i<14;i++){const d=new Date(now);d.setDate(now.getDate()+i);dates.push(d);}
+  const dayNames=lang==='es'?['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monthNames=lang==='es'?['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.innerHTML=dates.map(d=>{
+    const ds=d.toISOString().slice(0,10);
+    return`<div class="date-btn${selDate===ds?' sel':''}" onclick="bkSelDateFn('${ds}')">
+      <div class="date-day">${dayNames[d.getDay()]}</div>
+      <div class="date-num">${d.getDate()}</div>
+      <div class="date-month">${monthNames[d.getMonth()]}</div>
+    </div>`;
+  }).join('');
+  // Show service duration
+  const svcs=bkGetD('pub_sv',bkGetD('sv',[]));
+  const svc=svcs.find(s=>s.id===selSvc);
+  if(svc)document.getElementById('dur-notice').textContent=T('dur')+' '+svc.d+' '+T('min');
+}
+function bkSelDateFn(ds){
+  selDate=ds;selTime=null;
+  document.querySelectorAll('.date-btn').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+ds+"'")));
+  document.getElementById('btn-s3').disabled=true;
+  bkRenderTimes();
+}
+function bkRenderTimes(){
+  const el=document.getElementById('time-grid');
+  if(!selDate){el.innerHTML='';return;}
+  const apts=bkGetD('ap',[]);
+  const takenTimes=apts.filter(a=>a.date===selDate&&a.status!=='cancelled').map(a=>a.time);
+  el.innerHTML=HOURS.map(h=>{
+    const padded=h.split(':')[0].padStart(2,'0')+':00';
+    const taken=takenTimes.some(t=>t.startsWith(h.split(':')[0].padStart(2,'0')));
+    const displayH=lang==='es'?h+'h':bkFormatHour(h);
+    return`<div class="time-btn${taken?' taken':selTime===padded?' sel':''}" onclick="${taken?'':'bkSelTimeFn(\''+padded+'\')'}">
+      ${displayH}${taken?`<br><span style="font-size:9px">${T('taken')}</span>`:''}
+    </div>`;
+  }).join('');
+}
+function bkFormatHour(h){const hr=parseInt(h);return hr<12?hr+':00 AM':hr===12?'12:00 PM':(hr-12)+':00 PM';}
+function bkSelTimeFn(t){
+  selTime=t;
+  document.querySelectorAll('.time-btn:not(.taken)').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+t+"'")));
+  document.getElementById('btn-s3').disabled=false;
+}
+
+// STEP 4 — CLIENT INFO
+function bkRenderSummary(){
+  const svcs=bkGetD('pub_sv',bkGetD('sv',[]));
+  const staff=bkGetD('pub_st',bkGetD('st',[]));
+  const svc=svcs.find(s=>s.id===selSvc)||{};
+  const stf=selStaffId?staff.find(s=>s.id===selStaffId):null;
+  const rows=[
+    [T('sum_svc'),svN(svc)+(svc.ic?' '+svc.ic:'')],
+    [T('sum_dur'),svc.d?svc.d+' '+T('min'):'—'],
+    [T('sum_stf'),stf?stf.name:T('any')],
+    [T('sum_date'),fmtDate(selDate)],
+    [T('sum_time'),selTime?bkFormatHour(selTime.replace(':00',':').split(':')[0]+':00'):'—'],
+    [T('sum_price'),svc.p!=null?fm(svc.p):T('tbd')],
+  ];
+  document.getElementById('booking-summary').innerHTML=rows.map(([l,v])=>`<div class="sum-row"><span class="sum-lbl">${l}</span><span class="sum-val">${v}</span></div>`).join('');
+}
+function bkCheckExist(){
+  const ph=document.getElementById('b-phone').value.replace(/\D/g,'');
+  if(ph.length<7){existingClient=null;document.getElementById('existing-found').style.display='none';document.getElementById('new-client-form').style.display='';return;}
+  const cls=bkGetD('cl',[]);
+  const found=cls.find(c=>(c.phone||'').replace(/\D/g,'').includes(ph));
+  if(found){
+    existingClient=found;
+    document.getElementById('existing-msg').textContent=T('exist_found')+', '+found.name+'! 👋';
+    document.getElementById('existing-found').style.display='';
+    document.getElementById('new-client-form').style.display='none';
+  }else{existingClient=null;document.getElementById('existing-found').style.display='none';document.getElementById('new-client-form').style.display='';}
+}
+
+// CONFIRM BOOKING
+function bkConfirm(){
+  const phone=document.getElementById('b-phone').value.trim();
+  if(!phone){toast(T('lph'),'terr');return;}
+  let cl=existingClient;
+  if(!cl){
+    const fn=document.getElementById('b-fn').value.trim();
+    if(!fn){toast(T('lfn'),'terr');return;}
+    cl={id:uid(),name:(fn+' '+document.getElementById('b-ln').value.trim()).trim(),phone,email:document.getElementById('b-em').value.trim(),gender:document.getElementById('b-gn').value,notes:'',avatar:null};
+    const cls=bkGetD('cl',[]);
+    cls.push(cl);bkSetD('cl',cls);
+  }
+  const svcs=bkGetD('pub_sv',bkGetD('sv',[]));
+  const staff=bkGetD('pub_st',bkGetD('st',[]));
+  const svc=svcs.find(s=>s.id===selSvc)||{};
+  const stf=selStaffId?staff.find(s=>s.id===selStaffId):null;
+  const apt={id:uid(),ci:cl.id,cn:cl.name,si:selSvc,sn:svN(svc),stid:selStaffId||null,date:selDate,time:selTime,p:svc.p||null,status:'pending',nt:document.getElementById('b-nt').value,source:'booking'};
+  const apts=bkGetD('ap',[]);apts.push(apt);bkSetD('ap',apts);
+  bkShowSuccess(cl,svc,stf,apt);
+}
+
+function bkShowSuccess(cl,svc,stf,apt){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec5').classList.add('on');
+  document.getElementById('steps-wrap').style.display='none';
+  const rows=[
+    ['👤',cl.name],
+    ['💅',svN(svc)],
+    ['⏱',svc.d+' '+T('min')],
+    ['💇',stf?stf.name:T('any')],
+    ['📅',fmtDate(apt.date)],
+    ['🕐',bkFormatHour(apt.time.replace(':00',':').split(':')[0]+':00')],
+    ['💰',svc.p!=null?fm(svc.p):T('tbd')],
+  ];
+  document.getElementById('conf-box').innerHTML=rows.map(([ic,v])=>`<div class="sum-row"><span class="sum-lbl">${ic}</span><span class="sum-val">${v}</span></div>`).join('');
+  window.scrollTo(0,0);
+}
+
+function bkReset(){
+  selSvc=null;selStaffId=null;selDate=null;selTime=null;existingClient=null;curStep=1;
+  document.getElementById('steps-wrap').style.display='';
+  ['b-phone','b-fn','b-ln','b-em','b-nt'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('existing-found').style.display='none';
+  document.getElementById('new-client-form').style.display='';
+  bkGoStep(1);bkRenderSvcs();
+}
+
+
+
+
+document.addEventListener('DOMContentLoaded',function(){
+  SD2('pub_sv',svcs); SD2('pub_st',staff);
+  var fdt=document.getElementById('f-dt'); if(fdt) fdt.value=today();
+  setL(localStorage.getItem('jl')||'en');
+  var np=document.getElementById('no-pref');
+  if(np) np.onclick=function(){bkSelStaff(null);};
+  var ap2=document.getElementById('ap');
+  if(ap2) ap2.addEventListener('keydown',function(ev){if(ev.keyCode===13)doLogin();});
+});
+window.saveCl=saveCl2;
+
+
+function gv(v){
+  document.querySelectorAll('.vw').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.ni,.bn').forEach(e=>e.classList.remove('on'));
+  document.getElementById('vw-'+v).classList.add('on');
+  document.querySelectorAll('.ni').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes("'"+v+"'"))e.classList.add('on');});
+  const bn=document.getElementById('bn-'+v);if(bn)bn.classList.add('on');
+  curV=v;document.getElementById('pg-title').textContent=T('v'+v[0]+v.slice(1).replace(/appointments/,'a').replace(/calendar/,'c').replace(/staff/,'st').replace(/services/,'sv').replace(/clients/,'cl').replace(/reports/,'r').replace(/dashboard/,'d')||v);
+  // simpler title lookup
+  const vmap={dashboard:'vd',appointments:'va',calendar:'vc',staff:'vst',services:'vsv',clients:'vcl',reports:'vr'};
+  document.getElementById('pg-title').textContent=T(vmap[v]||v);
+  rv(v);
+}</script>
 </body>
 </html>
