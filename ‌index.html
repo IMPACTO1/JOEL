@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>JOEL Salon</title>
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--sf:#161616;--sf2:#1E1E1E;--sf3:#252525;
+  --gold:#C9A017;--gold2:#E8B84B;--gdim:rgba(201,160,23,.12);
+  --tx:#F5F5F0;--tx2:#999990;--tx3:#555550;
+  --men:#3B7DD8;--mdim:rgba(59,125,216,.15);
+  --women:#C2607A;--wdim:rgba(194,96,122,.15);
+  --uni:#7B68EE;--udim:rgba(123,104,238,.15);
+  --ok:#2ECC71;--warn:#F39C12;--err:#E74C3C;
+  --bd:rgba(255,255,255,.07);--r:12px;--rs:8px;
+  --nh:58px;
+}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;overflow:hidden;-webkit-text-size-adjust:100%}
+button{cursor:pointer;font-family:inherit;border:none;outline:none;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
+*{scrollbar-width:thin;scrollbar-color:var(--sf3) transparent}
+
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR desktop */
+.sidebar{width:200px;min-width:200px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;z-index:100}
+.logo-wrap{padding:16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.logo-ic{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .4s;flex-shrink:0}
+.logo-ic:hover{transform:rotate(180deg)}
+.logo-tx{font-size:18px;font-weight:800;letter-spacing:3px}
+.logo-sub{font-size:9px;color:var(--tx2);letter-spacing:2px}
+.lang-row{margin:8px 12px;background:var(--sf2);border-radius:8px;display:flex;padding:3px;gap:2px}
+.lb{flex:1;padding:5px;border-radius:6px;font-size:11px;font-weight:700;background:transparent;color:var(--tx2);transition:all .2s}
+.lb.on{background:var(--gold);color:#000}
+.nav{flex:1;padding:6px 10px;overflow-y:auto}
+.nl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);padding:10px 8px 4px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--rs);color:var(--tx2);font-size:13px;font-weight:500;background:transparent;cursor:pointer;width:100%;text-align:left;transition:all .2s;margin-bottom:2px;border:none}
+.ni:hover{background:var(--sf2);color:var(--tx)}
+.ni.on{background:var(--gdim);color:var(--gold)}
+.ni-ic{font-size:15px;width:20px;text-align:center}
+.nbadge{margin-left:auto;background:var(--err);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;display:none}
+.sf-foot{padding:10px 14px;border-top:1px solid var(--bd);font-size:10px;color:var(--tx3);text-align:center}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:52px;min-height:52px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;gap:8px}
+.tb-title{font-size:14px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px;-webkit-overflow-scrolling:touch}
+
+/* BOTTOM NAV mobile */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--nh);background:var(--sf);border-top:1px solid var(--bd);z-index:200;align-items:stretch}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;border:none;color:var(--tx2);font-size:9px;font-weight:600;cursor:pointer;padding:6px 2px;-webkit-tap-highlight-color:transparent;transition:color .2s}
+.bn.on{color:var(--gold)}
+.bn-ic{font-size:21px;line-height:1}
+.bn-dot{position:absolute;top:8px;right:calc(50% - 15px);width:7px;height:7px;background:var(--err);border-radius:50%;display:none}
+
+/* FAB */
+.fab{display:none;position:fixed;bottom:calc(var(--nh) + 12px);right:14px;width:50px;height:50px;border-radius:50%;background:var(--gold);color:#000;font-size:26px;font-weight:700;border:none;cursor:pointer;z-index:150;box-shadow:0 4px 20px rgba(201,160,23,.45);align-items:center;justify-content:center}
+
+/* BUTTONS */
+.btn{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:600;transition:all .2s;border:none;cursor:pointer}
+.bg{background:var(--gold);color:#000}.bg:active{background:var(--gold2)}
+.bgh{background:var(--sf2);color:var(--tx);border:1px solid var(--bd)}.bgh:active{background:var(--sf3)}
+.bd2{background:var(--err);color:#fff}
+.sm{padding:6px 11px;font-size:12px}
+
+/* VIEWS */
+.vw{display:none}.vw.on{display:block}
+
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acc,var(--gold))}
+.sl{font-size:10px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.sv{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.ss{font-size:10px;color:var(--tx2);margin-top:2px}
+
+/* APT CARDS */
+.ac{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:11px 12px;display:flex;align-items:center;gap:9px;margin-bottom:7px;transition:border-color .2s}
+.ac:active{border-color:rgba(201,160,23,.3)}
+.at{font-size:12px;font-weight:700;color:var(--gold);min-width:40px;text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0}
+.ad{width:2px;height:32px;background:var(--sf3);border-radius:2px;flex-shrink:0}
+.ai{flex:1;min-width:0}
+.acl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asv{font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0}
+.bm{background:var(--mdim);color:var(--men)}.bw{background:var(--wdim);color:var(--women)}.bu{background:var(--udim);color:var(--uni)}
+.apr{font-size:13px;font-weight:700;color:var(--ok);flex-shrink:0;min-width:48px;text-align:right}
+.ast{font-size:10px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;text-align:center}
+.sc2{background:rgba(46,204,113,.15);color:var(--ok)}
+.sp{background:rgba(243,156,18,.15);color:var(--warn)}
+.sd{background:rgba(255,255,255,.06);color:var(--tx2)}
+.sx{background:rgba(231,76,60,.15);color:var(--err)}
+.aa{display:flex;gap:4px;flex-shrink:0}
+.ab{width:30px;height:30px;border-radius:6px;background:var(--sf2);color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:13px;border:none;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.ab:active{background:var(--gold);color:#000}
+.ab.dd:active{background:var(--err);color:#fff}
+
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.cbtn{width:30px;height:30px;border-radius:8px;background:var(--sf2);color:var(--tx);border:none;cursor:pointer;font-size:14px;transition:all .2s}
+.cbtn:active{background:var(--gold);color:#000}
+.cm{font-size:13px;font-weight:700;flex:1;text-align:center}
+.wg{display:grid;grid-template-columns:40px repeat(7,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.wh{background:var(--sf);padding:6px 2px;text-align:center}
+.dn{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx2)}
+.dnum{font-size:15px;font-weight:800;margin-top:1px}
+.dnum.td{color:var(--gold)}
+.tc{background:var(--sf);padding:4px 2px;font-size:8px;color:var(--tx3);text-align:right;line-height:1.2}
+.ws{background:var(--sf);min-height:34px;padding:2px;cursor:pointer}
+.ws:active{background:var(--sf2)}
+.sa{border-radius:3px;padding:1px 3px;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;cursor:pointer}
+.sw{background:var(--wdim);border-left:2px solid var(--women);color:var(--women)}
+.sm2{background:var(--mdim);border-left:2px solid var(--men);color:var(--men)}
+.su{background:var(--gdim);border-left:2px solid var(--gold);color:var(--gold)}
+
+/* SERVICES */
+.gtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.gt{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;background:var(--sf);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;transition:all .2s}
+.gt.aw{background:var(--wdim);border-color:var(--women);color:var(--women)}
+.gt.am{background:var(--mdim);border-color:var(--men);color:var(--men)}
+.gt.au{background:var(--udim);border-color:var(--uni);color:var(--uni)}
+.svgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.svcd{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:12px;position:relative;transition:border-color .2s}
+.svcd:active{border-color:var(--gold)}
+.gdot{position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%}
+.svic{font-size:20px;margin-bottom:6px}
+.svnm{font-size:12px;font-weight:700;margin-bottom:2px}
+.svdr{font-size:10px;color:var(--tx2);margin-bottom:7px}
+.svpr{display:flex;align-items:center;justify-content:space-between}
+.sprice{font-size:15px;font-weight:800;color:var(--gold)}
+.stbd{font-size:10px;color:var(--warn);font-style:italic}
+.sedt{width:24px;height:24px;border-radius:5px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:11px;transition:all .2s}
+.sedt:active{background:var(--gold);color:#000}
+
+/* STAFF */
+.staff-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.staff-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px;position:relative}
+.staff-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
+.staff-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.staff-name{font-size:14px;font-weight:700}
+.staff-role{font-size:11px;color:var(--tx2)}
+.staff-del{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:11px}
+.staff-del:active{background:var(--err);color:#fff}
+
+/* CLIENTS */
+.clt{width:100%;border-collapse:collapse}
+.clt th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx2);text-transform:uppercase;border-bottom:1px solid var(--bd)}
+.clt td{padding:10px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.clt tr:active td{background:var(--sf2)}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.cc{display:flex;align-items:center;gap:8px}
+.cn{font-size:13px;font-weight:600}
+.cp{font-size:11px;color:var(--tx2)}
+
+/* REPORTS */
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.rc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:15px}
+.rt{font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:11px;text-transform:uppercase;letter-spacing:1px}
+.bc{display:flex;flex-direction:column;gap:9px}
+.br{display:flex;align-items:center;gap:8px}
+.bl{font-size:10px;color:var(--tx2);min-width:85px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{flex:1;height:6px;background:var(--sf2);border-radius:3px;overflow:hidden}
+.bf{height:100%;border-radius:3px;transition:width .8s ease}
+.bv{font-size:10px;font-weight:700;min-width:28px;text-align:right}
+.rbig{font-size:32px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.rrow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.rrow:last-child{border-bottom:none}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:500;align-items:flex-end;justify-content:center;padding:0}
+.mo.on{display:flex}
+.md{background:var(--sf);border:1px solid var(--bd);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 -10px 50px rgba(0,0,0,.8);animation:su .25s ease}
+@keyframes su{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
+.mh{padding:14px 16px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--sf);z-index:1}
+.handle{width:36px;height:4px;background:var(--sf3);border-radius:2px;margin:0 auto 10px;display:block}
+.mt{font-size:14px;font-weight:700}
+.mc{width:28px;height:28px;border-radius:7px;background:var(--sf2);color:var(--tx2);border:none;cursor:pointer;font-size:14px;transition:all .2s}
+.mc:active{background:var(--err);color:#fff}
+.mb{padding:14px 16px}
+.mf{padding:10px 16px 18px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--bd)}
+.fg{margin-bottom:11px}
+.fl{display:block;font-size:10px;font-weight:600;color:var(--tx2);letter-spacing:.5px;margin-bottom:4px;text-transform:uppercase}
+.fi{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 11px;color:var(--tx);font-size:14px;transition:border-color .2s;-webkit-appearance:none}
+.fi:focus{border-color:var(--gold)}
+.fi::placeholder{color:var(--tx3)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fs{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 11px;color:var(--tx);font-size:14px;-webkit-appearance:none}
+.fs:focus{border-color:var(--gold)}
+.fta{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 11px;color:var(--tx);font-size:14px;resize:vertical;min-height:65px}
+.fta:focus{border-color:var(--gold)}
+
+/* TOAST */
+.tw{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:90%}
+.toast{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:9px 16px;font-size:12px;white-space:nowrap;box-shadow:var(--sh);animation:ti .25s ease;text-align:center;max-width:300px}
+@keyframes ti{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.tok{border-color:var(--ok);color:var(--ok)}.terr{border-color:var(--err);color:var(--err)}.twarn{border-color:var(--warn);color:var(--warn)}
+
+/* MISC */
+.empty{text-align:center;padding:40px 16px;color:var(--tx2)}
+.emp-ic{font-size:34px;margin-bottom:8px;opacity:.4}
+.emp-tx{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.emp-sub{font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.st{font-size:13px;font-weight:700}
+.sb{display:flex;gap:7px;margin-bottom:12px}
+.si{flex:1;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:9px 12px;color:var(--tx);font-size:14px;-webkit-appearance:none}
+.si:focus{border-color:var(--gold)}
+.si::placeholder{color:var(--tx3)}
+.av-up{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.av-pr{width:52px;height:52px;border-radius:50%;background:var(--sf2);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;border:2px solid var(--bd)}
+.av-pr img{width:100%;height:100%;object-fit:cover}
+.av-btn{padding:6px 12px;font-size:12px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);cursor:pointer;display:inline-block}
+.av-btn:active{border-color:var(--gold);color:var(--gold)}
+
+/* BOOKING LINK BOX */
+.link-box{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:16px}
+.link-label{font-size:10px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.link-url{font-size:12px;color:var(--gold);word-break:break-all;margin-bottom:10px;font-family:monospace}
+.link-hint{font-size:11px;color:var(--tx2)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .bnav{display:flex}
+  .fab{display:flex}
+  .content{padding:11px 11px calc(var(--nh) + 11px)}
+  .sg{grid-template-columns:1fr 1fr;gap:8px}
+  .sv{font-size:20px}
+  .two{grid-template-columns:1fr}
+  .svgrid{grid-template-columns:1fr 1fr}
+  .rg{grid-template-columns:1fr}
+  .fr{grid-template-columns:1fr}
+  .staff-grid{grid-template-columns:1fr}
+  .ast,.apr{display:none}
+  .tb-date{display:none}
+  .md{max-width:100%}
+}
+@media(min-width:769px){
+  .mo{align-items:center;padding:20px}
+  .md{border-radius:16px;max-width:460px}
+  .handle{display:none}
+  @keyframes su{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+}
+@media(max-width:400px){
+  .sg{grid-template-columns:1fr 1fr;gap:6px}
+  .sc{padding:10px}
+  .sv{font-size:18px}
+  .svgrid{grid-template-columns:1fr}
+  .content{padding:9px 9px calc(var(--nh) + 9px)}
+}
+@media print{.sidebar,.topbar,.aa,.btn,.mo,.bnav,.fab{display:none!important}.main{display:block}.content{padding:0;overflow:visible}body{background:#fff;color:#000}}
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--sf:#161616;--sf2:#1E1E1E;--sf3:#252525;
+  --gold:#C9A017;--gold2:#E8B84B;--gdim:rgba(201,160,23,.12);
+  --tx:#F5F5F0;--tx2:#999990;--tx3:#555550;
+  --men:#3B7DD8;--mdim:rgba(59,125,216,.15);
+  --women:#C2607A;--wdim:rgba(194,96,122,.15);
+  --uni:#7B68EE;--udim:rgba(123,104,238,.15);
+  --ok:#2ECC71;--warn:#F39C12;--err:#E74C3C;
+  --bd:rgba(255,255,255,.07);--r:14px;--rs:10px;
+}
+html,body{min-height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+button{cursor:pointer;font-family:inherit;border:none;outline:none;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
+
+/* HEADER */
+.header{background:var(--sf);border-bottom:1px solid var(--bd);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.h-logo{display:flex;align-items:center;gap:10px}
+.h-ic{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.h-name{font-size:18px;font-weight:800;letter-spacing:2px}
+.h-sub{font-size:10px;color:var(--tx2);letter-spacing:1px}
+.lang-tog{display:flex;background:var(--sf2);border-radius:8px;padding:3px;gap:2px}
+.lb{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;background:transparent;color:var(--tx2);transition:all .2s;border:none;cursor:pointer}
+.lb.on{background:var(--gold);color:#000}
+
+/* MAIN */
+.wrap{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+
+/* STEPS */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--sf2);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--tx2);transition:all .3s}
+.step-num.done{background:var(--ok);border-color:var(--ok);color:#000}
+.step-num.active{background:var(--gold);border-color:var(--gold);color:#000}
+.step-lbl{font-size:10px;color:var(--tx2);letter-spacing:.5px;text-align:center}
+.step-line{flex:1;height:2px;background:var(--bd);margin-bottom:16px;transition:background .3s}
+.step-line.done{background:var(--ok)}
+
+/* SECTIONS */
+.section{display:none}.section.on{display:block}
+.sec-title{font-size:18px;font-weight:800;margin-bottom:6px}
+.sec-sub{font-size:13px;color:var(--tx2);margin-bottom:20px}
+
+/* SERVICE CARDS */
+.svc-list{display:flex;flex-direction:column;gap:10px}
+.svc-item{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.svc-item:active,.svc-item.sel{border-color:var(--gold);background:var(--gdim)}
+.svc-ic{font-size:28px;flex-shrink:0}
+.svc-info{flex:1}
+.svc-name{font-size:15px;font-weight:700}
+.svc-dur{font-size:12px;color:var(--tx2);margin-top:2px}
+.svc-price{font-size:16px;font-weight:800;color:var(--gold);flex-shrink:0}
+.svc-tbd{font-size:12px;color:var(--warn);font-style:italic}
+.gender-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.gt{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:600;background:var(--sf);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;transition:all .2s}
+.gt.aw{background:var(--wdim);border-color:var(--women);color:var(--women)}
+.gt.am{background:var(--mdim);border-color:var(--men);color:var(--men)}
+.gt.au{background:var(--udim);border-color:var(--uni);color:var(--uni)}
+
+/* STAFF CARDS */
+.staff-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.staff-item{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s}
+.staff-item:active,.staff-item.sel{border-color:var(--gold);background:var(--gdim)}
+.staff-av{width:52px;height:52px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;overflow:hidden}
+.staff-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.staff-nm{font-size:13px;font-weight:700}
+.staff-rl{font-size:11px;color:var(--tx2)}
+.no-pref{background:var(--sf);border:2px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.no-pref:active,.no-pref.sel{border-color:var(--gold);background:var(--gdim)}
+
+/* DATE TIME */
+.date-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.date-btn{background:var(--sf);border:2px solid var(--bd);border-radius:var(--rs);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s}
+.date-btn:active,.date-btn.sel{border-color:var(--gold);background:var(--gdim)}
+.date-day{font-size:10px;color:var(--tx2);margin-bottom:2px}
+.date-num{font-size:17px;font-weight:800}
+.date-month{font-size:10px;color:var(--tx2)}
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.time-btn{background:var(--sf);border:2px solid var(--bd);border-radius:var(--rs);padding:11px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.time-btn:active,.time-btn.sel{border-color:var(--gold);background:var(--gdim);color:var(--gold)}
+.time-btn.taken{background:var(--sf2);border-color:var(--sf3);color:var(--tx3);cursor:not-allowed;opacity:.5}
+
+/* SUMMARY BOX */
+.summary{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:20px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.sum-row:last-child{border-bottom:none}
+.sum-lbl{color:var(--tx2)}
+.sum-val{font-weight:700}
+.dur-badge{display:inline-flex;align-items:center;gap:5px;background:var(--gdim);color:var(--gold);font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;margin-top:6px}
+
+/* FORM */
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--tx2);letter-spacing:.5px;margin-bottom:5px;text-transform:uppercase}
+.fi{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;color:var(--tx);font-size:15px;transition:border-color .2s}
+.fi:focus{border-color:var(--gold)}
+.fi::placeholder{color:var(--tx3)}
+.fs{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;color:var(--tx);font-size:15px}
+.fs:focus{border-color:var(--gold)}
+
+/* BUTTONS */
+.btn-main{width:100%;padding:15px;border-radius:var(--rs);font-size:16px;font-weight:700;background:var(--gold);color:#000;border:none;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-main:active{background:var(--gold2);transform:scale(.99)}
+.btn-back{width:100%;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:600;background:var(--sf2);color:var(--tx2);border:1px solid var(--bd);cursor:pointer;margin-bottom:10px}
+.btn-back:active{background:var(--sf3)}
+
+/* SUCCESS */
+.success-screen{text-align:center;padding:30px 0}
+.success-ic{font-size:64px;margin-bottom:16px}
+.success-title{font-size:22px;font-weight:800;margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--tx2);margin-bottom:24px;line-height:1.6}
+.conf-box{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:20px;text-align:left}
+
+/* NOTICE */
+.notice{background:rgba(201,160,23,.08);border:1px solid rgba(201,160,23,.2);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:var(--tx2);margin-bottom:16px;display:flex;align-items:flex-start;gap:8px}
+
+/* TOAST */
+.tw{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+.toast{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:9px 18px;font-size:13px;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:ti .25s ease;text-align:center}
+@keyframes ti{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.tok{border-color:var(--ok);color:var(--ok)}.terr{border-color:var(--err);color:var(--err)}
+
+.empty{text-align:center;padding:30px;color:var(--tx2);font-size:13px}
+
+
+.svc-item{cursor:pointer;-webkit-tap-highlight-color:rgba(201,160,23,.2);touch-action:manipulation}
+.svc-item:active{opacity:.7}
+@supports(padding:env(safe-area-inset-bottom)){
+  #booking-shell{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+</style>
+</head>
+<body>
+<div id="landing" style="position:fixed;inset:0;background:#0a0a0a;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <div style="text-align:center;margin-bottom:40px">
+    <div style="width:72px;height:72px;background:#C9A017;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:12px">✂️</div>
+    <div style="font-size:26px;font-weight:800;color:#F5F5F0;letter-spacing:4px">JOEL</div>
+    <div style="font-size:11px;color:#888;margin-top:4px;letter-spacing:1px">SALON</div>
+  </div>
+  <div style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:10px">
+    <button onclick="goBooking()" style="width:100%;background:#C9A017;border:none;border-radius:16px;padding:18px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">
+      <div style="font-size:24px;margin-bottom:4px">📲</div>
+      <div id="lb-book" style="font-size:16px;font-weight:700;color:#000">Book an Appointment</div>
+      <div id="lb-book2" style="font-size:11px;color:#333;margin-top:2px">Reserve your spot</div>
+    </button>
+    <button onclick="showAdminLogin()" id="adm-btn" style="width:100%;background:#1a1a1a;border:1.5px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">
+      <div style="font-size:24px;margin-bottom:4px">🔐</div>
+      <div id="lb-adm" style="font-size:16px;font-weight:700;color:#F5F5F0">Administrator</div>
+      <div id="lb-adm2" style="font-size:11px;color:#888;margin-top:2px">Staff access only</div>
+    </button>
+    <div id="adm-form" style="display:none;background:#141414;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px">
+      <input id="au" type="text" placeholder="Username" autocomplete="username" autocorrect="off" autocapitalize="none" spellcheck="false" style="width:100%;background:#222;border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:#F5F5F0;font-size:16px;font-family:inherit;box-sizing:border-box;outline:none;-webkit-appearance:none;margin-bottom:8px" onfocus="this.style.borderColor='#C9A017'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+      <input id="ap" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;background:#222;border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:#F5F5F0;font-size:16px;font-family:inherit;box-sizing:border-box;outline:none;-webkit-appearance:none;margin-bottom:12px" onfocus="this.style.borderColor='#C9A017'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+      <div id="lf-err" style="display:none;color:#E74C3C;font-size:12px;text-align:center;margin-bottom:8px">Incorrect credentials</div>
+      <button id="lf-go" onclick="doLogin()" style="width:100%;background:#C9A017;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">Enter Admin</button>
+      <div style="font-size:10px;color:#444;text-align:center;margin-top:8px">admin / joel2024</div>
+    </div>
+  </div>
+  <div style="position:fixed;top:14px;right:14px;display:flex;background:#1a1a1a;border-radius:8px;padding:3px;gap:2px">
+    <button id="en-b" onclick="setL('en')" style="padding:5px 10px;border-radius:5px;font-size:11px;font-weight:700;background:#C9A017;color:#000;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent">EN</button>
+    <button id="es-b" onclick="setL('es')" style="padding:5px 10px;border-radius:5px;font-size:11px;font-weight:700;background:transparent;color:#888;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent">ES</button>
+  </div>
+</div>
+<div id="admin-shell" class="app" style="display:none;position:fixed;inset:0">
+
+
+<!-- SIDEBAR desktop -->
+<aside class="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-ic">✂️</div>
+    <div><div class="logo-tx">JOEL</div><div class="logo-sub">Salon Admin</div></div>
+  </div>
+  <div class="lang-row">
+    <button class="lb on" onclick="setL('en')" id="en-btn">EN</button>
+    <button class="lb" onclick="setL('es')" id="es-btn">ES</button>
+  </div>
+  <nav class="nav">
+    <div class="nl" data-i="mn">Main</div>
+    <button class="ni on" onclick="gv('dashboard')"><span class="ni-ic">📊</span><span data-i="vd">Dashboard</span></button>
+    <button class="ni" onclick="gv('appointments')"><span class="ni-ic">📅</span><span data-i="va">Appointments</span><span class="nbadge" id="nb">0</span></button>
+    <button class="ni" onclick="gv('calendar')"><span class="ni-ic">🗓️</span><span data-i="vc">Calendar</span></button>
+    <div class="nl" data-i="mg">Manage</div>
+    <button class="ni" onclick="gv('staff')"><span class="ni-ic">💇</span><span data-i="vst">Staff</span></button>
+    <button class="ni" onclick="gv('services')"><span class="ni-ic">💅</span><span data-i="vsv">Services</span></button>
+    <button class="ni" onclick="gv('clients')"><span class="ni-ic">👥</span><span data-i="vcl">Clients</span></button>
+    <button class="ni" onclick="gv('reports')"><span class="ni-ic">📈</span><span data-i="vr">Reports</span></button>
+  </nav>
+  <div class="sf-foot">v4.0 · JOEL Salon</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar"><button id="exit-admin-btn" onclick="exitAdmin()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:6px 14px;color:#ccc;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent">← Exit</button>
+    <div class="tb-title" id="pg-title">Dashboard</div>
+    <div class="tb-date" id="tb-date" style="font-size:11px;color:var(--tx2)"></div>
+    <button class="btn bgh sm" onclick="setL(lang==='en'?'es':'en')" id="mob-l" style="min-width:40px">ES</button>
+    <button class="btn bgh sm" onclick="expData()" title="Backup">💾</button>
+    <button class="btn bg sm" onclick="openNewApt()" data-i="napt">+ New</button>
+  </header>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="vw on" id="vw-dashboard">
+      <div class="sg">
+        <div class="sc" style="--acc:var(--gold)"><div class="sl" data-i="s1">Today</div><div class="sv" id="s-t">$0</div><div class="ss" id="s-tn">0</div></div>
+        <div class="sc" style="--acc:var(--ok)"><div class="sl" data-i="s2">This Week</div><div class="sv" id="s-w">$0</div><div class="ss" id="s-wn">0</div></div>
+        <div class="sc" style="--acc:var(--men)"><div class="sl" data-i="s3">Clients</div><div class="sv" id="s-c">0</div><div class="ss" data-i="s3b">total</div></div>
+        <div class="sc" style="--acc:var(--err)"><div class="sl" data-i="s4">Pending</div><div class="sv" id="s-p">0</div><div class="ss" data-i="s4b">confirm</div></div>
+      </div>
+      <div class="two">
+        <div>
+          <div class="sh"><div class="st" data-i="td-sch">Today</div><button class="btn bgh sm" onclick="gv('appointments')" data-i="sa">See all</button></div>
+          <div id="dash-tl"></div>
+        </div>
+        <div>
+          <div class="sh"><div class="st" data-i="top-sv">Top Services</div></div>
+          <div class="rc" style="margin:0"><div class="bc" id="dash-top"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="vw" id="vw-appointments">
+      <div style="display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap;align-items:center">
+        <input type="date" class="fi" id="f-dt" style="max-width:155px;flex:1" onchange="renderApts()">
+        <select class="fs" id="f-st" style="max-width:135px;flex:1" onchange="renderApts()">
+          <option value="" data-i="all">All</option>
+          <option value="pending" data-i="pend">Pending</option>
+          <option value="confirmed" data-i="conf">Confirmed</option>
+          <option value="completed" data-i="comp">Completed</option>
+          <option value="cancelled" data-i="canc">Cancelled</option>
+        </select>
+        <button class="btn bgh sm" onclick="document.getElementById('f-dt').value='';renderApts()">✕</button>
+      </div>
+      <div id="apt-list"></div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="vw" id="vw-calendar">
+      <div class="cal-nav">
+        <button class="cbtn" onclick="calW--;renderCal()">‹</button>
+        <div class="cm" id="cal-lbl"></div>
+        <button class="cbtn" onclick="calW++;renderCal()">›</button>
+        <button class="btn bgh sm" onclick="calW=0;renderCal()" data-i="tod">Today</button>
+      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="wg" id="wk-g" style="min-width:500px"></div></div>
+    </div>
+
+    <!-- STAFF -->
+    <div class="vw" id="vw-staff">
+      <div class="link-box">
+        <div class="link-label" data-i="bl-lbl">📲 Client Booking Link</div>
+        <div class="link-url" id="booking-url">joel_booking.html</div>
+        <div class="link-hint" data-i="bl-hint">Send this link to clients so they can book appointments online without seeing your management app.</div>
+      </div>
+      <div class="sh">
+        <div class="st" data-i="vst">Staff</div>
+        <button class="btn bg sm" onclick="openAddStaff()">+ <span data-i="add-st">Add</span></button>
+      </div>
+      <div class="staff-grid" id="staff-grid"></div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="vw" id="vw-services">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div class="gtabs">
+          <button class="gt aw" id="tw" onclick="fSv('women')" data-i="tw">👩 Women</button>
+          <button class="gt" id="tm" onclick="fSv('men')" data-i="tm">👨 Men</button>
+          <button class="gt" id="tu" onclick="fSv('unisex')" data-i="tu">✨ Unisex</button>
+        </div>
+        <button class="btn bg sm" onclick="openAddSvc()">+</button>
+      </div>
+      <div class="svgrid" id="sv-g"></div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="vw" id="vw-clients">
+      <div class="sb">
+        <input type="text" class="si" id="cl-s" placeholder="Search..." oninput="renderCl()">
+        <button class="btn bgh sm" onclick="openImp()">📥</button>
+        <button class="btn bg sm" onclick="openAddCl()">+</button>
+      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="clt">
+          <thead><tr>
+            <th data-i="hcl">Client</th>
+            <th data-i="hvi">Visits</th>
+            <th data-i="hsp">Spent</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="cl-tb"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="vw" id="vw-reports">
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <select class="fs" id="rp" style="max-width:145px" onchange="renderRep()">
+          <option value="today" data-i="pt">Today</option>
+          <option value="week" selected data-i="pw">This Week</option>
+          <option value="month" data-i="pm">This Month</option>
+          <option value="all" data-i="pa">All Time</option>
+        </select>
+        <button class="btn bgh sm" onclick="window.print()">🖨️</button>
+        <button class="btn bgh sm" onclick="expData()">💾</button>
+      </div>
+      <div class="rg">
+        <div class="rc">
+          <div class="rt" data-i="rrev">Revenue</div>
+          <div class="rbig" id="r-rev">$0</div>
+          <div style="font-size:10px;color:var(--tx2);margin-top:2px" id="r-pl"></div>
+          <div style="margin-top:10px">
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rco">Completed</span><span id="r-co" style="font-weight:700">0</span></div>
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rav">Avg</span><span id="r-av" style="font-weight:700">$0</span></div>
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rpd">Pending</span><span id="r-pd" style="font-weight:700;color:var(--warn)">0</span></div>
+            <div class="rrow"><span style="color:var(--tx2)" data-i="rns">No-shows</span><span id="r-ns" style="font-weight:700;color:var(--err)">0</span></div>
+          </div>
+        </div>
+        <div class="rc"><div class="rt" data-i="rts">Top Services</div><div class="bc" id="r-ts"></div></div>
+        <div class="rc"><div class="rt" data-i="rbg">By Gender</div><div class="bc" id="r-bg"></div></div>
+        <div class="rc"><div class="rt" data-i="rtc">Top Clients</div><div id="r-tc"></div></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<!-- BOTTOM NAV mobile -->
+<nav class="bnav" id="bnav">
+  <button class="bn on" onclick="gv('dashboard')" id="bn-dashboard"><div class="bn-ic">📊</div><span data-i="vd">Home</span></button>
+  <button class="bn" onclick="gv('appointments')" id="bn-appointments"><div class="bn-ic">📅</div><span data-i="va">Apts</span><div class="bn-dot" id="bndot"></div></button>
+  <button class="bn" onclick="gv('staff')" id="bn-staff"><div class="bn-ic">💇</div><span data-i="vst">Staff</span></button>
+  <button class="bn" onclick="gv('clients')" id="bn-clients"><div class="bn-ic">👥</div><span data-i="vcl">Clients</span></button>
+  <button class="bn" onclick="gv('reports')" id="bn-reports"><div class="bn-ic">📈</div><span data-i="vr">Reports</span></button>
+</nav>
+<button class="fab" onclick="openNewApt()">+</button>
+
+<!-- MODALS -->
+<!-- Appointment -->
+<div class="mo" id="m-apt">
+  <div class="md">
+    <div class="mh"><div class="mt" id="apt-mt" data-i="napt">New Appointment</div><button class="mc" onclick="cM('m-apt')">✕</button></div>
+    <div class="mb">
+      <div class="handle"></div>
+      <input type="hidden" id="apt-eid">
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="ld">Date</label><input type="date" class="fi" id="apt-d"></div>
+        <div class="fg"><label class="fl" data-i="lt">Time</label><input type="time" class="fi" id="apt-t"></div>
+      </div>
+      <div class="fg"><label class="fl" data-i="lcl">Client</label><select class="fs" id="apt-cl"></select></div>
+      <div class="fg"><label class="fl" data-i="lsv">Service</label><select class="fs" id="apt-sv" onchange="fillP()"></select></div>
+      <div class="fg"><label class="fl" data-i="lst">Stylist</label><select class="fs" id="apt-stf"></select></div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lpr">Price ($)</label><input type="number" class="fi" id="apt-pr" placeholder="0.00" inputmode="decimal"></div>
+        <div class="fg"><label class="fl" data-i="lstat">Status</label>
+          <select class="fs" id="apt-stat">
+            <option value="confirmed" data-i="conf">Confirmed</option>
+            <option value="pending" data-i="pend">Pending</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl" data-i="lnt">Notes</label><input type="text" class="fi" id="apt-nt" placeholder="Optional..."></div>
+    </div>
+    <div class="mf">
+      <button class="btn bgh sm" onclick="cM('m-apt')" data-i="can">Cancel</button>
+      <button class="btn bg" onclick="saveApt()" data-i="sav">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Staff -->
+<div class="mo" id="m-stf">
+  <div class="md">
+    <div class="mh"><div class="mt" id="stf-mt">Add Stylist</div><button class="mc" onclick="cM('m-stf')">✕</button></div>
+    <div class="mb">
+      <div class="handle"></div>
+      <input type="hidden" id="stf-eid">
+      <div class="av-up">
+        <div class="av-pr" id="stf-av-pr">💇</div>
+        <label class="av-btn"><span data-i="uph">Upload photo</span><input type="file" accept="image/*" style="display:none" onchange="prevStfAv(this)"></label>
+        <input type="hidden" id="stf-av">
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lfn">First Name</label><input type="text" class="fi" id="stf-fn" placeholder="Joel"></div>
+        <div class="fg"><label class="fl" data-i="lln">Last Name</label><input type="text" class="fi" id="stf-ln" placeholder="Smith"></div>
+      </div>
+      <div class="fg"><label class="fl" data-i="lrl">Role / Specialty</label><input type="text" class="fi" id="stf-rl" placeholder="Hair Stylist, Barber..."></div>
+      <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="stf-ph" placeholder="000-000-0000"></div>
+    </div>
+    <div class="mf">
+      <button class="btn bd2 sm" id="stf-del" style="display:none" onclick="delStf()">Delete</button>
+      <button class="btn bgh sm" onclick="cM('m-stf')" data-i="can">Cancel</button>
+      <button class="btn bg" onclick="saveStf()" data-i="sav">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client -->
+<div class="mo" id="m-cl">
+  <div class="md">
+    <div class="mh"><div class="mt" id="cl-mt" data-i="ncl">New Client</div><button class="mc" onclick="cM('m-cl')">✕</button></div>
+    <div class="mb">
+      <div class="handle"></div>
+      <input type="hidden" id="cl-eid">
+      <div class="av-up">
+        <div class="av-pr" id="cl-av-pr">👤</div>
+        <label class="av-btn"><span data-i="uph">Upload photo</span><input type="file" accept="image/*" style="display:none" onchange="prevClAv(this)"></label>
+        <input type="hidden" id="cl-av">
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lfn">First Name</label><input type="text" class="fi" id="cl-fn" autocomplete="given-name"></div>
+        <div class="fg"><label class="fl" data-i="lln">Last Name</label><input type="text" class="fi" id="cl-ln" autocomplete="family-name"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lph">Phone</label><input type="tel" class="fi" id="cl-ph" autocomplete="tel"></div>
+        <div class="fg"><label class="fl" data-i="lgn">Gender</label>
+          <select class="fs" id="cl-gn"></select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl" data-i="lem">Email</label><input type="email" class="fi" id="cl-em" autocomplete="email"></div>
+      <div class="fg"><label class="fl" data-i="lnt">Notes</label><textarea class="fta" id="cl-nt"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn bgh sm" onclick="cM('m-cl')" data-i="can">Cancel</button>
+      <button class="btn bg" onclick="saveCl()" data-i="sav">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Service -->
+<div class="mo" id="m-sv">
+  <div class="md">
+    <div class="mh"><div class="mt" id="sv-mt">Add Service</div><button class="mc" onclick="cM('m-sv')">✕</button></div>
+    <div class="mb">
+      <div class="handle"></div>
+      <input type="hidden" id="sv-eid">
+      <div class="fg"><label class="fl" data-i="lsvn">Name (EN)</label><input type="text" class="fi" id="sv-n"></div>
+      <div class="fg"><label class="fl" data-i="lsve">Name (ES)</label><input type="text" class="fi" id="sv-e"></div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lgn">Category</label>
+          <select class="fs" id="sv-gn">
+            <option value="women">Women / Mujer</option>
+            <option value="men">Men / Hombre</option>
+            <option value="unisex">Unisex</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl" data-i="ldr">Duration (min)</label><input type="number" class="fi" id="sv-d" inputmode="numeric"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl" data-i="lpr">Price ($)</label><input type="number" class="fi" id="sv-p" inputmode="decimal"></div>
+        <div class="fg"><label class="fl" data-i="lic">Icon</label><input type="text" class="fi" id="sv-i" placeholder="💇"></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn bd2 sm" id="sv-del" style="display:none" onclick="delSv()">Delete</button>
+      <button class="btn bgh sm" onclick="cM('m-sv')" data-i="can">Cancel</button>
+      <button class="btn bg" onclick="saveSv()" data-i="sav">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import -->
+<div class="mo" id="m-imp">
+  <div class="md">
+    <div class="mh"><div class="mt" data-i="imp">Import / Restore</div><button class="mc" onclick="cM('m-imp')">✕</button></div>
+    <div class="mb">
+      <div class="handle"></div>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:12px" data-i="imph">Upload backup file to sync between devices.</p>
+      <div class="fg"><label class="fl">JSON File</label><input type="file" class="fi" id="imp-f" accept=".json" onchange="readImp(this)"></div>
+      <div class="fg"><label class="fl">Or paste JSON</label><textarea class="fta" id="imp-j" style="font-size:11px;font-family:monospace;min-height:80px"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn bgh sm" onclick="cM('m-imp')" data-i="can">Cancel</button>
+      <button class="btn bg" onclick="impData()" data-i="imp">Import</button>
+    </div>
+  </div>
+</div>
+
+<div class="tw" id="tw">
+</div>
+<div id="booking-shell" style="display:none;position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0a0a0a">
+
+
+<header class="header">
+  <div class="h-logo">
+    <div class="h-ic">✂️</div>
+    <div><div class="h-name">JOEL</div><div class="h-sub" data-i="tagline">Book your appointment</div></div>
+  </div>
+  <div class="lang-tog">
+    <button class="lb on" onclick="setL('en')" id="en-b">EN</button>
+    <button class="lb" onclick="setL('es')" id="es-b">ES</button>
+  </div>
+<button onclick="goLanding()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:7px 14px;color:#ddd;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:inherit">← Back</button></header>
+
+<div class="wrap">
+
+  <!-- STEPS INDICATOR -->
+  <div class="steps" id="steps-wrap">
+    <div class="step">
+      <div class="step-num active" id="sn1">1</div>
+      <div class="step-lbl" data-i="step1">Service</div>
+    </div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step">
+      <div class="step-num" id="sn2">2</div>
+      <div class="step-lbl" data-i="step2">Stylist</div>
+    </div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step">
+      <div class="step-num" id="sn3">3</div>
+      <div class="step-lbl" data-i="step3">Date & Time</div>
+    </div>
+    <div class="step-line" id="sl3"></div>
+    <div class="step">
+      <div class="step-num" id="sn4">4</div>
+      <div class="step-lbl" data-i="step4">Your Info</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: SERVICE -->
+  <div class="section on" id="sec1">
+    <div class="sec-title" data-i="s1t">Choose a Service</div>
+    <div class="sec-sub" data-i="s1s">What would you like today?</div>
+    <div class="gender-tabs">
+      <button class="gt aw" id="g-women" onclick="bkFilterG('women')" data-i="gw"><span id="tab-w-txt">Women</span></button>
+      <button class="gt" id="g-men" onclick="bkFilterG('men')" data-i="gm"><span id="tab-m-txt">Men</span></button>
+      <button class="gt" id="g-uni" onclick="bkFilterG('unisex')" data-i="gu"><span id="tab-o-txt">Other</span></button>
+    </div>
+    <div class="svc-list" id="svc-list"></div>
+    <button class="btn-main" style="margin-top:20px" onclick="bkGoStep(2)" id="btn-s1" disabled data-i="next">Continue →</button>
+  </div>
+
+  <!-- STEP 2: STYLIST -->
+  <div class="section" id="sec2">
+    <div class="sec-title" data-i="s2t">Choose your Stylist</div>
+    <div class="sec-sub" data-i="s2s">Who would you like to see?</div>
+    <div class="no-pref" id="no-pref" onclick="selStaff(null)">
+      <div style="font-size:24px;margin-bottom:4px">🎲</div>
+      <div style="font-size:14px;font-weight:700" data-i="no-pref">No preference</div>
+      <div style="font-size:12px;color:var(--tx2)" data-i="no-pref-sub">First available</div>
+    </div>
+    <div class="staff-list" id="staff-list"></div>
+    <button class="btn-back" onclick="bkGoStep(1)" data-i="back">← Back</button>
+  </div>
+
+  <!-- STEP 3: DATE & TIME -->
+  <div class="section" id="sec3">
+    <div class="sec-title" data-i="s3t">Pick a Date & Time</div>
+    <div class="sec-sub" data-i="s3s">Select when you'd like to come in</div>
+    <div class="notice">⏱ <span id="dur-notice"></span></div>
+    <div style="font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px" data-i="pick-date">Date</div>
+    <div class="date-grid" id="date-grid"></div>
+    <div style="font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin:14px 0 10px" data-i="pick-time">Time</div>
+    <div class="time-grid" id="time-grid"></div>
+    <button class="btn-main" style="margin-top:20px" onclick="bkGoStep(4)" id="btn-s3" disabled data-i="next">Continue →</button>
+    <button class="btn-back" onclick="bkGoStep(2)" data-i="back">← Back</button>
+  </div>
+
+  <!-- STEP 4: CLIENT INFO -->
+  <div class="section" id="sec4">
+    <div class="sec-title" data-i="s4t">Your Information</div>
+    <div class="sec-sub" data-i="s4s">Almost done! Tell us a little about yourself.</div>
+
+    <!-- Summary -->
+    <div class="summary" id="booking-summary"></div>
+
+    <!-- Check if existing client -->
+    <div class="fg">
+      <label class="fl" data-i="lph">Phone Number</label>
+      <input type="tel" class="fi" id="b-phone" placeholder="000-000-0000" autocomplete="tel" inputmode="tel" oninput="bkCheckExist()">
+    </div>
+    <div id="existing-found" style="display:none">
+      <div style="background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);border-radius:var(--rs);padding:12px 14px;font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span>✅</span><span id="existing-msg"></span>
+      </div>
+    </div>
+    <div id="new-client-form">
+      <div class="fg">
+        <label class="fl" data-i="lfn">First Name</label>
+        <input type="text" class="fi" id="b-fn" autocomplete="given-name">
+      </div>
+      <div class="fg">
+        <label class="fl" data-i="lln">Last Name</label>
+        <input type="text" class="fi" id="b-ln" autocomplete="family-name">
+      </div>
+      <div class="fg">
+        <label class="fl" data-i="lem">Email <span style="color:var(--tx2);font-style:italic;font-size:10px" data-i="opt">(optional)</span></label>
+        <input type="email" class="fi" id="b-em" autocomplete="email">
+      </div>
+      <div class="fg">
+        <label class="fl" data-i="lgn">Gender</label>
+        <select class="fs" id="b-gn"></select>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl" data-i="lnt">Notes <span style="color:var(--tx2);font-style:italic;font-size:10px" data-i="opt">(optional)</span></label>
+      <input type="text" class="fi" id="b-nt" data-i-placeholder="nt-ph">
+    </div>
+    <div class="notice">🔒 <span data-i="privacy">Your information is private and will only be used to manage your appointment.</span></div>
+    <button class="btn-main" onclick="bkConfirm()" data-i="confirm">Confirm Appointment ✓</button>
+    <button class="btn-back" onclick="bkGoStep(3)" data-i="back">← Back</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="section" id="sec5">
+    <div class="success-screen">
+      <div class="success-ic">🎉</div>
+      <div class="success-title" data-i="suc-t">You're booked!</div>
+      <div class="success-sub" data-i="suc-s">We'll see you soon. Please arrive 5 minutes early.</div>
+      <div class="conf-box" id="conf-box"></div>
+      <div class="notice">📱 <span data-i="suc-note">Screenshot this confirmation for your records.</span></div>
+      <button class="btn-main" onclick="bkReset()" data-i="book-again">Book Another Appointment</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="tw" id="tw"></div>
+
+
+
+</div>
+<div class="tw" id="tw"></div>
+<script>
+
+var isLoggedIn=false;
+
+function goBooking(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('booking-shell').style.display='block';
+  if(typeof svcs!=='undefined'&&svcs.length) SD2('pub_sv',svcs);
+  if(typeof staff!=='undefined') SD2('pub_st',staff);
+  selSvc=null; curFilter='women';
+  bkRenderSvcs(); bkFilterG('women');
+  setTimeout(function(){buildGenderOpts('b-gn','men');},30);
+}
+function showAdminLogin(){
+  document.getElementById('adm-form').style.display='block';
+  document.getElementById('adm-btn').style.display='none';
+  setTimeout(function(){var u=document.getElementById('au');if(u)u.focus();},100);
+}
+function doLogin(){
+  var u=(document.getElementById('au').value||'').trim().toLowerCase().replace(/ /g,'');
+  var p=(document.getElementById('ap').value||'').trim();
+  if(u==='admin'&&p==='joel2024'){
+    isLoggedIn=true;
+    document.getElementById('landing').style.display='none';
+    document.getElementById('admin-shell').style.display='flex';
+    renderAll();
+  } else {
+    document.getElementById('lf-err').style.display='block';
+    document.getElementById('ap').value='';
+    setTimeout(function(){document.getElementById('lf-err').style.display='none';},3000);
+  }
+}
+function exitAdmin(){
+  isLoggedIn=false;
+  document.getElementById('admin-shell').style.display='none';
+  document.getElementById('ap').value='';
+  document.getElementById('au').value='';
+  document.getElementById('adm-form').style.display='none';
+  document.getElementById('adm-btn').style.display='block';
+  document.getElementById('landing').style.display='flex';
+}
+function goLanding(){
+  document.getElementById('booking-shell').style.display='none';
+  document.getElementById('landing').style.display='flex';
+}
+function buildGenderOpts(selId,curVal){
+  var sel=document.getElementById(selId);
+  if(!sel)return;
+  var en=(lang==='en');
+  var cur=curVal||'men';
+  sel.innerHTML='';
+  [['men',en?'Male':'Hombre'],['women',en?'Female':'Mujer'],['other',en?'Other':'Otro']].forEach(function(o){
+    var opt=document.createElement('option');
+    opt.value=o[0]; opt.textContent=o[1];
+    if(o[0]===cur) opt.selected=true;
+    sel.appendChild(opt);
+  });
+}
+function applyLandingI18n(){
+  var en=(lang==='en');
+  function el(id,t){var e=document.getElementById(id);if(e)e.textContent=t;}
+  el('lb-book',en?'Book an Appointment':'Hacer una Reserva');
+  el('lb-book2',en?'Reserve your spot':'Reserva tu espacio');
+  el('lb-adm',en?'Administrator':'Administrador');
+  el('lb-adm2',en?'Staff access only':'Solo personal autorizado');
+  el('lf-go',en?'Enter Admin':'Entrar al Admin');
+  el('exit-admin-btn',en?'Exit':'Salir');
+  // Tabs
+  el('tab-w-txt',en?'Women':'Mujer');
+  el('tab-m-txt',en?'Men':'Hombre');
+  el('tab-o-txt',en?'Other':'Otro');
+  // Lang buttons
+  var eb=document.getElementById('en-b');
+  var esb=document.getElementById('es-b');
+  if(eb){eb.style.background=en?'#C9A017':'transparent';eb.style.color=en?'#000':'#888';}
+  if(esb){esb.style.background=!en?'#C9A017':'transparent';esb.style.color=!en?'#000':'#888';}
+}
+
+
+// I18N
+const TT={
+  en:{mn:"Main",vd:"Dashboard",va:"Appointments",vc:"Calendar",mg:"Manage",vst:"Staff",vsv:"Services",vcl:"Clients",vr:"Reports",napt:"+ New Appointment",tod:"Today",s1:"Today's Revenue",s2:"This Week",s3:"Clients",s3b:"total",s4:"Pending",s4b:"confirm",td_sch:"Today's Schedule",sa:"See all","top-sv":"Top Services",all:"All",pend:"Pending",conf:"Confirmed",comp:"Completed",canc:"Cancelled",ld:"Date",lt:"Time",lcl:"Client",lsv:"Service",lst:"Stylist",lpr:"Price ($)",lstat:"Status",lnt:"Notes",lfn:"First Name",lln:"Last Name",lph:"Phone",lgn:"Gender",lem:"Email",lsvn:"Name (EN)",lsve:"Name (ES)",ldr:"Duration (min)",lic:"Icon",lrl:"Role",can:"Cancel",sav:"Save",del:"Delete",ed:"Edit",pt:"Today",pw:"This Week",pm:"This Month",pa:"All Time",rrev:"Revenue",rco:"Completed",rav:"Avg",rpd:"Pending",rns:"No-shows",rts:"Top Services",rbg:"By Gender",rtc:"Top Clients",hcl:"Client",hvi:"Visits",hsp:"Spent",hlv:"Last Visit",men:"Male",women:"Female",uni:"Unisex",noa:"No appointments",noa2:"Tap + to add",noc:"No clients",nosts:"No staff",nos:"Add your first stylist",ncl:"New Client",ecl:"Edit Client",nsv:"Add Service",esv:"Edit Service",nst:"Add Stylist",est:"Edit Stylist",imp:"Import",imph:"Upload backup to sync between devices.","add-st":"Add Staff",uph:"Upload photo","bl-lbl":"Client Booking Link","bl-hint":"Share this link with clients so they can self-book without seeing your admin."},
+  es:{mn:"Principal",vd:"Panel",va:"Citas",vc:"Calendario",mg:"Gestión",vst:"Personal",vsv:"Servicios",vcl:"Clientes",vr:"Informes",napt:"+ Nueva Cita",tod:"Hoy",s1:"Ingresos de Hoy",s2:"Esta Semana",s3:"Clientes",s3b:"total",s4:"Pendientes",s4b:"confirmar",td_sch:"Agenda de Hoy",sa:"Ver todo","top-sv":"Servicios Populares",all:"Todos",pend:"Pendiente",conf:"Confirmado",comp:"Completado",canc:"Cancelado",ld:"Fecha",lt:"Hora",lcl:"Cliente",lsv:"Servicio",lst:"Estilista",lpr:"Precio ($)",lstat:"Estado",lnt:"Notas",lfn:"Nombre",lln:"Apellido",lph:"Teléfono",lgn:"Género",lem:"Correo",lsvn:"Nombre (EN)",lsve:"Nombre (ES)",ldr:"Duración (min)",lic:"Ícono",lrl:"Cargo / Especialidad",can:"Cancelar",sav:"Guardar",del:"Eliminar",ed:"Editar",pt:"Hoy",pw:"Esta Semana",pm:"Este Mes",pa:"Todo",rrev:"Ingresos",rco:"Completados",rav:"Promedio",rpd:"Pendientes",rns:"No se presentaron",rts:"Servicios Populares",rbg:"Por Género",rtc:"Mejores Clientes",hcl:"Cliente",hvi:"Visitas",hsp:"Total",hlv:"Última",men:"Hombre",women:"Mujer",uni:"Unisex",noa:"Sin citas",noa2:"Toca + para agregar",noc:"Sin clientes",nosts:"Sin personal",nos:"Agrega tu primer estilista",ncl:"Nuevo Cliente",ecl:"Editar Cliente",nsv:"Agregar Servicio",esv:"Editar Servicio",nst:"Agregar Estilista",est:"Editar Estilista",imp:"Importar",imph:"Sube el respaldo para sincronizar.","add-st":"Agregar",uph:"Subir foto","bl-lbl":"Link de Reservas del Cliente","bl-hint":"Envía este link a los clientes para que agenden sin ver tu administración."}
+};
+let lang=localStorage.getItem('jl')||'en';
+const T=k=>TT[lang][k]||TT.en[k]||k;
+function setL(l){
+  lang=l; localStorage.setItem('jl',l);
+  applyLandingI18n();
+  buildGenderOpts('b-gn',null);
+  buildGenderOpts('cl-gn',null);
+  apI18n(); renderAll();
+}
+function rv(v){
+  if(v==='dashboard')renderDash();
+  else if(v==='appointments')renderApts();
+  else if(v==='calendar')renderCal();
+  else if(v==='staff')renderStaff();
+  else if(v==='services')renderSv();
+  else if(v==='clients')renderCl();
+  else if(v==='reports')renderRep();
+}
+function renderAll(){apI18n();rv(curV);badge();updD();}
+function updD(){const d=new Date();document.getElementById('tb-date').textContent=d.toLocaleDateString(lang==='es'?'es-US':'en-US',{weekday:'short',month:'short',day:'numeric'});}
+function badge(){
+  const n=apts.filter(a=>a.status==='pending').length;
+  const nb=document.getElementById('nb');nb.textContent=n;nb.style.display=n?'':' none';
+  const bd=document.getElementById('bndot');if(bd)bd.style.display=n?'block':'none';
+  document.getElementById('s-p').textContent=n;
+}
+
+// DASHBOARD
+function renderDash(){
+  const td=today(),now=new Date();
+  const ta=apts.filter(a=>a.date===td&&a.status!=='cancelled');
+  const tr=ta.filter(a=>a.status==='completed').reduce((s,a)=>s+(+a.p||0),0);
+  const sw=new Date(now);sw.setDate(now.getDate()-now.getDay());
+  const wa=apts.filter(a=>{const d=new Date(a.date+'T12:00:00');return d>=sw&&a.status==='completed';});
+  const wr=wa.reduce((s,a)=>s+(+a.p||0),0);
+  document.getElementById('s-t').textContent=fm(tr);
+  document.getElementById('s-tn').textContent=ta.length+' '+T('va').toLowerCase();
+  document.getElementById('s-w').textContent=fm(wr);
+  document.getElementById('s-wn').textContent=wa.length;
+  document.getElementById('s-c').textContent=cls.length;
+  const sorted=[...ta].sort((a,b)=>a.time.localeCompare(b.time));
+  document.getElementById('dash-tl').innerHTML=sorted.length?sorted.map(a=>acHTML(a,true)).join(''):emH(T('noa'),T('noa2'));
+  const sc={};apts.filter(a=>a.status==='completed').forEach(a=>{sc[a.sn]=(sc[a.sn]||0)+1;});
+  const ts=Object.entries(sc).sort((a,b)=>b[1]-a[1]).slice(0,5);const mx=ts[0]?.[1]||1;
+  document.getElementById('dash-top').innerHTML=ts.length?ts.map(([n,c])=>`<div class="br"><div class="bl">${n}</div><div class="bt"><div class="bf" style="width:${c/mx*100}%;background:var(--gold)"></div></div><div class="bv" style="color:var(--gold)">${c}</div></div>`).join(''):`<div style="color:var(--tx2);font-size:11px;padding:8px">No data</div>`;
+}
+
+// APT CARD HTML
+function acHTML(a,compact){
+  compact=compact||false;
+  var sv=svcs.find(function(s){return s.id===a.si;})||{};
+  var cl=cls.find(function(x){return x.id===a.ci;})||{name:a.cn||"—"};
+  var stf=staff.find(function(s){return s.id===a.stid;})||null;
+  var gc=sv.g==="men"?"bm":sv.g==="women"?"bw":"bu";
+  var stName=stf?stf.name:T("any");
+  var price=a.p?"$"+parseFloat(a.p).toFixed(0):"";
+  var btns="";
+  if(a.status==="pending"){
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'confirmed\')">'+T("conf")+"</button>";
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'cancelled\')">'+T("canc")+"</button>";
+  }
+  if(a.status==="confirmed"){
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'completed\')">'+T("comp")+"</button>";
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'cancelled\')">'+T("canc")+"</button>";
+  }
+  return '<div class="ac '+gc+'" onclick="editApt(\'"+a.id+"\');" style="cursor:pointer">'+
+    '<div class="at">'+a.time+"</div>"+
+    '<div class="ad">'+
+      '<div class="an">'+cl.name+"</div>"+
+      '<div class="as">'+svN(sv)+(stName?" · "+stName:"")+"</div>"+
+      (price?'<div style="font-size:11px;color:var(--tx2)">'+price+"</div>":"")+"</div>"+
+    '<div class="ar">'+
+      '<span class="tag tag-'+a.status+'">'+T(a.status)+"</span>"+
+      btns+"</div></div>";
+}
+
+function renderApts(){
+  var list=apts.slice();
+  var fv=document.getElementById("f-v");
+  var fd=document.getElementById("f-dt");
+  if(fd&&fd.value) list=list.filter(function(a){return a.date===fd.value;});
+  if(fv&&fv.value&&fv.value!=="all") list=list.filter(function(a){return a.status===fv.value;});
+  list.sort(function(a,b){return a.time>b.time?1:-1;});
+  var el=document.getElementById("apt-list");
+  if(!el)return;
+  if(!list.length){el.innerHTML=mH(T("napt"),"");return;}
+  el.innerHTML=list.map(function(a){return acHTML(a,false);}).join("");
+}
+
+function chSt(id,s){const a=apts.find(x=>x.id===id);if(a){a.status=s;saveAp();renderAll();toast('✅ '+T(s==='confirmed'?'conf':s==='completed'?'comp':s),'tok');}}
+function delApt(id){if(!confirm(lang==='es'?'¿Eliminar esta cita?':'Delete this appointment?'))return;apts=apts.filter(a=>a.id!==id);saveAp();renderAll();toast('🗑️','tok');}
+
+// APT MODAL
+function openNewApt(prefCl=null){
+  document.getElementById('apt-eid').value='';
+  document.getElementById('apt-mt').textContent=T('napt');
+  document.getElementById('apt-d').value=today();
+  document.getElementById('apt-t').value='10:00';
+  document.getElementById('apt-pr').value='';
+  document.getElementById('apt-nt').value='';
+  document.getElementById('apt-stat').value='confirmed';
+  popAptDrops(prefCl);
+  document.getElementById('m-apt').classList.add('on');
+}
+function editApt(id){
+  const a=apts.find(x=>x.id===id);if(!a)return;
+  document.getElementById('apt-eid').value=id;
+  document.getElementById('apt-mt').textContent=T('napt').replace('+','✏️');
+  document.getElementById('apt-d').value=a.date;
+  document.getElementById('apt-t').value=a.time;
+  document.getElementById('apt-pr').value=a.p||''
+  document.getElementById('apt-nt').value=a.nt||''
+  document.getElementById('apt-stat').value=a.status;
+  popAptDrops(a.ci,a.si,a.stid);
+  document.getElementById('m-apt').classList.add('on');
+}
+function popAptDrops(pCl=null,pSv=null,pStf=null){
+  const cs=document.getElementById('apt-cl');
+  cs.innerHTML=cls.length?cls.map(c=>`<option value="${c.id}"${c.id===pCl?' selected':''}}>${c.name}</option>`):`<option value="">— ${T('ncl')} first —</option>`;
+  const ss=document.getElementById('apt-sv');
+  ss.innerHTML=svcs.map(s=>`<option value="${s.id}"${s.id===pSv?' selected':''}}>${svN(s)}</option>`);
+  const stfSel=document.getElementById('apt-stf');
+  stfSel.innerHTML=`<option value="">— ${T('lst')} —</option>`+staff.map(s=>`<option value="${s.id}"${s.id===pStf?' selected':''}}>${s.name}</option>`).join('');
+  if(!pSv)fillP();
+}
+function fillP(){const id=document.getElementById('apt-sv').value;const s=svcs.find(x=>x.id===id);if(s&&s.p!=null)document.getElementById('apt-pr').value=s.p;}
+function saveApt(){
+  const date=document.getElementById('apt-d').value;
+  const time=document.getElementById('apt-t').value;
+  if(!date||!time){toast(T('ld')+' required','terr');return;}
+  const ci=document.getElementById('apt-cl').value;
+  const si=document.getElementById('apt-sv').value;
+  const stid=document.getElementById('apt-stf').value;
+  const cl=cls.find(c=>c.id===ci);
+  const sv=svcs.find(s=>s.id===si);
+  const eid=document.getElementById('apt-eid').value;
+  const data={id:eid||uid(),ci,cn:cl?cl.name:'Guest',si,sn:sv?svN(sv):'—',stid:stid||null,date,time,p:document.getElementById('apt-pr').value||null,status:document.getElementById('apt-stat').value,nt:document.getElementById('apt-nt').value};
+  if(eid){const i=apts.findIndex(a=>a.id===eid);if(i>-1)apts[i]=data;}else apts.push(data);
+  saveAp();cM('m-apt');renderAll();toast('✅ '+T('sav'),'tok');
+}
+
+// CALENDAR
+function renderCal(){
+  const now=new Date();const sw=new Date(now);sw.setDate(now.getDate()-now.getDay()+calW*7);
+  const days=Array.from({length:7},(_,i)=>{const d=new Date(sw);d.setDate(sw.getDate()+i);return d;});
+  const dn=lang==='es'?['D','L','M','X','J','V','S']:['S','M','T','W','T','F','S'];
+  const hrs=['8','9','10','11','12','13','14','15','16','17','18','19'];
+  document.getElementById('cal-lbl').textContent=days[3].toLocaleDateString(lang==='es'?'es-US':'en-US',{month:'long',year:'numeric'});
+  const td=today();let h='<div class="wh"></div>';
+  days.forEach((d,i)=>{const ds=d.toISOString().slice(0,10);h+=`<div class="wh"><div class="dn">${dn[i]}</div><div class="dnum${ds===td?' td':''}">${d.getDate()}</div></div>`;});
+  hrs.forEach(hr=>{
+    h+=`<div class="tc">${hr}</div>`;
+    days.forEach(d=>{
+      const ds=d.toISOString().slice(0,10);
+      const da=apts.filter(a=>a.date===ds&&a.status!=='cancelled'&&a.time&&parseInt(a.time.split(':')[0])===parseInt(hr));
+      h+=`<div class="ws" onclick="qApt('${ds}','${hr.padStart(2,'0')}:00')">${da.map(a=>{const sv=svcs.find(s=>s.id===a.si)||{};const gc=sv.g==='men'?'sm2':sv.g==='women'?'sw':'su';return`<div class="sa ${gc}" title="${a.cn} · ${a.sn}" onclick="event.stopPropagation();editApt('${a.id}')">${a.cn}</div>`;}).join('')}</div>`;
+    });
+  });
+  document.getElementById('wk-g').innerHTML=h;
+}
+function qApt(date,time){openNewApt();document.getElementById('apt-d').value=date;document.getElementById('apt-t').value=time;}
+
+// STAFF
+function renderStaff(){
+  var el=document.getElementById("staff-grid");
+  if(!el)return;
+  if(!staff.length){el.innerHTML=mH(T("vst"),"");return;}
+  el.innerHTML=staff.map(function(s){
+    var av=s.avatar?'<img src="'+s.avatar+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover">':ini(s.name);
+    var phone=s.phone?'<div style="font-size:11px;color:var(--tx2)">'+s.phone+"</div>":"";
+    return '<div class="staff-card" onclick="editSt(\'"'+s.id+'"\')" style="cursor:pointer">'+
+      '<div class="staff-av">'+av+"</div>"+
+      "<div>"+
+      '<div style="font-weight:700;font-size:14px">'+s.name+"</div>"+
+      '<div style="font-size:11px;color:var(--tx2)">'+s.role+"</div>"+
+      phone+"</div></div>";
+  }).join("");
+}
+
+function openAddStaff(){
+  document.getElementById('stf-eid').value='';
+  document.getElementById('stf-mt').textContent=T('nst');
+  ['stf-fn','stf-ln','stf-rl','stf-ph','stf-av'].forEach(i=>document.getElementById(i).value='');
+  const p=document.getElementById('stf-av-pr');p.innerHTML='💇';p.style.background='var(--sf2)';
+  document.getElementById('stf-del').style.display='none';
+  document.getElementById('m-stf').classList.add('on');
+}
+function editStf(id){
+  const s=staff.find(x=>x.id===id);if(!s)return;
+  document.getElementById('stf-eid').value=id;
+  document.getElementById('stf-mt').textContent=T('est');
+  document.getElementById('stf-fn').value=s.name.split(' ')[0]||''
+  document.getElementById('stf-ln').value=s.name.split(' ').slice(1).join(' ')||''
+  document.getElementById('stf-rl').value=s.role||''
+  document.getElementById('stf-ph').value=s.phone||''
+  document.getElementById('stf-av').value=s.avatar||''
+  const p=document.getElementById('stf-av-pr');
+  if(s.avatar){p.innerHTML=`<img src="${s.avatar}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;}
+  else{p.innerHTML=ini(s.name);p.style.background=ac(s.name);}
+  document.getElementById('stf-del').style.display='';
+  document.getElementById('m-stf').classList.add('on');
+}
+function prevStfAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const d=e.target.result;document.getElementById('stf-av').value=d;const p=document.getElementById('stf-av-pr');p.innerHTML=`<img src="${d}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;};r.readAsDataURL(f);}
+function saveStf(){
+  const fn=document.getElementById('stf-fn').value.trim();if(!fn){toast(T('lfn')+' required','terr');return;}
+  const eid=document.getElementById('stf-eid').value;
+  const data={id:eid||uid(),name:(fn+' '+document.getElementById('stf-ln').value.trim()).trim(),role:document.getElementById('stf-rl').value.trim(),phone:document.getElementById('stf-ph').value.trim(),avatar:document.getElementById('stf-av').value||null};
+  if(eid){const i=staff.findIndex(s=>s.id===eid);if(i>-1)staff[i]=data;}else staff.push(data);
+  saveSt();cM('m-stf');renderStaff();toast('✅ '+T('sav'),'tok');
+}
+function delStf(){const id=document.getElementById('stf-eid').value;if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;staff=staff.filter(s=>s.id!==id);saveSt();cM('m-stf');renderStaff();toast('🗑️','tok');}
+
+// SERVICES
+function fSv(g){curSF=g;document.querySelectorAll('.gt').forEach(x=>x.className='gt');document.getElementById('t'+g[0]).classList.add(g==='men'?'am':g==='women'?'aw':'au');renderSv();}
+function renderSv(){
+  var el=document.getElementById("sv-g");
+  if(!el)return;
+  if(!svcs.length){el.innerHTML=mH(T("vsv"),"");return;}
+  el.innerHTML=svcs.map(function(s){
+    var gc=s.g==="men"?"#2196F3":s.g==="women"?"#E91E8C":"#9C27B0";
+    var price=s.p!=null?"<div class=\"sprice\">$"+parseFloat(s.p).toFixed(0)+"</div>":"<div class=\"svc-tbd\">TBD</div>";
+    return "<div class=\"svcd\" onclick=\"editSv('"+s.id+"')\" style=\"cursor:pointer\">"+
+      "<div class=\"gdot\" style=\"background:"+gc+"\"></div>"+
+      "<div class=\"svc-ic\">"+(s.ic||"💅")+"</div>"+
+      "<div class=\"svc-info\">"+
+        "<div class=\"svc-name\">"+s.n+"</div>"+
+        "<div class=\"svc-dur\">"+s.d+" min</div>"+
+      "</div>"+price+"</div>";
+  }).join("");
+}
+
+function openAddSvc(){
+  document.getElementById('sv-eid').value='';
+  document.getElementById('sv-mt').textContent=T('nsv');
+  ['sv-n','sv-e','sv-d','sv-p','sv-i'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('sv-gn').value='women';
+  document.getElementById('sv-del').style.display='none';
+  document.getElementById('m-sv').classList.add('on');
+}
+function editSv(id){
+  const s=svcs.find(x=>x.id===id);if(!s)return;
+  document.getElementById('sv-eid').value=id;
+  document.getElementById('sv-mt').textContent=T('esv');
+  document.getElementById('sv-n').value=s.n;
+  document.getElementById('sv-e').value=s.es||''
+  document.getElementById('sv-gn').value=s.g;
+  document.getElementById('sv-d').value=s.d;
+  document.getElementById('sv-p').value=s.p!=null?s.p:''
+  document.getElementById('sv-i').value=s.ic||''
+  document.getElementById('sv-del').style.display='';
+  document.getElementById('m-sv').classList.add('on');
+}
+function saveSv(){
+  const nm=document.getElementById('sv-n').value.trim();if(!nm){toast('Name required','terr');return;}
+  const eid=document.getElementById('sv-eid').value;
+  const data={id:eid||uid(),g:document.getElementById('sv-gn').value,ic:document.getElementById('sv-i').value||'💅',n:nm,es:document.getElementById('sv-e').value.trim()||nm,d:parseInt(document.getElementById('sv-d').value)||60,p:document.getElementById('sv-p').value!==''?parseFloat(document.getElementById('sv-p').value):null};
+  if(eid){const i=svcs.findIndex(s=>s.id===eid);if(i>-1)svcs[i]=data;}else svcs.push(data);
+  _saveSv();cM('m-sv');renderSv();toast('✅','tok');
+}
+function delSv(){const id=document.getElementById('sv-eid').value;if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;svcs=svcs.filter(s=>s.id!==id);_saveSv();cM('m-sv');renderSv();toast('🗑️','tok');}
+
+// CLIENTS
+function renderCl(){
+  const q=(document.getElementById('cl-s').value||''). toLowerCase();
+  const list=cls.filter(c=>(c.name||''). toLowerCase().includes(q)||(c.phone||''). includes(q));
+  const tb=document.getElementById('cl-tb');
+  if(!list.length){tb.innerHTML=`<tr><td colspan="4">${emH(T('noc'),'')}</td></tr>`;return;}
+  tb.innerHTML=list.map(cl=>{
+    const ca=apts.filter(a=>a.ci===cl.id&&a.status==='completed');
+    const sp=ca.reduce((s,a)=>s+(+a.p||0),0);
+    const av=cl.avatar?`<div class="av"><img src="${cl.avatar}"></div>`:`<div class="av" style="background:${ac(cl.name)}">${ini(cl.name)}</div>`;
+    return`<tr>
+      <td><div class="cc" style="cursor:pointer" onclick="openProf('${cl.id}')">
+        ${av}<div><div class="cn">${cl.name}</div><div class="cp">${cl.phone||'—'}</div></div>
+      </div></td>
+      <td style="font-size:18px;font-weight:800;color:var(--gold)">${ca.length}</td>
+      <td style="font-size:13px;font-weight:700;color:var(--ok)">${fm(sp)}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="ab" onclick="editCl('${cl.id}')">✏️</button>
+        <button class="ab dd" onclick="delCl('${cl.id}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function openProf(id){const cl=cls.find(c=>c.id===id);if(cl)toast(cl.name+' — '+apts.filter(a=>a.ci===id&&a.status==='completed').length+' visits','tok');}
+function openAddCl(){
+  document.getElementById('cl-eid').value='';
+  document.getElementById('cl-mt').textContent=T('ncl');
+  ['cl-fn','cl-ln','cl-ph','cl-em','cl-nt','cl-av'].forEach(i=>document.getElementById(i).value='');
+  buildGenderOpts('cl-gn','men');
+  const p=document.getElementById('cl-av-pr');p.innerHTML='👤';p.style.background='var(--sf2)';
+  document.getElementById('m-cl').classList.add('on');
+}
+function editCl(id){
+  const cl=cls.find(c=>c.id===id);if(!cl)return;
+  document.getElementById('cl-eid').value=id;
+  document.getElementById('cl-mt').textContent=T('ecl');
+  document.getElementById('cl-fn').value=cl.name.split(' ')[0]||''
+  document.getElementById('cl-ln').value=cl.name.split(' ').slice(1).join(' ')||''
+  document.getElementById('cl-ph').value=cl.phone||''
+  document.getElementById('cl-em').value=cl.email||''
+  document.getElementById('cl-nt').value=cl.notes||''
+  buildGenderOpts('cl-gn',cl.gender||'men');
+  document.getElementById('cl-av').value=cl.avatar||''
+  const p=document.getElementById('cl-av-pr');
+  if(cl.avatar){p.innerHTML=`<img src="${cl.avatar}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;}else{p.innerHTML=ini(cl.name);p.style.background=ac(cl.name);}
+  document.getElementById('m-cl').classList.add('on');
+}
+function prevClAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const d=e.target.result;document.getElementById('cl-av').value=d;const p=document.getElementById('cl-av-pr');p.innerHTML=`<img src="${d}" style="width:52px;height:52px;border-radius:50%;object-fit:cover">`;};r.readAsDataURL(f);}
+function saveCl2(){
+  const fn=document.getElementById('cl-fn').value.trim();if(!fn){toast(T('lfn')+' required','terr');return;}
+  const eid=document.getElementById('cl-eid').value;
+  const data={id:eid||uid(),name:(fn+' '+document.getElementById('cl-ln').value.trim()).trim(),phone:document.getElementById('cl-ph').value.trim(),email:document.getElementById('cl-em').value.trim(),gender:document.getElementById('cl-gn').value,notes:document.getElementById('cl-nt').value.trim(),avatar:document.getElementById('cl-av').value||null};
+  if(eid){const i=cls.findIndex(c=>c.id===eid);if(i>-1)cls[i]=data;}else cls.push(data);
+  saveCls();cM('m-cl');renderCl();toast('✅','tok');
+}
+function delCl(id){if(!confirm(lang==='es'?'¿Eliminar?':'Delete?'))return;cls=cls.filter(c=>c.id!==id);saveCls();renderCl();toast('🗑️','tok');}
+
+// REPORTS
+function getFiltered(period){
+  const td=today(),now=new Date();
+  return apts.filter(a=>{
+    if(a.status!=='completed')return false;
+    if(period==='today')return a.date===td;
+    if(period==='week'){const d=new Date(a.date+'T12:00:00');const sw=new Date(now);sw.setDate(now.getDate()-now.getDay());return d>=sw;}
+    if(period==='month')return a.date.slice(0,7)===td.slice(0,7);
+    return true;
+  });
+}
+function renderRep(){
+  const period=document.getElementById('rp').value;
+  const list=getFiltered(period);
+  const total=list.reduce((s,a)=>s+(+a.p||0),0);
+  const avg=list.length?total/list.length:0;
+  const pend=apts.filter(a=>a.status==='pending').length;
+  const ns=apts.filter(a=>a.status==='cancelled').length;
+  const pl={today:T('pt'),week:T('pw'),month:T('pm'),all:T('pa')};
+  document.getElementById('r-rev').textContent=fm(total);
+  document.getElementById('r-pl').textContent=pl[period];
+  document.getElementById('r-co').textContent=list.length;
+  document.getElementById('r-av').textContent=fm(avg);
+  document.getElementById('r-pd').textContent=pend;
+  document.getElementById('r-ns').textContent=ns;
+  const sc={};list.forEach(a=>{sc[a.sn]=(sc[a.sn]||0)+1;});
+  const ts=Object.entries(sc).sort((a,b)=>b[1]-a[1]).slice(0,6);const mx=ts[0]?.[1]||1;
+  document.getElementById('r-ts').innerHTML=ts.length?ts.map(([n,c])=>`<div class="br"><div class="bl">${n}</div><div class="bt"><div class="bf" style="width:${c/mx*100}%;background:var(--gold)"></div></div><div class="bv" style="color:var(--gold)">${c}</div></div>`).join(''):`<div style="color:var(--tx2);font-size:11px">No data</div>`;
+  const mR=list.filter(a=>{const s=svcs.find(x=>x.id===a.si);return s?.g==='men';}).reduce((s,a)=>s+(+a.p||0),0);
+  const wR=list.filter(a=>{const s=svcs.find(x=>x.id===a.si);return s?.g==='women';}).reduce((s,a)=>s+(+a.p||0),0);
+  const uR=list.filter(a=>{const s=svcs.find(x=>x.id===a.si);return s?.g==='unisex';}).reduce((s,a)=>s+(+a.p||0),0);
+  const mg=Math.max(mR,wR,uR)||1;
+  document.getElementById('r-bg').innerHTML=`
+    <div class="br"><div class="bl">${T('women')}</div><div class="bt"><div class="bf" style="width:${wR/mg*100}%;background:var(--women)"></div></div><div class="bv" style="color:var(--women)">${fm(wR)}</div></div>
+    <div class="br"><div class="bl">${T('men')}</div><div class="bt"><div class="bf" style="width:${mR/mg*100}%;background:var(--men)"></div></div><div class="bv" style="color:var(--men)">${fm(mR)}</div></div>
+    <div class="br"><div class="bl">${T('uni')}</div><div class="bt"><div class="bf" style="width:${uR/mg*100}%;background:var(--uni)"></div></div><div class="bv" style="color:var(--uni)">${fm(uR)}</div></div>`;
+  const csp={};list.forEach(a=>{csp[a.ci]=(csp[a.ci]||0)+(+a.p||0);});
+  const tc=Object.entries(csp).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('r-tc').innerHTML=tc.length?tc.map(([id,sp])=>{const cl=cls.find(c=>c.id===id)||{name:'Guest'};const av=cl.avatar?`<img src="${cl.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">`:`<div class="av" style="background:${ac(cl.name)};width:24px;height:24px;font-size:10px">${ini(cl.name)}</div>`;return`<div class="rrow"><span style="display:flex;align-items:center;gap:7px;color:var(--tx2)">${av}${cl.name}</span><span style="font-weight:700;color:var(--ok)">${fm(sp)}</span></div>`;}).join(''):`<div style="color:var(--tx2);font-size:11px;padding:7px 0">No data</div>`;
+}
+
+// EXPORT / IMPORT
+function expData(){
+  // Share data to booking portal via localStorage key
+  SD2('pub_sv',svcs);SD2('pub_st',staff);
+  const data=JSON.stringify({clients:cls,appointments:apts,services:svcs,staff,exported:new Date().toISOString()},null,2);
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+  a.download='joel-backup-'+today()+'.json';a.click();
+  toast('💾 '+( lang==='es'?'Exportado':'Exported'),'tok');
+}
+function openImp(){document.getElementById('imp-j').value='';document.getElementById('imp-f').value='';document.getElementById('m-imp').classList.add('on');}
+function readImp(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('imp-j').value=e.target.result;};r.readAsText(f);}
+function impData(){
+  try{
+    const raw=document.getElementById('imp-j').value.trim();if(!raw){toast('Paste JSON','terr');return;}
+    const d=JSON.parse(raw);
+    if(d.clients)cls=d.clients;
+    if(d.appointments)apts=d.appointments;
+    if(d.services)svcs=d.services;
+    if(d.staff)staff=d.staff;
+    saveCls();saveAp();_saveSv();saveSt();
+    SD2('pub_sv',svcs);SD2('pub_st',staff);
+    cM('m-imp');renderAll();toast('✅ Imported','tok');
+  }catch(e){toast('Invalid JSON','terr');}
+}
+
+// MODAL / TOAST
+function cM(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
+function toast(msg,type='tok'){
+  const c=document.getElementById('tw');const el=document.createElement('div');
+  el.className='toast '+type;el.textContent=msg;
+  c.appendChild(el);setTimeout(()=>el.remove(),3000);
+}
+function emH(t,s){
+  return '<div class="empty"><div class="emp-ic">🔍</div><div class="emp-tx">'+t+"</div>"+(s?'<div class="emp-sub">'+s+"</div>":"")+"</div>";
+}
+
+function bkRenderStep(n){bkGoStep(n);}
+
+// STEP 1 — SERVICES
+function bkFilterG(g){
+  curFilter=g;
+  document.querySelectorAll('.gt').forEach(x=>x.className='gt');
+  document.getElementById('g-'+g).classList.add(g==='men'?'am':g==='women'?'aw':'au');
+  bkRenderSvcs();
+}
+function bkGoStep(n){
+  if(n===2&&!selSvc){alert(lang==='es'?'Selecciona un servicio':'Select a service');return;}
+  if(n===4&&(!selDate||!selTime)){alert(lang==='es'?'Selecciona fecha y hora':'Select date and time');return;}
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('on');});
+  var target=document.getElementById('sec'+n);
+  if(target)target.classList.add('on');
+  for(var i=1;i<=4;i++){
+    var sn=document.getElementById('sn'+i);
+    if(!sn)continue;
+    sn.classList.remove('active','done');
+    if(i<n)sn.classList.add('done');
+    else if(i===n)sn.classList.add('active');
+    var sl=document.getElementById('sl'+i);
+    if(sl)sl.classList.toggle('done',i<n);
+  }
+  curStep=n;
+  if(n===2)bkRenderStaff();
+  if(n===3){bkRenderDates();bkRenderTimes();}
+  if(n===4)bkRenderSummary();
+  window.scrollTo(0,0);
+}
+
+function bkRenderSvcs(){
+  var svcArr=typeof SD!=='undefined'?SD:[];
+  try{var pub=JSON.parse(localStorage.getItem('j_pub_sv')||'null');if(pub&&pub.length)svcArr=pub;}catch(ex){}
+  var list=svcArr.filter(function(sv){return curFilter==='unisex'?true:sv.g===curFilter;});
+  var el=document.getElementById('svc-list');
+  if(!el)return;
+  if(!list.length){el.innerHTML='<div class="empty" style="text-align:center;padding:30px;color:#666">No services</div>';return;}
+  el.innerHTML=list.map(function(sv){
+    var nm=(lang==='es'&&sv.es)?sv.es:sv.n;
+    var pr=sv.p!=null?'<div class="svc-price">$'+sv.p+'</div>':'<div class="svc-tbd">TBD</div>';
+    var sel=selSvc===sv.id?' sel':'';
+    return '<div class="svc-item'+sel+'" data-svc="'+sv.id+'" style="cursor:pointer;-webkit-tap-highlight-color:rgba(201,160,23,.2);touch-action:manipulation">'+
+      '<div class="svc-ic">'+(sv.ic||'💅')+'</div>'+
+      '<div class="svc-info"><div class="svc-name">'+nm+'</div>'+
+      '<div class="svc-dur">⏱ '+sv.d+' min</div></div>'+pr+'</div>';
+  }).join('');
+  el.querySelectorAll('[data-svc]').forEach(function(div){
+    div.addEventListener('click',function(){bkSelService(this.getAttribute('data-svc'));});
+    div.addEventListener('touchend',function(ev){ev.preventDefault();bkSelService(this.getAttribute('data-svc'));});
+  });
+  document.getElementById('btn-s1').disabled=!selSvc;
+}
+function bkSelService(id){
+  if(!id)return;
+  selSvc=id;
+  document.querySelectorAll('[data-svc]').forEach(function(el){
+    var isSel=el.getAttribute('data-svc')===id;
+    el.style.borderColor=isSel?'#C9A017':'';
+    el.style.background=isSel?'rgba(201,160,23,.1)':'';
+    el.classList.toggle('sel',isSel);
+  });
+  var btn=document.getElementById('btn-s1');
+  if(btn)btn.disabled=false;
+}
+
+// STEP 2 — STAFF
+function bkRenderStaff(){
+  const staff=bkGetD('pub_st',bkGetD('st',[]));
+  const np=document.getElementById('no-pref');np.classList.toggle('sel',selStaffId===null&&selStaffId!==undefined);
+  const el=document.getElementById('staff-list');
+  if(!staff.length){el.innerHTML='';return;}
+  el.innerHTML=staff.map(s=>{
+    const av=s.avatar?`<img src="${s.avatar}">`:`<div style="background:${ac(s.name)};width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;margin:0 auto 8px">${ini(s.name)}</div>`;
+    return`<div class="staff-item${selStaffId===s.id?' sel':''}" onclick="bkSelStaffFn('${s.id}')">
+      <div class="staff-av">${av}</div>
+      <div class="staff-nm">${s.name}</div>
+      <div class="staff-rl">${s.role||''}</div>
+    </div>`;
+  }).join('');
+}
+function bkSelStaffFn(id){
+  selStaffId=id;
+  document.querySelectorAll('.staff-item').forEach(el=>{el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+id+"'"));});
+  document.getElementById('no-pref').classList.remove('sel');
+  setTimeout(()=>bkGoStep(3),300);
+}
+function selStaff2(id){selStaffId=id;document.getElementById('no-pref').classList.add('sel');document.querySelectorAll('.staff-item').forEach(el=>el.classList.remove('sel'));setTimeout(()=>bkGoStep(3),300);}
+document.getElementById('no-pref').onclick=()=>selStaff2(null);
+
+// STEP 3 — DATE & TIME
+function bkRenderDates(){
+  const el=document.getElementById('date-grid');
+  const dates=[];const now=new Date();
+  for(let i=0;i<14;i++){const d=new Date(now);d.setDate(now.getDate()+i);dates.push(d);}
+  const dayNames=lang==='es'?['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const monthNames=lang==='es'?['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.innerHTML=dates.map(d=>{
+    const ds=d.toISOString().slice(0,10);
+    return`<div class="date-btn${selDate===ds?' sel':''}" onclick="bkSelDateFn('${ds}')">
+      <div class="date-day">${dayNames[d.getDay()]}</div>
+      <div class="date-num">${d.getDate()}</div>
+      <div class="date-month">${monthNames[d.getMonth()]}</div>
+    </div>`;
+  }).join('');
+  // Show service duration
+  const svcs=bkGetD('pub_sv',bkGetD('sv',[]));
+  const svc=svcs.find(s=>s.id===selSvc);
+  if(svc)document.getElementById('dur-notice').textContent=T('dur')+' '+svc.d+' '+T('min');
+}
+function bkSelDateFn(ds){
+  selDate=ds;selTime=null;
+  document.querySelectorAll('.date-btn').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick').includes("'"+ds+"'")));
+  document.getElementById('btn-s3').disabled=true;
+  bkRenderTimes();
+}
+function bkRenderTimes(){
+  const el=document.getElementById('time-grid');
+  if(!selDate){el.innerHTML='';return;}
+  const apts=bkGetD('ap',[]);
+  const takenTimes=apts.filter(a=>a.date===selDate&&a.status!=='cancelled').map(a=>a.time);
+  el.innerHTML=HOURS.map(h=>{
+    const padded=h.split(':')[0].padStart(2,'0')+':00';
+    const taken=takenTimes.some(t=>t.startsWith(h.split(':')[0].padStart(2,'0')));
+    const displayH=lang==='es'?h+'h':bkFormatHour(h);
+    return`<div class="time-btn${taken?' taken':selTime===padded?' sel':''}" onclick="${taken?'':'bkSelTimeFn(\''+padded+'\')'}">
+      ${displayH}"+(taken?'<br><span style="font-size:9px">'+T("taken")+"</span>":"")+"
+    </div>`;
+  }).join('');
+}
+function bkFormatHour(h){const hr=parseInt(h);return hr<12?hr+':00 AM':hr===12?'12:00 PM':(hr-12)+':00 PM';}
+function bkSelTimeFn(t){
+  selTime=t;
+  document.querySelectorAll('.time-btn:not(.taken)').forEach(el=>el.classList.toggle('sel',el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+t+"'")));
+  document.getElementById('btn-s3').disabled=false;
+}
+
+// STEP 4 — CLIENT INFO
+function bkRenderSummary(){
+  const svcs=bkGetD('pub_sv',bkGetD('sv',[]));
+  const staff=bkGetD('pub_st',bkGetD('st',[]));
+  const svc=svcs.find(s=>s.id===selSvc)||{};
+  const stf=selStaffId?staff.find(s=>s.id===selStaffId):null;
+  const rows=[
+    [T('sum_svc'),svN(svc)+(svc.ic?' '+svc.ic:'')],
+    [T('sum_dur'),svc.d?svc.d+' '+T('min'):'—'],
+    [T('sum_stf'),stf?stf.name:T('any')],
+    [T('sum_date'),fmtDate(selDate)],
+    [T('sum_time'),selTime?bkFormatHour(selTime.replace(':00',':').split(':')[0]+':00'):'—'],
+    [T('sum_price'),svc.p!=null?fm(svc.p):T('tbd')],
+  ];
+  document.getElementById('booking-summary').innerHTML=rows.map(([l,v])=>`<div class="sum-row"><span class="sum-lbl">${l}</span><span class="sum-val">${v}</span></div>`).join('');
+}
+function bkCheckExist(){
+  const ph=document.getElementById('b-phone').value.replace(/\D/g,'');
+  if(ph.length<7){existingClient=null;document.getElementById('existing-found').style.display='none';document.getElementById('new-client-form').style.display='';return;}
+  const cls=bkGetD('cl',[]);
+  const found=cls.find(c=>(c.phone||'').replace(/\D/g,'').includes(ph));
+  if(found){
+    existingClient=found;
+    document.getElementById('existing-msg').textContent=T('exist_found')+', '+found.name+'! 👋';
+    document.getElementById('existing-found').style.display='';
+    document.getElementById('new-client-form').style.display='none';
+  }else{existingClient=null;document.getElementById('existing-found').style.display='none';document.getElementById('new-client-form').style.display='';}
+}
+
+// CONFIRM BOOKING
+function bkConfirm(){
+  const phone=document.getElementById('b-phone').value.trim();
+  if(!phone){toast(T('lph'),'terr');return;}
+  let cl=existingClient;
+  if(!cl){
+    const fn=document.getElementById('b-fn').value.trim();
+    if(!fn){toast(T('lfn'),'terr');return;}
+    cl={id:uid(),name:(fn+' '+document.getElementById('b-ln').value.trim()).trim(),phone,email:document.getElementById('b-em').value.trim(),gender:document.getElementById('b-gn').value,notes:'',avatar:null};
+    const cls=bkGetD('cl',[]);
+    cls.push(cl);bkSetD('cl',cls);
+  }
+  const svcs=bkGetD('pub_sv',bkGetD('sv',[]));
+  const staff=bkGetD('pub_st',bkGetD('st',[]));
+  const svc=svcs.find(s=>s.id===selSvc)||{};
+  const stf=selStaffId?staff.find(s=>s.id===selStaffId):null;
+  const apt={id:uid(),ci:cl.id,cn:cl.name,si:selSvc,sn:svN(svc),stid:selStaffId||null,date:selDate,time:selTime,p:svc.p||null,status:'pending',nt:document.getElementById('b-nt').value,source:'booking'};
+  const apts=bkGetD('ap',[]);apts.push(apt);bkSetD('ap',apts);
+  bkShowSuccess(cl,svc,stf,apt);
+}
+
+function bkShowSuccess(cl,svc,stf,apt){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec5').classList.add('on');
+  document.getElementById('steps-wrap').style.display='none';
+  const rows=[
+    ['👤',cl.name],
+    ['💅',svN(svc)],
+    ['⏱',svc.d+' '+T('min')],
+    ['💇',stf?stf.name:T('any')],
+    ['📅',fmtDate(apt.date)],
+    ['🕐',bkFormatHour(apt.time.replace(':00',':').split(':')[0]+':00')],
+    ['💰',svc.p!=null?fm(svc.p):T('tbd')],
+  ];
+  document.getElementById('conf-box').innerHTML=rows.map(([ic,v])=>`<div class="sum-row"><span class="sum-lbl">${ic}</span><span class="sum-val">${v}</span></div>`).join('');
+  window.scrollTo(0,0);
+}
+
+function bkReset(){
+  selSvc=null;selStaffId=null;selDate=null;selTime=null;existingClient=null;curStep=1;
+  document.getElementById('steps-wrap').style.display='';
+  ['b-phone','b-fn','b-ln','b-em','b-nt'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('existing-found').style.display='none';
+  document.getElementById('new-client-form').style.display='';
+  bkGoStep(1);bkRenderSvcs();
+}
+
+
+
+
+document.addEventListener('DOMContentLoaded',function(){
+  SD2('pub_sv',svcs); SD2('pub_st',staff);
+  var fdt=document.getElementById('f-dt'); if(fdt) fdt.value=today();
+  setL(localStorage.getItem('jl')||'en');
+  var np=document.getElementById('no-pref');
+  if(np) np.onclick=function(){bkSelStaff(null);};
+  var ap2=document.getElementById('ap');
+  if(ap2) ap2.addEventListener('keydown',function(ev){if(ev.keyCode===13)doLogin();});
+});
+window.saveCl=saveCl2;
+
+
+function gv(v){
+  document.querySelectorAll('.vw').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.ni,.bn').forEach(e=>e.classList.remove('on'));
+  document.getElementById('vw-'+v).classList.add('on');
+  document.querySelectorAll('.ni').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes("'"+v+"'"))e.classList.add('on');});
+  const bn=document.getElementById('bn-'+v);if(bn)bn.classList.add('on');
+  curV=v;document.getElementById('pg-title').textContent=T('v'+v[0]+v.slice(1).replace(/appointments/,'a').replace(/calendar/,'c').replace(/staff/,'st').replace(/services/,'sv').replace(/clients/,'cl').replace(/reports/,'r').replace(/dashboard/,'d')||v);
+  // simpler title lookup
+  const vmap={dashboard:'vd',appointments:'va',calendar:'vc',staff:'vst',services:'vsv',clients:'vcl',reports:'vr'};
+  document.getElementById('pg-title').textContent=T(vmap[v]||v);
+  rv(v);
+}</script>
+</body>
+</html>
