@@ -884,7 +884,96 @@ input,select,textarea{font-family:inherit;outline:none;-webkit-appearance:none}
 
 </div>
 <div class="tw" id="tw"></div>
-<script>
+<script>// BOOKING STATE
+let curStep=1,selSvc=null,selStaffId=null,selDate=null,selTime=null,curFilter='women',existingClient=null;
+const HOURS=['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+
+// BOOKING DATA HELPERS
+function bkGetD(k,def){try{return JSON.parse(localStorage.getItem('j_'+k)||'null')||def;}catch(ex){return def;}}
+function bkSetD(k,v){localStorage.setItem('j_'+k,JSON.stringify(v));}
+
+// DATA
+const SD=[
+  {id:'w1',g:'women',ic:'✂️',n:'Haircut & Style',es:'Corte y Peinado',d:60,p:null},
+  {id:'w2',g:'women',ic:'💨',n:'Blowout',es:'Brushing',d:45,p:null},
+  {id:'w3',g:'women',ic:'🎨',n:'Full Color',es:'Color Completo',d:120,p:null},
+  {id:'w4',g:'women',ic:'✨',n:'Highlights',es:'Mechas',d:150,p:null},
+  {id:'w5',g:'women',ic:'🌊',n:'Balayage',es:'Balayage',d:180,p:null},
+  {id:'w6',g:'women',ic:'💎',n:'Keratin Treatment',es:'Keratina',d:180,p:null},
+  {id:'w7',g:'women',ic:'🌀',n:'Perm',es:'Permanente',d:150,p:null},
+  {id:'w8',g:'women',ic:'💆',n:'Deep Conditioning',es:'Hidratación Profunda',d:60,p:null},
+  {id:'w9',g:'women',ic:'👑',n:'Updo / Bridal',es:'Recogido / Novia',d:90,p:null},
+  {id:'w10',g:'women',ic:'🔆',n:'Gloss / Toner',es:'Brillo / Tónico',d:45,p:null},
+  {id:'w11',g:'women',ic:'🪮',n:'Eyebrow Wax',es:'Depilación de Cejas',d:20,p:null},
+  {id:'w12',g:'women',ic:'💋',n:'Facial Wax',es:'Depilación Facial',d:20,p:null},
+  {id:'m1',g:'men',ic:'💈',n:'Haircut',es:'Corte de Cabello',d:30,p:null},
+  {id:'m2',g:'men',ic:'🧔',n:'Beard Trim',es:'Arreglo de Barba',d:20,p:null},
+  {id:'m3',g:'men',ic:'⚡',n:'Haircut + Beard',es:'Corte + Barba',d:50,p:null},
+  {id:'m4',g:'men',ic:'🪒',n:'Hot Towel Shave',es:'Afeitado Clásico',d:40,p:null},
+  {id:'m5',g:'men',ic:'🎨',n:'Hair Color',es:'Color de Cabello',d:90,p:null},
+  {id:'m6',g:'men',ic:'🩶',n:'Gray Coverage',es:'Cobertura de Canas',d:90,p:null},
+  {id:'m7',g:'men',ic:'✂️',n:'Fade / Taper',es:'Degradado',d:35,p:null},
+  {id:'m8',g:'men',ic:'👦',n:'Kids Haircut',es:'Corte Infantil',d:25,p:null},
+  {id:'m9',g:'men',ic:'🪮',n:'Eyebrow Cleanup',es:'Arreglo de Cejas',d:15,p:null},
+  {id:'u1',g:'unisex',ic:'💆',n:'Scalp Massage',es:'Masaje Capilar',d:30,p:null},
+  {id:'u2',g:'unisex',ic:'🔬',n:'Scalp Analysis',es:'Análisis Capilar',d:20,p:null},
+  {id:'u3',g:'unisex',ic:'🧶',n:'Braids',es:'Trenzas',d:120,p:null},
+  {id:'u4',g:'unisex',ic:'🌿',n:'Locs Service',es:'Locs / Dreadlocks',d:180,p:null},
+];
+const GD=k=>{try{return JSON.parse(localStorage.getItem('j_'+k)||'null')}catch{return null}};
+const SD2=(k,v)=>localStorage.setItem('j_'+k,JSON.stringify(v));
+let svcs=GD('sv')||SD;
+let cls=GD('cl')||[];
+let apts=GD('ap')||[];
+let staff=GD('st')||[];
+const saveCls=()=>SD2('cl',cls);
+const saveAp=()=>SD2('ap',apts);
+const saveSt=()=>SD2('st',staff);
+
+// UTILS
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const today=()=>new Date().toISOString().slice(0,10);
+const fm=n=>n!=null&&n!==''?'$'+parseFloat(n).toFixed(2):'—';
+const fd=d=>{if(!d)return'—';return new Date(d+'T12:00:00').toLocaleDateString(lang==='es'?'es-US':'en-US',{month:'short',day:'numeric'});};
+const ac=n=>{const c=['#3B7DD8','#C2607A','#2ECC71','#F39C12','#9B59B6','#1ABC9C','#E67E22','#E74C3C'];let h=0;for(let x of(n||'?'))h=x.charCodeAt(0)+h*31;return c[Math.abs(h)%c.length];};
+const ini=n=>(n||'?').split(' ').map(w=>w[0]||''). slice(0,2).join('').toUpperCase();
+const svN=s=>lang==='es'&&s.es?s.es:s.n;
+
+// VIEWS
+let curV='dashboard',curSF='women',calW=0;
+function gv(v){
+  document.querySelectorAll('.vw').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.ni,.bn').forEach(e=>e.classList.remove('on'));
+  document.getElementById('vw-'+v).classList.add('on');
+  document.querySelectorAll('.ni').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes("'"+v+"'"))e.classList.add('on');});
+  const bn=document.getElementById('bn-'+v);if(bn)bn.classList.add('on');
+  curV=v;document.getElementById('pg-title').textContent=T('v'+v[0]+v.slice(1).replace(/appointments/,'a').replace(/calendar/,'c').replace(/staff/,'st').replace(/services/,'sv').replace(/clients/,'cl').replace(/reports/,'r').replace(/dashboard/,'d')||v);
+  // simpler title lookup
+  const vmap={dashboard:'vd',appointments:'va',calendar:'vc',staff:'vst',services:'vsv',clients:'vcl',reports:'vr'};
+  document.getElementById('pg-title').textContent=T(vmap[v]||v);
+  rv(v);
+}
+function rv(v){
+  if(v==='dashboard')renderDash();
+  else if(v==='appointments')renderApts();
+  else if(v==='calendar')renderCal();
+  else if(v==='staff')renderStaff();
+  else if(v==='services')renderSv();
+  else if(v==='clients')renderCl();
+  else if(v==='reports')renderRep();
+}
+function renderAll(){apI18n();rv(curV);badge();updD();}
+function updD(){const d=new Date();document.getElementById('tb-date').textContent=d.toLocaleDateString(lang==='es'?'es-US':'en-US',{weekday:'short',month:'short',day:'numeric'});}
+function badge(){
+  const n=apts.filter(a=>a.status==='pending').length;
+  const nb=document.getElementById('nb');nb.textContent=n;nb.style.display=n?'':' none';
+  const bd=document.getElementById('bndot');if(bd)bd.style.display=n?'block':'none';
+  document.getElementById('s-p').textContent=n;
+}
+
+// DASHBOARD
+
+
 
 var isLoggedIn=false;
 
@@ -977,23 +1066,6 @@ function setL(l){
   buildGenderOpts('cl-gn',null);
   apI18n(); renderAll();
 }
-function rv(v){
-  if(v==='dashboard')renderDash();
-  else if(v==='appointments')renderApts();
-  else if(v==='calendar')renderCal();
-  else if(v==='staff')renderStaff();
-  else if(v==='services')renderSv();
-  else if(v==='clients')renderCl();
-  else if(v==='reports')renderRep();
-}
-function renderAll(){apI18n();rv(curV);badge();updD();}
-function updD(){const d=new Date();document.getElementById('tb-date').textContent=d.toLocaleDateString(lang==='es'?'es-US':'en-US',{weekday:'short',month:'short',day:'numeric'});}
-function badge(){
-  const n=apts.filter(a=>a.status==='pending').length;
-  const nb=document.getElementById('nb');nb.textContent=n;nb.style.display=n?'':' none';
-  const bd=document.getElementById('bndot');if(bd)bd.style.display=n?'block':'none';
-  document.getElementById('s-p').textContent=n;
-}
 
 // DASHBOARD
 function renderDash(){
@@ -1016,38 +1088,47 @@ function renderDash(){
 }
 
 // APT CARD HTML
-function acHTML(a,compact=false){
-  const sv=svcs.find(s=>s.id===a.si)||{};
-  const cl=cls.find(c=>c.id===a.ci)||{name:a.cn||'—'};
-  const stf=staff.find(s=>s.id===a.stid);
-  const gc=sv.g==='men'?'bm':sv.g==='women'?'bw':'bu';
-  const gl=sv.g==='men'?T('men'):sv.g==='women'?T('women'):T('uni');
-  const sl={confirmed:T('conf'),pending:T('pend'),completed:T('comp'),cancelled:T('canc')}[a.status]||a.status;
-  const stfLabel=stf?`· ${stf.name}`:'';
-  return`<div class="ac">
-    <div class="at">${a.time}</div>
-    <div class="ad"></div>
-    <div class="ai"><div class="acl">${cl.name}</div><div class="asv">${a.sn} ${stfLabel}${!compact?' · '+fd(a.date):''}</div></div>
-    <span class="abg ${gc}">${gl}</span>
-    <div class="apr">${a.p?fm(a.p):'—'}</div>
-    <span class="ast s${a.status[0]}">${sl}</span>
-    <div class="aa">
-      ${a.status==='pending'?`<button class="ab" onclick="chSt('${a.id}','confirmed')">👍</button>`:''}
-      ${a.status==='confirmed'?`<button class="ab" onclick="chSt('${a.id}','completed')">✅</button>`:''}
-      <button class="ab" onclick="editApt('${a.id}')">✏️</button>
-      <button class="ab dd" onclick="delApt('${a.id}')">🗑️</button>
-    </div>
-  </div>`;
+function acHTML(a,compact){
+  compact=compact||false;
+  var sv=svcs.find(function(s){return s.id===a.si;})||{};
+  var cl=cls.find(function(x){return x.id===a.ci;})||{name:a.cn||"—"};
+  var stf=staff.find(function(s){return s.id===a.stid;})||null;
+  var gc=sv.g==="men"?"bm":sv.g==="women"?"bw":"bu";
+  var stName=stf?stf.name:T("any");
+  var price=a.p?"$"+parseFloat(a.p).toFixed(0):"";
+  var btns="";
+  if(a.status==="pending"){
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'confirmed\')">'+T("conf")+"</button>";
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'cancelled\')">'+T("canc")+"</button>";
+  }
+  if(a.status==="confirmed"){
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'completed\')">'+T("comp")+"</button>";
+    btns+='<button class="ab btn-sm" onclick="chSt(\'"+a.id+"\',\'cancelled\')">'+T("canc")+"</button>";
+  }
+  return '<div class="ac '+gc+'" onclick="editApt(\'"+a.id+"\');" style="cursor:pointer">'+
+    '<div class="at">'+a.time+"</div>"+
+    '<div class="ad">'+
+      '<div class="an">'+cl.name+"</div>"+
+      '<div class="as">'+svN(sv)+(stName?" · "+stName:"")+"</div>"+
+      (price?'<div style="font-size:11px;color:var(--tx2)">'+price+"</div>":"")+"</div>"+
+    '<div class="ar">'+
+      '<span class="tag tag-'+a.status+'">'+T(a.status)+"</span>"+
+      btns+"</div></div>";
 }
+
 function renderApts(){
-  const fd2=document.getElementById('f-dt').value;
-  const fs=document.getElementById('f-st').value;
-  let list=[...apts];
-  if(fd2)list=list.filter(a=>a.date===fd2);
-  if(fs)list=list.filter(a=>a.status===fs);
-  list.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
-  document.getElementById('apt-list').innerHTML=list.length?list.map(a=>acHTML(a)).join(''):emH(T('noa'),T('noa2'));
+  var list=apts.slice();
+  var fv=document.getElementById("f-v");
+  var fd=document.getElementById("f-dt");
+  if(fd&&fd.value) list=list.filter(function(a){return a.date===fd.value;});
+  if(fv&&fv.value&&fv.value!=="all") list=list.filter(function(a){return a.status===fv.value;});
+  list.sort(function(a,b){return a.time>b.time?1:-1;});
+  var el=document.getElementById("apt-list");
+  if(!el)return;
+  if(!list.length){el.innerHTML=mH(T("napt"),"");return;}
+  el.innerHTML=list.map(function(a){return acHTML(a,false);}).join("");
 }
+
 function chSt(id,s){const a=apts.find(x=>x.id===id);if(a){a.status=s;saveAp();renderAll();toast('✅ '+T(s==='confirmed'?'conf':s==='completed'?'comp':s),'tok');}}
 function delApt(id){if(!confirm(lang==='es'?'¿Eliminar esta cita?':'Delete this appointment?'))return;apts=apts.filter(a=>a.id!==id);saveAp();renderAll();toast('🗑️','tok');}
 
@@ -1123,17 +1204,21 @@ function qApt(date,time){openNewApt();document.getElementById('apt-d').value=dat
 
 // STAFF
 function renderStaff(){
-  const g=document.getElementById('staff-grid');
-  if(!staff.length){g.innerHTML=emH(T('nosts'),T('nos'));return;}
-  g.innerHTML=staff.map(s=>{
-    const av=s.avatar?`<img src="${s.avatar}">`:`<div class="staff-av" style="background:${ac(s.name)}">${ini(s.name)}</div>`;
-    return`<div class="staff-card">
-      <div class="staff-av">${av}</div>
-      <div><div class="staff-name">${s.name}</div><div class="staff-role">${s.role||''}</div>${s.phone?`<div style="font-size:11px;color:var(--tx2)">${s.phone}</div>`:''}</div>
-      <button class="staff-del" onclick="editStf('${s.id}')">✏️</button>
-    </div>`;
-  }).join('');
+  var el=document.getElementById("staff-grid");
+  if(!el)return;
+  if(!staff.length){el.innerHTML=mH(T("vst"),"");return;}
+  el.innerHTML=staff.map(function(s){
+    var av=s.avatar?'<img src="'+s.avatar+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover">':ini(s.name);
+    var phone=s.phone?'<div style="font-size:11px;color:var(--tx2)">'+s.phone+"</div>":"";
+    return '<div class="staff-card" onclick="editSt(\'"'+s.id+'"\')" style="cursor:pointer">'+
+      '<div class="staff-av">'+av+"</div>"+
+      "<div>"+
+      '<div style="font-weight:700;font-size:14px">'+s.name+"</div>"+
+      '<div style="font-size:11px;color:var(--tx2)">'+s.role+"</div>"+
+      phone+"</div></div>";
+  }).join("");
 }
+
 function openAddStaff(){
   document.getElementById('stf-eid').value='';
   document.getElementById('stf-mt').textContent=T('nst');
@@ -1170,20 +1255,22 @@ function delStf(){const id=document.getElementById('stf-eid').value;if(!confirm(
 // SERVICES
 function fSv(g){curSF=g;document.querySelectorAll('.gt').forEach(x=>x.className='gt');document.getElementById('t'+g[0]).classList.add(g==='men'?'am':g==='women'?'aw':'au');renderSv();}
 function renderSv(){
-  const list=svcs.filter(s=>s.g===curSF);
-  const gc=curSF==='men'?'var(--men)':curSF==='women'?'var(--women)':'var(--uni)';
-  document.getElementById('sv-g').innerHTML=list.length?list.map(s=>`
-    <div class="svcd">
-      <div class="gdot" style="background:${gc}"></div>
-      <div class="svic">${s.ic||'💅'}</div>
-      <div class="svnm">${svN(s)}</div>
-      <div class="svdr">⏱ ${s.d} min</div>
-      <div class="svpr">
-        ${s.p!=null?`<div class="sprice">$${parseFloat(s.p).toFixed(0)}</div>`:`<div class="stbd">TBD</div>`}
-        <button class="sedt" onclick="editSv('${s.id}')">✏️</button>
-      </div>
-    </div>`).join(''):emH(T('vsv'),'');
+  var el=document.getElementById("sv-g");
+  if(!el)return;
+  if(!svcs.length){el.innerHTML=mH(T("vsv"),"");return;}
+  el.innerHTML=svcs.map(function(s){
+    var gc=s.g==="men"?"#2196F3":s.g==="women"?"#E91E8C":"#9C27B0";
+    var price=s.p!=null?"<div class=\"sprice\">$"+parseFloat(s.p).toFixed(0)+"</div>":"<div class=\"svc-tbd\">TBD</div>";
+    return "<div class=\"svcd\" onclick=\"editSv('"+s.id+"')\" style=\"cursor:pointer\">"+
+      "<div class=\"gdot\" style=\"background:"+gc+"\"></div>"+
+      "<div class=\"svc-ic\">"+(s.ic||"💅")+"</div>"+
+      "<div class=\"svc-info\">"+
+        "<div class=\"svc-name\">"+s.n+"</div>"+
+        "<div class=\"svc-dur\">"+s.d+" min</div>"+
+      "</div>"+price+"</div>";
+  }).join("");
 }
+
 function openAddSvc(){
   document.getElementById('sv-eid').value='';
   document.getElementById('sv-mt').textContent=T('nsv');
@@ -1345,12 +1432,9 @@ function toast(msg,type='tok'){
   el.className='toast '+type;el.textContent=msg;
   c.appendChild(el);setTimeout(()=>el.remove(),3000);
 }
-function emH(t,s){return`<div class="empty"><div class="emp-ic">🔍</div><div class="emp-tx">${t}</div>${s?`<div class="emp-sub">${s}</div>`:''}</div>`;}
-
-
-
-// I18N
-
+function emH(t,s){
+  return '<div class="empty"><div class="emp-ic">🔍</div><div class="emp-tx">'+t+"</div>"+(s?'<div class="emp-sub">'+s+"</div>":"")+"</div>";
+}
 
 function bkRenderStep(n){bkGoStep(n);}
 
@@ -1478,7 +1562,7 @@ function bkRenderTimes(){
     const taken=takenTimes.some(t=>t.startsWith(h.split(':')[0].padStart(2,'0')));
     const displayH=lang==='es'?h+'h':bkFormatHour(h);
     return`<div class="time-btn${taken?' taken':selTime===padded?' sel':''}" onclick="${taken?'':'bkSelTimeFn(\''+padded+'\')'}">
-      ${displayH}${taken?`<br><span style="font-size:9px">${T('taken')}</span>`:''}
+      ${displayH}"+(taken?'<br><span style="font-size:9px">'+T("taken")+"</span>":"")+"
     </div>`;
   }).join('');
 }
@@ -1579,18 +1663,6 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 window.saveCl=saveCl2;
 
-
-function gv(v){
-  document.querySelectorAll('.vw').forEach(e=>e.classList.remove('on'));
-  document.querySelectorAll('.ni,.bn').forEach(e=>e.classList.remove('on'));
-  document.getElementById('vw-'+v).classList.add('on');
-  document.querySelectorAll('.ni').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes("'"+v+"'"))e.classList.add('on');});
-  const bn=document.getElementById('bn-'+v);if(bn)bn.classList.add('on');
-  curV=v;document.getElementById('pg-title').textContent=T('v'+v[0]+v.slice(1).replace(/appointments/,'a').replace(/calendar/,'c').replace(/staff/,'st').replace(/services/,'sv').replace(/clients/,'cl').replace(/reports/,'r').replace(/dashboard/,'d')||v);
-  // simpler title lookup
-  const vmap={dashboard:'vd',appointments:'va',calendar:'vc',staff:'vst',services:'vsv',clients:'vcl',reports:'vr'};
-  document.getElementById('pg-title').textContent=T(vmap[v]||v);
-  rv(v);
-}</script>
+</script>
 </body>
 </html>
